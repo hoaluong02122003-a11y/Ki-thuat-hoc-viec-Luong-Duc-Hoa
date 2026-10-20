@@ -1,1 +1,927 @@
 
+# Hướng dẫn sử dụng MobaXterm cho người mới
+
+> Tài liệu thực hành bằng tiếng Việt: SSH, SFTP, Serial console, quản lý phiên và xử lý lỗi. Có 15 ảnh giao diện để đối chiếu khi thao tác.
+
+**Môi trường:** máy Windows cài MobaXterm, kết nối tới máy Linux hoặc thiết bị bạn được phép quản lý.  
+**Cách học:** đọc mục 1–6, thực hành mục 8–9, rồi làm bài tổng hợp ở mục 18. Các mục SSH key, RDP và tunnel có thể đọc sau.  
+**Định dạng:** README Markdown dùng trên GitHub; ảnh được lưu trong thư mục `images` đi kèm.
+
+**Về hình minh họa:** ảnh được trích từ tài liệu của Mobatek và Seeed Studio, không phải ảnh chụp hệ thống của người đọc. Một số ảnh của hãng là giao diện phiên bản cũ hoặc bản Professional; tên tab, biểu tượng và vị trí có thể khác bản đang cài. IP, tài khoản, cổng COM và các lựa chọn có sẵn trong ảnh thuộc ví dụ của nguồn. Hãy điền theo bảng hướng dẫn và thông tin máy đích của bạn. Danh sách nguồn ảnh nằm trong [SOURCES.md](SOURCES.md).
+
+## Mục lục
+
+1. [MobaXterm là gì?](#1-mobaxterm-là-gì)
+2. [Chuẩn bị trước khi kết nối](#2-chuẩn-bị-trước-khi-kết-nối)
+3. [Tải và cài đặt](#3-tải-và-cài-đặt)
+4. [Làm quen với giao diện](#4-làm-quen-với-giao-diện)
+5. [Thiết lập ban đầu](#5-thiết-lập-ban-đầu)
+6. [Kết nối SSH bằng mật khẩu](#6-kết-nối-ssh-bằng-mật-khẩu)
+7. [Lưu và sắp xếp session](#7-lưu-và-sắp-xếp-session)
+8. [Sử dụng terminal và các lệnh cơ bản](#8-sử-dụng-terminal-và-các-lệnh-cơ-bản)
+9. [Truyền và chỉnh sửa tệp bằng SFTP](#9-truyền-và-chỉnh-sửa-tệp-bằng-sftp)
+10. [Kết nối bằng SSH key](#10-kết-nối-bằng-ssh-key)
+11. [Kết nối cổng console bằng Serial](#11-kết-nối-cổng-console-bằng-serial)
+12. [Kết nối máy Windows bằng RDP](#12-kết-nối-máy-windows-bằng-rdp)
+13. [SSH gateway và tunnel](#13-ssh-gateway-và-tunnel)
+14. [Chia cửa sổ và nhận biết MultiExec](#14-chia-cửa-sổ-và-nhận-biết-multiexec)
+15. [Lưu nội dung terminal và ghi log](#15-lưu-nội-dung-terminal-và-ghi-log)
+16. [Sao lưu và chuyển cấu hình sang máy khác](#16-sao-lưu-và-chuyển-cấu-hình-sang-máy-khác)
+17. [Xử lý lỗi thường gặp](#17-xử-lý-lỗi-thường-gặp)
+18. [Bài thực hành hoàn chỉnh](#18-bài-thực-hành-hoàn-chỉnh)
+19. [Đưa tài liệu lên GitHub để ảnh hiển thị đúng](#19-đưa-tài-liệu-lên-github-để-ảnh-hiển-thị-đúng)
+20. [Nguồn tham khảo](#20-nguồn-tham-khảo)
+
+---
+
+## 1. MobaXterm là gì?
+
+**MobaXterm là ứng dụng trên Windows dùng để kết nối, thao tác và truyền tệp với máy tính hoặc thiết bị từ xa.** Ứng dụng tập hợp terminal nhiều tab, các loại kết nối mạng và công cụ hỗ trợ trong cùng giao diện. [R3]
+
+Bạn sẽ thường dùng:
+
+| Chức năng | Công việc thực tế | Thông tin cần biết |
+|---|---|---|
+| **SSH** | Gõ lệnh quản trị máy Linux, router, switch hoặc firewall | IP/tên máy, cổng SSH, tài khoản và cách xác thực |
+| **SFTP** | Tải tệp giữa Windows và máy chủ qua kết nối SSH | Tài khoản, quyền đọc/ghi, máy chủ hỗ trợ SFTP |
+| **Serial** | Vào console thiết bị qua cáp | Cổng COM và thông số serial của model |
+| **RDP** | Mở màn hình Windows từ xa | Máy đích hỗ trợ RDP, tài khoản và quyền truy cập |
+| **Local terminal** | Chạy lệnh trên máy Windows của bạn | Phân biệt rõ với tab SSH |
+| **X11** | Hiển thị ứng dụng đồ họa Linux từ xa khi đã cấu hình phù hợp | X11 forwarding và ứng dụng phía máy chủ |
+
+MobaXterm là chương trình bạn dùng để kết nối. Nó không tự cấp IP cho máy đích, không tự tạo tài khoản quản trị và không tự bật SSH/RDP trên thiết bị.
+
+**Session** là một cấu hình kết nối đã lưu, ví dụ “SSH tới Linux-Lab”. Một session thường nhớ địa chỉ, cổng, tài khoản và một số lựa chọn; việc lưu session và việc lưu mật khẩu là hai việc khác nhau.
+
+---
+
+## 2. Chuẩn bị trước khi kết nối
+
+### 2.1. Lấy đúng thông tin máy đích
+
+Bài này dùng một máy Linux giả định:
+
+| Thông tin | Giá trị minh họa |
+|---|---|
+| Tên máy | `linux-lab` |
+| IP | `192.168.10.20` |
+| Cổng SSH | `22` |
+| Tài khoản | `labuser` |
+| Cách đăng nhập | Mật khẩu hoặc SSH key đã được cấu hình |
+| Thư mục thực hành | `~/moba-lab` |
+
+**Các giá trị trên chỉ là ví dụ.** Máy của bạn phải có đường mạng tới IP đích; tài khoản phải tồn tại và được phép đăng nhập.
+
+Nếu máy ở chi nhánh hoặc mạng nội bộ khác, kết nối VPN/đường truy cập quản trị phù hợp trước. Mở được trang web của một thiết bị cũng chưa chứng minh cổng SSH của thiết bị đó đang mở.
+
+### 2.2. Kiểm tra cổng từ Windows
+
+Mở **Windows PowerShell** trên máy của bạn:
+
+```powershell
+Test-NetConnection 192.168.10.20 -Port 22
+```
+
+Đọc dòng `TcpTestSucceeded`:
+
+| Kết quả | Ý nghĩa |
+|---|---|
+| `True` | Máy Windows đã thiết lập được kết nối TCP tới cổng được kiểm tra |
+| `False` | Cần kiểm tra IP/cổng, đường mạng, VPN, firewall hoặc dịch vụ phía máy đích |
+
+Lệnh này không kiểm tra mật khẩu và không xác nhận tài khoản được phép đăng nhập. Nếu SSH dùng cổng `2222`, kiểm tra `2222` thay cho `22`. [R6]
+
+Có thể ping để tham khảo, nhưng **ping thất bại không tự chứng minh SSH thất bại**: ICMP có thể bị chặn riêng.
+
+### 2.3. Phân biệt ba môi trường thao tác
+
+| Bạn đang mở ở đâu? | Lệnh tác động tới đâu? |
+|---|---|
+| Windows PowerShell | Máy Windows đang ngồi sử dụng |
+| Local terminal của MobaXterm | Môi trường cục bộ trên máy Windows |
+| Tab SSH đã đăng nhập | Máy hoặc thiết bị ở đầu bên kia |
+
+Các nhãn trước khối lệnh trong bài sẽ chỉ rõ môi trường cần sử dụng.
+
+---
+
+## 3. Tải và cài đặt
+
+### 3.1. Tải từ website chính thức
+
+Mở [trang tải MobaXterm Home Edition](https://mobaxterm.mobatek.net/download-home-edition.html).
+
+Trang hãng có hai gói chính: **Portable edition** và **Installer edition**. Chọn bản theo nhu cầu và điều kiện sử dụng của bạn. [R2]
+
+| Gói | Cách dùng | Phù hợp khi |
+|---|---|---|
+| **Installer** | Chạy bộ cài, sau đó mở từ Start menu/shortcut | Sử dụng thường xuyên trên một máy |
+| **Portable** | Giải nén vào thư mục riêng rồi chạy chương trình | Muốn sử dụng từ một thư mục dễ di chuyển |
+
+### 3.2. Cài bản Installer
+
+1. Tải gói **Installer edition**.
+2. Nếu tệp tải về là `.zip`, chọn **Extract All** để giải nén.
+3. Mở tệp cài đặt trong thư mục đã giải nén.
+4. Đọc và đồng ý điều khoản nếu phù hợp.
+5. Thực hiện các bước của trình cài đặt, chọn **Install**, sau đó **Finish**.
+6. Mở **MobaXterm** trong Start menu.
+
+Nếu trình cài yêu cầu quyền quản trị, dùng tài khoản có quyền cài phần mềm hoặc nhờ người quản trị máy thực hiện.
+
+### 3.3. Dùng bản Portable
+
+1. Tải gói **Portable edition**.
+2. Giải nén toàn bộ vào một thư mục bạn có quyền ghi.
+3. Chạy MobaXterm trong thư mục đã giải nén.
+4. Giữ thư mục chương trình và dữ liệu cấu hình cần thiết khi di chuyển sang máy khác.
+
+Không nên thao tác lâu dài trực tiếp bên trong cửa sổ ZIP: dữ liệu có thể bị đưa vào vị trí tạm của Windows.
+
+---
+
+## 4. Làm quen với giao diện
+
+![Giao diện chính MobaXterm với thanh công cụ, danh sách session và vùng terminal](images/01-giao-dien-chinh.png)
+
+*Hình 1 — Giao diện minh họa của Mobatek: bên trái là các phiên, phía trên là công cụ, bên phải là vùng làm việc. [R1]*
+
+| Khu vực | Cách sử dụng |
+|---|---|
+| **Session** | Tạo kết nối mới |
+| **Thanh bên Sessions** | Mở lại và quản lý phiên đã lưu |
+| **Tab terminal** | Làm việc với từng kết nối |
+| **SSH-browser / Sftp** | Xem tệp trên máy đích khi giao thức và tài khoản cho phép |
+| **Settings** | Cấu hình chữ, terminal, SSH, mật khẩu và tùy chọn khác |
+| **Split** | Chia nhiều terminal trong cùng cửa sổ |
+| **MultiExec** | Gửi thao tác tới nhiều terminal cùng lúc |
+| **Tunneling** | Tạo SSH tunnel |
+| **X server** | Trạng thái thành phần hiển thị ứng dụng X11 |
+
+Bấm **Session** sẽ mở cửa sổ chọn loại kết nối:
+
+![Cửa sổ chọn loại phiên SSH, SFTP, RDP và Serial](images/02-tao-session.png)
+
+*Hình 2 — Chọn SSH để gõ lệnh qua mạng; chọn Serial để làm việc qua cáp console. [R1]*
+
+**Mẹo:** khi mới học, chỉ mở một phiên SSH và luôn nhìn tên tab trước khi gõ lệnh.
+
+---
+
+## 5. Thiết lập ban đầu
+
+Mở **Settings → Configuration**.
+
+![Cửa sổ cấu hình MobaXterm với Persistent home directory và quản lý mật khẩu](images/03-thiet-lap-chung.png)
+
+*Hình 3 — Tab General. Vị trí lưu dữ liệu cục bộ và quản lý mật khẩu nằm trong nhóm thiết lập chung. [R1]*
+
+### 5.1. Chỉnh chữ và mã hóa
+
+Trong nhóm **Terminal**, tìm thiết lập font và charset:
+
+- Chọn font dễ đọc, ví dụ Consolas.
+- Đặt cỡ chữ phù hợp với màn hình; khoảng 12–14 là điểm bắt đầu để tự điều chỉnh.
+- Chọn **UTF-8** khi làm việc với máy chủ và tệp dùng UTF-8.
+- Nếu riêng một session có cấu hình terminal khác, kiểm tra thêm **Terminal settings** của session đó.
+
+Đổi charset không chuyển đổi nội dung một tệp vốn đã lưu bằng bảng mã khác. Nếu chữ tiếng Việt vẫn lỗi, cần kiểm tra cả font, mã hóa tệp và locale phía máy đích.
+
+### 5.2. Thiết lập dán và cảnh báo nhiều dòng
+
+Trong **Terminal**:
+
+1. Bật **Paste using right-click** nếu muốn dán bằng chuột phải.
+2. Giữ **Warn before pasting multiple lines** để nhìn lại khối lệnh trước khi gửi.
+3. Kiểm tra phím tắt trong phần **Keyboard shortcuts** nếu cần.
+
+Phím dán thường dùng là **Shift+Insert**. Các phím có thể đã được tùy chỉnh trên máy của bạn. [R1], [R5]
+
+### 5.3. Đặt thư mục home cố định nếu dùng local terminal/SSH key
+
+Trong **General → Persistent home directory**:
+
+1. Tạo một thư mục riêng trong vùng dữ liệu của tài khoản Windows.
+2. Bấm nút chọn thư mục.
+3. Chọn thư mục đó và lưu thiết lập.
+4. Khởi động lại MobaXterm nếu chương trình yêu cầu.
+
+Thư mục này dùng cho dữ liệu **cục bộ** của MobaXterm. Nó không phải thư mục home của tài khoản Linux ở máy đích. [R11]
+
+### 5.4. Lưu mật khẩu và master password
+
+Nếu sử dụng chức năng lưu mật khẩu, mở mục **MobaXterm passwords management** để xem chính sách lưu và đặt **master password** theo nhu cầu.
+
+![Hộp thoại đặt master password của MobaXterm](images/08-mat-khau.png)
+
+*Hình 4 — Master password bảo vệ dữ liệu mật khẩu đã lưu trong ứng dụng. Không dùng thông tin thật trong ảnh minh họa hoặc repository tài liệu. [R3]*
+
+Trên máy dùng chung, hãy cân nhắc không lưu mật khẩu phiên. Master password của MobaXterm và mật khẩu tài khoản máy chủ là hai thông tin độc lập.
+
+---
+
+## 6. Kết nối SSH bằng mật khẩu
+
+### 6.1. Tạo session SSH
+
+Bấm **Session → SSH**, rồi nhập thông tin:
+
+| Trường | Điền gì? | Ví dụ của bài |
+|---|---|---|
+| **Remote host** | IP hoặc tên máy đích | `192.168.10.20` |
+| **Specify username** | Bật để nhập tài khoản | `labuser` |
+| **Port** | Cổng dịch vụ SSH thực tế | `22` |
+| **Use private key** | Dành cho xác thực bằng khóa | Chưa bật ở bài đăng nhập mật khẩu |
+| **Remote environment** | Môi trường mở khi đăng nhập | Giữ chế độ shell/Interactive shell mặc định |
+| **Execute command** | Lệnh tự chạy khi mở phiên | Để trống ở bài đầu tiên |
+
+Trong **Remote host**, không nhập `https://`, đường dẫn thư mục hoặc `:22` vào cùng IP khi đã có ô **Port** riêng.
+
+![Cửa sổ cấu hình SSH với Remote host, Specify username, Port và các tab nâng cao](images/12-cau-hinh-ssh.png)
+
+*Hình 5 — Ảnh của Mobatek dùng Raspberry Pi với user pi và lựa chọn LXDE desktop. Trong bài này, thay bằng IP/user của bạn và giữ shell mặc định; không cần chọn LXDE hay sao chép các checkbox có sẵn trong ảnh. [R4]*
+
+Bấm **OK** để mở kết nối.
+
+### 6.2. Xác nhận khóa máy chủ ở lần đầu
+
+Lần đầu tới một máy, ứng dụng có thể hiển thị thông tin **host key/fingerprint**.
+
+Host key giúp nhận biết máy chủ đang kết nối. Khi cần xác minh, đối chiếu fingerprint qua quản trị viên hoặc kênh quản trị đáng tin cậy trước khi chấp nhận lưu. Một cảnh báo “khóa đã thay đổi” ở lần sau cần được kiểm tra riêng, không xử lý như một thông báo đăng nhập bình thường. [R10]
+
+### 6.3. Nhập mật khẩu
+
+Nếu terminal hỏi `Password:`:
+
+1. Nhập mật khẩu của `labuser` trên máy đích.
+2. Nhấn **Enter**.
+3. Chờ xuất hiện dấu nhắc lệnh.
+
+**Khi gõ mật khẩu, thường không có ký tự hoặc dấu sao xuất hiện.** Đây là cách terminal nhập mật khẩu, không phải bàn phím bị hỏng.
+
+Mật khẩu có phân biệt chữ hoa/chữ thường. Kiểm tra Caps Lock và bộ gõ nếu đăng nhập thất bại.
+
+### 6.4. Xác nhận đã vào đúng máy
+
+**Chạy trong tab SSH của máy Linux:**
+
+```bash
+hostname
+whoami
+pwd
+```
+
+Bạn cần thấy tên máy, tài khoản và thư mục hiện tại phù hợp với thông tin đã được cấp.
+
+Ví dụ kết quả có thể là:
+
+```text
+linux-lab
+labuser
+/home/labuser
+```
+
+Kết quả này chỉ minh họa; hostname và thư mục home thực tế có thể khác.
+
+**Nếu kết nối tới router/switch/firewall:** sử dụng bộ lệnh của hệ điều hành thiết bị. Các lệnh Linux trong bài không mặc nhiên dùng được trên FortiGate, Cisco hoặc MikroTik.
+
+### 6.5. Thoát phiên
+
+**Trong tab SSH Linux:**
+
+```bash
+exit
+```
+
+Nếu đang ở một shell lồng nhau, `exit` có thể chỉ thoát shell hiện tại. Đóng tab khi bạn đã hoàn thành phiên làm việc và kiểm tra các tác vụ đang chạy.
+
+---
+
+## 7. Lưu và sắp xếp session
+
+### 7.1. Mở lại phiên đã dùng
+
+Thông thường, session đã tạo xuất hiện trong thanh bên **Sessions**. Nhấp đúp để kết nối lại. Nếu ứng dụng báo đã đạt giới hạn phiên lưu của edition đang dùng, phiên mới có thể không tự được lưu; kiểm tra thông báo trong cửa sổ session. [R1], [R2]
+
+Lưu session không đồng nghĩa luôn đăng nhập được: mật khẩu có thể đã đổi, VPN chưa kết nối hoặc server đã chuyển IP.
+
+### 7.2. Đặt tên dễ nhận biết
+
+Chuột phải session và mở **Edit session**; tùy phiên bản có thể đổi tên trực tiếp hoặc chỉnh tên trong **Bookmark settings**.
+
+Tên gợi ý:
+
+| Session | Mục đích |
+|---|---|
+| `LAB-Linux-192.168.10.20` | Máy Linux để thực hành |
+| `HN-SW-Access-01` | Switch access tại Hà Nội |
+| `HCM-FW-01` | Firewall tại chi nhánh |
+| `Console-Switch-COM3` | Phiên console trên COM3 |
+
+Không đưa mật khẩu vào tên phiên.
+
+### 7.3. Tạo folder nhóm phiên
+
+Ở thanh bên Sessions:
+
+1. Chuột phải vùng quản lý hoặc thư mục cha.
+2. Chọn thao tác tạo folder mới trong menu.
+3. Đặt tên như `Lab`, `Servers` hoặc `Network`.
+4. Di chuyển session vào đúng folder bằng menu chuột phải hoặc kéo thả nếu phiên bản hỗ trợ.
+5. Mở lại một session để kiểm tra.
+
+Folder chỉ tổ chức danh sách trong MobaXterm, không tạo thư mục trên máy chủ.
+
+### 7.4. Sửa hoặc xóa session
+
+- **Edit:** sửa IP, cổng, tài khoản và tùy chọn.
+- **Delete:** xóa cấu hình phiên được lưu trong MobaXterm.
+- **Export/Import:** chuyển cấu hình phiên giữa các máy.
+
+Xóa session không xóa tài khoản hoặc dữ liệu trên server. Các thao tác quản lý session qua thanh bên được Mobatek mô tả trong tài liệu ứng dụng. [R1]
+
+---
+
+## 8. Sử dụng terminal và các lệnh cơ bản
+
+### 8.1. Sao chép và dán
+
+| Thao tác | Cách làm |
+|---|---|
+| Sao chép chữ từ terminal | Bôi đen vùng cần lấy; trong cấu hình thông thường, vùng chọn được đưa vào clipboard |
+| Dán | `Shift+Insert` hoặc chuột phải khi đã bật tùy chọn dán |
+| Xem output cũ | Thanh cuộn hoặc `Shift+PageUp` / `Shift+PageDown` |
+| Dừng chương trình đang chạy | `Ctrl+C` trong nhiều ứng dụng dòng lệnh |
+| Gợi ý lệnh/đường dẫn | `Tab` trong shell hỗ trợ hoàn thành tự động |
+| Gọi lại lệnh | Phím mũi tên lên/xuống trong shell có lịch sử |
+| Thoát trình xem `less` | `q` |
+
+Trong terminal, **Ctrl+C thường dùng để ngắt lệnh**, nên không sử dụng nó như cách sao chép mặc định của Word. Mobatek hướng dẫn chọn chữ để sao chép và dùng Shift+Insert để dán. [R5]
+
+### 8.2. Các lệnh đầu tiên trên Linux
+
+**Chỉ áp dụng cho tab SSH tới Linux có các công cụ tương ứng.**
+
+| Lệnh | Mục đích |
+|---|---|
+| `hostname` | Xem tên máy |
+| `whoami` | Xem tài khoản hiện tại |
+| `pwd` | Xem thư mục hiện tại |
+| `ls` | Liệt kê tên tệp/thư mục |
+| `ls -lah` | Xem cả tệp ẩn, quyền và dung lượng dễ đọc |
+| `cd ten-thu-muc` | Chuyển vào thư mục |
+| `cd ..` | Lên thư mục cha |
+| `cd ~` | Về thư mục home của tài khoản |
+| `cat ten-tep.txt` | Xem nội dung một tệp văn bản nhỏ |
+| `less ten-tep.log` | Xem tệp theo trang, nhấn q để thoát |
+| `tail -n 50 ten-tep.log` | Xem 50 dòng cuối |
+| `df -h` | Xem dung lượng các filesystem |
+| `uptime` | Xem thời gian hoạt động và thông tin tải |
+| `exit` | Thoát shell hiện tại |
+
+Đường dẫn có dấu cách cần đặt trong dấu ngoặc kép, ví dụ `cd "thu muc lab"`. Nên dùng tên không dấu và không có dấu cách cho các tệp thực hành đầu tiên.
+
+### 8.3. Tạo thư mục thực hành riêng
+
+**Trong tab SSH Linux:**
+
+```bash
+mkdir -p ~/moba-lab
+cd ~/moba-lab
+pwd
+```
+
+Bạn sẽ dùng thư mục này để thử upload/download, tránh nhầm với thư mục cấu hình hệ thống.
+
+### 8.4. Dùng local terminal của MobaXterm
+
+Bấm **Start local terminal** hoặc mở tab local tương ứng trong giao diện. Trong local terminal, các ổ Windows thường truy cập qua `/drives`. [R1]
+
+**Trong MobaXterm local terminal:**
+
+```bash
+cd /drives/c/Users
+ls
+```
+
+Đường dẫn `/drives/c` ở đây thuộc máy Windows. Khi chuyển sang tab SSH, cùng một chuỗi đường dẫn không còn mang ý nghĩa “ổ C của máy bạn”.
+
+---
+
+## 9. Truyền và chỉnh sửa tệp bằng SFTP
+
+### 9.1. Hiểu cửa sổ bên trái
+
+Sau khi SSH vào máy có hỗ trợ phù hợp, thanh bên có thể hiện **SSH-browser**, **Sftp** hoặc tên tương tự.
+
+![Thanh bên SFTP dùng để duyệt tệp trên máy đích](images/04-sftp.png)
+
+*Hình 6 — Danh sách tệp ở thanh bên là tệp của máy đích. Phần Follow terminal folder dùng để theo dõi thư mục terminal trong các môi trường được hỗ trợ. [R3]*
+
+SFTP truyền tệp qua SSH; tài khoản vẫn chịu quyền đọc/ghi của máy chủ. SFTP và FTP là hai giao thức khác nhau. [R7]
+
+### 9.2. Nếu chưa thấy thanh bên SFTP
+
+1. Bảo đảm đang ở tab SSH, không phải tab local.
+2. Mở thiết lập của session.
+3. Trong **Advanced SSH settings**, tìm **SSH-browser type** hoặc lựa chọn tương đương.
+4. Chọn **SFTP** nếu máy đích hỗ trợ; một số phiên bản cũ dùng checkbox **Display SSH-browser**.
+5. Lưu và kết nối lại.
+6. Nếu vẫn lỗi, đọc thông báo xác thực/giao thức cụ thể.
+
+Một số thiết bị mạng chỉ cung cấp CLI qua SSH, không cung cấp SFTP. Trường hợp đó SSH vẫn có thể làm việc bình thường. [R1], [R7]
+
+### 9.3. Upload từ Windows lên máy chủ
+
+1. Trên Windows, tạo tệp `hello-moba.txt` bằng Notepad.
+2. Nhập một câu thử và lưu.
+3. Trong tab SSH, tạo thư mục lab như mục 8.3.
+4. Ở thanh SFTP, mở đúng thư mục lab. Có thể lấy đường dẫn từ kết quả `pwd`.
+5. Kéo tệp từ **File Explorer của Windows** vào vùng danh sách tệp SFTP.
+6. Chờ truyền xong; nếu có hộp thoại ghi đè, kiểm tra tên và đường dẫn trước khi chọn.
+7. Nhấn làm mới nếu chưa thấy tệp.
+
+**Kiểm tra trong tab SSH Linux:**
+
+```bash
+cd ~/moba-lab
+ls -l hello-moba.txt
+cat hello-moba.txt
+```
+
+### 9.4. Download từ máy chủ về Windows
+
+1. Chọn tệp trong thanh SFTP.
+2. Kéo ra một thư mục Windows, hoặc chọn thao tác **Download** trong menu.
+3. Chọn nơi lưu nếu được hỏi.
+4. Chờ hoàn tất.
+5. Mở bản tải về để kiểm tra.
+
+Upload là đưa tệp lên máy đích; download là lấy tệp về máy đang dùng. [R3]
+
+### 9.5. Sửa tệp bằng MobaTextEditor
+
+Nhấp đúp một tệp văn bản trong SSH-browser để mở editor được cấu hình. MobaTextEditor là trình soạn thảo tích hợp của ứng dụng.
+
+![MobaTextEditor dùng để chỉnh sửa tệp văn bản](images/07-sua-tep.png)
+
+*Hình 7 — Trình soạn thảo tệp. Bài thực hành chỉ sửa hello-moba.txt trong thư mục lab. [R3]*
+
+Quy trình:
+
+1. Mở `hello-moba.txt` từ thanh SFTP.
+2. Thêm một dòng nhận xét.
+3. Lưu bằng `Ctrl+S` trong **cửa sổ editor**.
+4. Theo dõi thông báo upload/lưu của MobaXterm.
+5. Trở lại SSH và chạy `cat ~/moba-lab/hello-moba.txt` để kiểm tra nội dung thực tế.
+
+**Lưu trong editor có thể tự tải thay đổi ngược lên server.** Đây có thể là sửa trực tiếp tệp trên máy đích, dù editor đang hiển thị một bản tạm trên Windows. [R1]
+
+### 9.6. Khi báo Permission denied
+
+Nếu không upload được vào `/etc` hoặc thư mục ứng dụng:
+
+- Thử thư mục home của tài khoản để xác định có phải vấn đề quyền ghi.
+- Upload bản chuẩn bị vào thư mục bạn có quyền.
+- Thực hiện bước triển khai tới vị trí cuối bằng quy trình quản trị của hệ thống.
+
+Chạy `sudo` trong terminal không tự biến tài khoản của phiên SFTP thành root. Không cần đổi quyền rộng như `chmod 777` chỉ để hoàn thành bài thử truyền tệp.
+
+---
+
+## 10. Kết nối bằng SSH key
+
+Mục này dành cho máy đã được cấu hình xác thực bằng khóa.
+
+### 10.1. Phân biệt hai loại khóa
+
+| Thành phần | Nơi sử dụng |
+|---|---|
+| **Private key — khóa riêng** | Giữ trên máy client; MobaXterm dùng để chứng minh danh tính |
+| **Public key — khóa công khai** | Được cấu hình cho tài khoản tương ứng trên máy chủ |
+| **Passphrase** | Mật khẩu bảo vệ khóa riêng, nếu đã đặt |
+| **Host key** | Khóa nhận diện máy chủ; khác với cặp khóa đăng nhập của người dùng |
+
+Tên đuôi `.pem` hay `.ppk` không tự chứng minh đó là đúng khóa cho đúng tài khoản. Kiểm tra định dạng được ứng dụng hỗ trợ và thông tin do quản trị viên cung cấp. [R8], [R10]
+
+### 10.2. Chọn một private key đã có
+
+1. Chuột phải session SSH → **Edit session**.
+2. Giữ đúng **Remote host**, **Specify username** và **Port**.
+3. Mở **Advanced SSH settings**.
+4. Bật **Use private key**.
+5. Chọn tệp **private key**, không chọn tệp `.pub`.
+6. Bấm **OK** và mở phiên.
+7. Nhập passphrase của khóa nếu được hỏi.
+
+Tài khoản `labuser` chỉ đăng nhập được nếu public key tương ứng đã được máy chủ chấp nhận cho chính tài khoản đó. Chọn private key trong ứng dụng không tự đăng ký khóa lên server. [R1], [R10]
+
+### 10.3. Nếu chưa có khóa
+
+MobaXterm cung cấp công cụ **MobaKeyGen** trong menu **Tools**. Bạn có thể tạo cặp khóa bằng công cụ đó hoặc OpenSSH theo chuẩn của hệ thống đang quản lý.
+
+Đối với người mới, nên thống nhất với quản trị viên:
+
+1. Loại khóa và định dạng cần dùng.
+2. Nơi giữ private key.
+3. Cách gửi public key để được cấp quyền.
+4. Tài khoản được phép sử dụng khóa.
+
+Không đưa private key hoặc passphrase vào README, ảnh chụp, log công khai hay file cấu hình gửi lên GitHub.
+
+---
+
+## 11. Kết nối cổng console bằng Serial
+
+Serial dùng khi nối trực tiếp tới console thiết bị. Bạn cần chọn đúng cáp console/USB-console theo model; cổng console dạng RJ45 không đồng nghĩa cổng Ethernet LAN.
+
+### 11.1. Kiểm tra cổng COM
+
+1. Cắm cáp console vào máy Windows và đúng cổng trên thiết bị.
+2. Cài driver chính thức cho cáp/chip chuyển đổi nếu Windows chưa nhận.
+3. Mở **Device Manager**.
+4. Mở nhóm **Ports (COM & LPT)**.
+5. Ghi lại số COM của cáp, ví dụ `COM3`.
+
+Nếu không xuất hiện COM, xử lý nhận cáp/driver trước khi đổi thông số trong MobaXterm.
+
+### 11.2. Chọn Serial
+
+Bấm **Session → Serial**.
+
+![Chọn loại session Serial trong MobaXterm](images/17-serial-chon-loai.jpg)
+
+*Hình 8 — Vị trí chọn Serial, trích hướng dẫn của Seeed Studio. [R12]*
+
+### 11.3. Điền thông số console
+
+| Trường | Cách chọn |
+|---|---|
+| **Serial port** | COM thực tế trong Device Manager |
+| **Speed (bps)** | Baud rate theo tài liệu model và cấu hình thiết bị |
+| **Data bits** | Theo thiết bị; thường gặp 8 |
+| **Parity** | Theo thiết bị; thường gặp None |
+| **Stop bits** | Theo thiết bị; thường gặp 1 |
+| **Flow control** | Theo thiết bị; nhiều console dùng None |
+
+Các mục ngoài COM/tốc độ có thể nằm trong **Advanced Serial settings**.
+
+![Cửa sổ Serial minh họa cổng COM và tốc độ truyền](images/18-serial-thong-so.png)
+
+*Hình 9 — Ví dụ của Seeed sử dụng COM30 và 115200 bps. Đây không phải thông số bắt buộc cho mọi router/switch. Thông báo giới hạn session ở đầu ảnh thuộc máy dùng để chụp ảnh nguồn. [R12]*
+
+Ví dụ Cisco có hướng dẫn console với `9600`, `8` data bits, `None` parity, `1` stop bit, không flow control; thiết bị/model khác hoặc cấu hình đã đổi có thể dùng tốc độ khác. [R13]
+
+### 11.4. Mở console
+
+1. Bấm **OK**.
+2. Chờ cửa sổ terminal mở.
+3. Nhấn **Enter** một hoặc hai lần.
+4. Đăng nhập theo cơ chế của thiết bị.
+5. Bắt đầu bằng lệnh xem trạng thái phù hợp với hệ điều hành thiết bị.
+
+Nếu chỉ thấy màn hình trống, không vội kết luận thiết bị hỏng. Kiểm tra COM, cáp, nguồn và thông số truyền.
+
+### 11.5. Các dấu hiệu cần nhớ
+
+| Dấu hiệu | Kiểm tra đầu tiên |
+|---|---|
+| Chữ rác/ký tự lạ | Baud rate, data bits, parity, stop bits |
+| Có output nhưng gõ không được | Flow control, cáp, phần mềm khác đang giữ cổng |
+| Không mở được COM | COM có tồn tại không, driver, ứng dụng khác đang dùng |
+| Màn hình trống | Đúng console chưa, nhấn Enter, đúng COM, thiết bị có nguồn |
+
+---
+
+## 12. Kết nối máy Windows bằng RDP
+
+RDP dùng để xem và điều khiển desktop Windows từ xa. Máy đích phải hỗ trợ làm RDP host, đã bật Remote Desktop và cho phép tài khoản kết nối. Windows Home không cung cấp RDP host tích hợp như các edition hỗ trợ. [R14]
+
+### Các bước trong MobaXterm
+
+1. Bấm **Session → RDP**.
+2. Nhập **Remote host** là IP/tên máy Windows đích.
+3. Nhập tài khoản phù hợp: tài khoản cục bộ, `TENMAY\user` hoặc `DOMAIN\user` theo hệ thống.
+4. Dùng cổng RDP đã cấu hình; cổng thông thường là `3389`.
+5. Kiểm tra lựa chọn độ phân giải và clipboard nếu cần.
+6. Bấm **OK**, thực hiện bước xác thực và kiểm tra danh tính máy đích khi được hỏi.
+
+![Desktop Windows từ xa bên trong tab RDP của MobaXterm](images/06-rdp.png)
+
+*Hình 10 — Minh họa một tab RDP. Giao diện desktop trong ảnh nguồn là Windows phiên bản cũ. [R3]*
+
+**Kiểm tra cổng bằng Windows PowerShell:**
+
+```powershell
+Test-NetConnection 192.168.10.30 -Port 3389
+```
+
+IP `192.168.10.30` chỉ là ví dụ cho máy Windows; thay bằng máy của bạn.
+
+---
+
+## 13. SSH gateway và tunnel
+
+Đây là các mục mở rộng; bạn có thể bỏ qua ở lần học đầu tiên.
+
+### 13.1. SSH gateway — đi qua máy trung gian
+
+Ví dụ máy Windows kết nối được tới bastion/gateway, còn máy Linux đích chỉ cho truy cập từ gateway.
+
+| Vai trò | Ví dụ |
+|---|---|
+| Gateway SSH | `192.168.10.10:22`, tài khoản `jumpuser` |
+| Máy SSH đích | `10.20.10.20:22`, tài khoản `labuser` |
+
+Trong session SSH:
+
+1. Ở phần cơ bản, điền **máy đích** `10.20.10.20` và `labuser`.
+2. Mở **Network settings**.
+3. Bật **Connect through SSH gateway (jump host)**.
+4. Điền IP gateway, cổng SSH và tài khoản gateway.
+5. Chọn private key cho gateway nếu yêu cầu.
+6. Lưu và kết nối.
+
+![Thiết lập Connect through SSH gateway với host, port và user trung gian](images/05-gateway.png)
+
+*Hình 11 — Gateway có tài khoản và cổng riêng. Các số trong ảnh chỉ minh họa bố cục. [R3]*
+
+Gateway phải truy cập được tới máy đích và cho phép phương thức chuyển tiếp cần thiết. Đây là hai chặng kết nối; mật khẩu/khóa của hai tài khoản có thể khác nhau.
+
+### 13.2. Local port forwarding — mở dịch vụ qua SSH tunnel
+
+Ví dụ bạn được phép truy cập một ứng dụng HTTP tại `10.20.10.50:8080` từ gateway `192.168.10.10`. Bạn muốn mở ứng dụng qua cổng local `18080`.
+
+Bấm **Tunneling → New SSH tunnel**, chọn **Local port forwarding**:
+
+| Trường | Giá trị minh họa |
+|---|---|
+| **Forwarded port** | `18080` |
+| **Remote server** | `10.20.10.50` |
+| **Remote port** | `8080` |
+| **SSH server** | `192.168.10.10` |
+| **SSH login** | `jumpuser` |
+| **SSH port** | `22` |
+
+![Trình cấu hình SSH tunnel với cổng local, dịch vụ đích và SSH server](images/09-tunnel.png)
+
+*Hình 12 — Local port forwarding. Remote server là địa chỉ dịch vụ nhìn từ SSH server, có thể là một máy khác SSH server. [R15]*
+
+Sau khi lưu, bấm nút chạy tunnel. Với dịch vụ HTTP trong ví dụ, mở trình duyệt trên máy Windows tới:
+
+```text
+http://127.0.0.1:18080
+```
+
+Nếu dịch vụ đích dùng HTTPS hoặc yêu cầu hostname cụ thể, cần dùng URL/cấu hình phù hợp với ứng dụng đó. Khi có lựa chọn bind, giới hạn cổng local ở loopback nếu chỉ dùng trên chính máy của bạn. Dừng tunnel khi hoàn thành.
+
+---
+
+## 14. Chia cửa sổ và nhận biết MultiExec
+
+### Split — xem nhiều phiên
+
+1. Mở các session cần quan sát.
+2. Bấm **Split**.
+3. Chọn bố cục phù hợp.
+4. Nhấp vào đúng terminal trước khi gõ.
+
+Split giúp so sánh output hoặc theo dõi nhiều máy. Nó là cách bố trí hiển thị.
+
+### MultiExec — gõ đồng thời nhiều phiên
+
+![MobaXterm ở chế độ Multi-execution với nhiều terminal nhận cùng lệnh](images/10-nhieu-cua-so.png)
+
+*Hình 13 — Ảnh này là MultiExec, không chỉ là chia ô hiển thị. Thanh thông báo phía trên cho biết lệnh được gửi tới nhiều terminal. [R3]*
+
+**MultiExec gửi thao tác tới nhiều terminal cùng lúc.** Với người mới, giữ chế độ này tắt khi đang học lệnh quản trị.
+
+Nếu lỡ bật:
+
+1. Tìm thông báo **Multi-execution mode**.
+2. Bấm **Exit multi-execution mode**.
+3. Chọn lại đúng tab.
+4. Kiểm tra tên máy trước khi tiếp tục.
+
+X11 cũng là một tính năng riêng: chỉ bật forwarding khi cần ứng dụng đồ họa Linux và máy chủ đã hỗ trợ. Kết nối SSH để gõ lệnh không bắt buộc phải mở một desktop X11.
+
+---
+
+## 15. Lưu nội dung terminal và ghi log
+
+### 15.1. Lưu phần văn bản đang có
+
+Dùng **Terminal → Save terminal text** để lưu nội dung terminal ra tệp. Phím tắt được Mobatek liệt kê là **Ctrl+Shift+S**, nhưng có thể thay đổi theo cấu hình. [R1]
+
+Quy trình:
+
+1. Chọn tab cần lưu.
+2. Chạy các lệnh xem trạng thái.
+3. Chọn **Save terminal text**.
+4. Lưu thành tên có ý nghĩa, ví dụ `linux-lab-kiem-tra.txt`.
+5. Mở tệp vừa lưu để kiểm tra nội dung.
+
+Đây là lựa chọn phù hợp khi cần một đoạn output dễ đọc để ghi chú hoặc gửi hỗ trợ.
+
+### 15.2. Ghi log liên tục
+
+Vào **Settings → Configuration → Terminal**, tìm mục **Log terminal output to the following directory** hoặc tên gần tương đương. Chọn một thư mục Windows có quyền ghi.
+
+Một số thiết lập log cũng có thể áp dụng riêng trong **Terminal settings** của session.
+
+Sau khi bật:
+
+1. Mở một phiên thử.
+2. Gõ lệnh xem tên máy.
+3. Kiểm tra thư mục log có tệp mới và nội dung mới.
+4. Chỉnh định dạng theo lựa chọn sẵn có trong phiên bản.
+
+Log dạng raw có thể chứa mã điều khiển/màu của terminal; nếu chỉ cần văn bản rõ ràng, dùng Save terminal text. Khi chia sẻ log công khai, kiểm tra nội dung có mật khẩu, token, cấu hình hoặc dữ liệu nội bộ không.
+
+---
+
+## 16. Sao lưu và chuyển cấu hình sang máy khác
+
+### 16.1. Xuất riêng danh sách session
+
+Ở thanh bên Sessions:
+
+1. Chuột phải folder cần sao lưu.
+2. Chọn **Export sessions from this folder**.
+3. Lưu tệp xuất ra.
+4. Trên máy mới, chuột phải folder đích.
+5. Chọn **Import sessions into this folder** và chọn tệp đã xuất.
+
+Các session nhập vào vẫn cần đường mạng, quyền truy cập và phương thức xác thực phù hợp. [R1]
+
+### 16.2. Xuất toàn bộ cấu hình
+
+Các phiên bản hỗ trợ cung cấp **Settings → Export configuration**:
+
+![Menu Settings và lệnh Export configuration](images/13-export-cau-hinh.png)
+
+*Hình 14 — Xuất cấu hình từ menu Settings. [R9]*
+
+1. Chọn **Export configuration**.
+2. Chọn phạm vi/thành phần nếu hộp thoại yêu cầu.
+3. Lưu tệp sao lưu ở nơi riêng tư.
+4. Giữ bản sao trước khi đổi máy hoặc thực hiện thay đổi lớn.
+
+### 16.3. Nhập cấu hình
+
+Trên máy mới, chọn **Settings → Import configuration**:
+
+![Menu Settings và lệnh Import configuration](images/15-import-cau-hinh.png)
+
+*Hình 15 — Nhập cấu hình trên máy đích. [R9]*
+
+Sau khi nhập, kiểm tra session, đường dẫn private key và thư mục log/home. Một đường dẫn ổ D trên máy cũ có thể không tồn tại trên máy mới.
+
+Nếu bản đang dùng chưa có menu xuất toàn bộ, tham khảo vị trí `MobaXterm.ini` theo tài liệu hãng. Vị trí phụ thuộc bản Portable/Installer, quyền ghi và tham số khởi chạy; không nên mặc định một đường dẫn duy nhất cho mọi máy. [R11]
+
+**Tệp sao lưu dùng để chuyển môi trường cá nhân.** Không đưa cấu hình thực tế có thông tin xác thực, private key hoặc dữ liệu kết nối nội bộ vào repository hướng dẫn công khai.
+
+---
+## 17. Xử lý lỗi thường gặp
+
+Ghi lại thông báo lỗi, địa chỉ đích, cổng và thời điểm xảy ra. Sau đó xác định lỗi nằm ở kết nối mạng, xác thực hay quyền thao tác.
+
+| Hiện tượng | Kiểm tra và xử lý |
+|---|---|
+| **Connection timed out** | Kiểm tra IP, cổng, kết nối LAN/VPN và đường đi. Nhờ quản trị viên kiểm tra dịch vụ SSH cùng quy tắc firewall liên quan. |
+| **Connection refused** | Có phản hồi từ đích hoặc thiết bị trung gian nhưng kết nối bị từ chối. Kiểm tra đúng cổng và dịch vụ có đang lắng nghe không. |
+| **Access denied / Authentication failed** | Kiểm tra username, mật khẩu hoặc khóa được cấp; xác nhận máy chủ cho phép phương thức đang dùng. |
+| **Host identification has changed** | Khóa máy chủ khác bản đã lưu. Xác minh fingerprint trước khi cập nhật thông tin nhận dạng. |
+| **SSH thành công, không có SFTP** | Kiểm tra SSH-browser có bật không và thiết bị có hỗ trợ SFTP không. Một thiết bị mạng có thể chỉ cung cấp CLI qua SSH. |
+| **SFTP: Permission denied** | Tài khoản không có quyền ở đường dẫn đích. Thử thư mục home; nếu cần ghi nơi khác, xin quyền phù hợp. |
+| **Console hiện chữ rác** | Đối chiếu baud rate, data bits, parity và stop bits với tài liệu model. |
+| **Console không mở hoặc không gõ được** | Kiểm tra đúng COM, driver, cáp và flow control; đóng ứng dụng khác đang giữ cổng. |
+| **SSH ngắt sau thời gian không thao tác** | Kiểm tra timeout phiên và mạng. Có thể thử SSH keepalive nếu nguyên nhân là timeout khi nhàn rỗi. |
+
+Các thiết lập console phụ thuộc thiết bị; 9600 và 115200 chỉ là những tốc độ thường gặp. [R13]
+
+### Kiểm tra cổng SSH từ Windows
+
+Mở **Windows PowerShell trên máy cá nhân**, không nhập lệnh này vào terminal Linux:
+
+```powershell
+Test-NetConnection -ComputerName 192.168.10.20 -Port 22
+```
+
+Đây là IP và cổng của bài lab; thay bằng thông tin thực tế khi kiểm tra máy khác. Đọc kết quả:
+
+- **TcpTestSucceeded: True:** đã thiết lập được kết nối TCP tại thời điểm kiểm tra. Kết quả chưa chứng minh mật khẩu đúng hoặc dịch vụ trên cổng đó chắc chắn là SSH.
+- **TcpTestSucceeded: False:** kiểm tra lại đích, cổng, dịch vụ, LAN/VPN, định tuyến và firewall.
+- Ping có thể thất bại trong khi TCP thành công vì ICMP bị chặn. Không kết luận SSH hỏng chỉ từ kết quả ping. [R6]
+
+### Khi khóa máy chủ thay đổi
+
+Liên hệ quản trị viên qua kênh đã biết hoặc kiểm tra từ console để đối chiếu fingerprint. Máy được cài lại có thể có khóa mới, nhưng cảnh báo cũng có thể liên quan đến việc kết nối nhầm máy. Chỉ cập nhật bản ghi của đúng máy sau khi xác minh; không xóa toàn bộ `known_hosts` để bỏ cảnh báo. [R10]
+
+### Khi cần keepalive
+
+Vào **Settings → Configuration → SSH**, tìm **Enable SSH keepalive**. Tùy chọn này có thể giúp khi thiết bị trung gian hết thời gian chờ do phiên không có hoạt động; nó không khắc phục mất VPN hay đứt đường mạng. [R1]
+
+Không dùng cách tắt toàn bộ firewall hoặc cấp `chmod 777` cho thư mục để xử lý nhanh lỗi kết nối/quyền. Hãy xác định đúng quy tắc hoặc quyền đang thiếu.
+
+## 18. Bài thực hành hoàn chỉnh
+
+**Mục tiêu:** tạo phiên SSH, truyền một tệp, kiểm tra và chỉnh nội dung, tải về máy, lưu phiên và lưu văn bản terminal.
+
+**Điều kiện lab:** máy Linux `192.168.10.20` đã bật SSH/SFTP tại cổng `22`; tài khoản `labuser` được cấp quyền đăng nhập và ghi vào home. Đây là dữ liệu minh họa. Bài không thực hiện trên cấu hình hệ thống đang vận hành.
+
+### Bước 1: Kết nối
+
+Trong **MobaXterm trên Windows**, chọn **Session → SSH**:
+
+| Ô nhập | Giá trị lab |
+|---|---|
+| Remote host | `192.168.10.20` |
+| Specify username | Bật, nhập `labuser` |
+| Port | `22` |
+
+Bấm **OK**, xác minh nhận dạng máy ở lần đầu rồi đăng nhập bằng phương thức đã được cấp. [R1]
+
+**Trên máy Linux, trong tab SSH**, kiểm tra:
+
+```bash
+whoami
+hostname
+pwd
+```
+
+`whoami` cần trả về `labuser`. Kiểm tra hostname để chắc đang ở đúng máy trước khi thao tác.
+
+### Bước 2: Tạo thư mục lab
+
+**Trên máy Linux, trong tab SSH**, chạy:
+
+```bash
+mkdir -p ~/moba-lab
+cd ~/moba-lab
+pwd
+```
+
+Ghi lại đường dẫn hiện ra để mở đúng thư mục trong bảng SFTP. Với home thông thường của tài khoản ví dụ, đường dẫn là `/home/labuser/moba-lab`.
+
+### Bước 3: Tạo tệp trên Windows
+
+Mở **Notepad trên Windows**, nhập nội dung sau:
+
+```text
+Xin chao MobaXterm.
+Day la tep thuc hanh SFTP.
+```
+
+Lưu vào thư mục dễ tìm với tên `hello-moba.txt`. Kiểm tra phần mở rộng để tránh tên thành `hello-moba.txt.txt`.
+
+### Bước 4: Upload và xác minh
+
+Trong **bảng SFTP của MobaXterm**, mở đường dẫn lab đã ghi ở bước 2. Kéo `hello-moba.txt` từ File Explorer vào danh sách tệp SFTP và chờ hoàn tất. Kéo vào bảng tệp, không kéo vào vùng terminal. [R1]
+
+**Trên máy Linux, trong tab SSH**, chạy:
+
+```bash
+ls -l ~/moba-lab/hello-moba.txt
+cat ~/moba-lab/hello-moba.txt
+```
+
+Bạn phải thấy tệp và đúng hai dòng vừa nhập. Nếu không thấy, kiểm tra đường dẫn hiện tại của bảng SFTP.
+
+### Bước 5: Chỉnh tệp lab bằng editor
+
+Trong **bảng SFTP**, nhấp đúp `hello-moba.txt` để mở bằng editor được cấu hình. Thêm dòng:
+
+```text
+Da chinh sua tep lab tu MobaXterm.
+```
+
+Lưu tệp. MobaXterm có thể tự tải thay đổi trở lại máy chủ; nếu có hộp xác nhận upload, kiểm tra tên tệp và chấp nhận cho tệp lab này. [R1]
+
+**Trên máy Linux, trong tab SSH**, đọc lại:
+
+```bash
+cat ~/moba-lab/hello-moba.txt
+```
+
+Chỉ chuyển bước sau khi thấy dòng mới trên máy chủ.
+
+### Bước 6: Download về Windows
+
+Trong **bảng SFTP**, dùng thao tác download hoặc kéo tệp về một thư mục Windows khác, chẳng hạn thư mục `MobaLab-Download` trong Documents. Chờ tải xong, mở bằng Notepad và kiểm tra đủ ba dòng. Dùng thư mục khác giúp phân biệt bản tải về với tệp gốc.
+
+### Bước 7: Lưu phiên và kết quả
+
+Trong **danh sách Sessions bên trái**, đặt tên phiên dễ nhận biết như `LAB-Linux-192.168.10.20`. Phiên lưu giúp lần sau mở lại cấu hình kết nối; việc lưu phiên không bảo đảm chương trình từ xa tiếp tục chạy sau khi ngắt. [R1]
+
+Trong **tab SSH đang mở**, chọn **Terminal → Save terminal text**, lưu thành `moba-lab-session.txt` trên Windows. Mở tệp để kiểm tra có kết quả các lệnh vừa chạy.
+
+**Trên máy Linux, trong tab SSH**, kết thúc:
+
+```bash
+exit
+```
+
+Bài hoàn thành khi bạn có: phiên đã lưu, tệp ba dòng trong thư mục lab, bản download trên Windows và tệp văn bản ghi kết quả terminal.
+---
+
