@@ -1,0 +1,481 @@
+# SecureCRT là gì? Hướng dẫn sử dụng chi tiết cho người mới
+
+> Tài liệu tiếng Việt dành cho người mới làm Network/System, sử dụng SecureCRT trên Windows.
+> Bao gồm SSH, Telnet, Console, quản lý session, ghi log, Button Bar, SFTP và xử lý lỗi.
+>
+> **Hình trong tài liệu là hình mô phỏng thao tác, không phải ảnh chụp giao diện thật.** Tên menu và vị trí tùy chọn có thể thay đổi theo phiên bản.
+
+## Mục lục
+
+- [1. SecureCRT là gì?](#1-securecrt-là-gì)
+- [2. Tải và cài đặt](#2-tải-và-cài-đặt)
+- [3. Làm quen với giao diện](#3-làm-quen-với-giao-diện)
+- [4. Kết nối SSH vào thiết bị](#4-kết-nối-ssh-vào-thiết-bị)
+- [5. Kết nối Console qua cổng COM](#5-kết-nối-console-qua-cổng-com)
+- [6. Kết nối Telnet](#6-kết-nối-telnet)
+- [7. Lưu và quản lý session](#7-lưu-và-quản-lý-session)
+- [8. Nhập lệnh và chỉnh giao diện terminal](#8-nhập-lệnh-và-chỉnh-giao-diện-terminal)
+- [9. Ghi log phiên làm việc](#9-ghi-log-phiên-làm-việc)
+- [10. Tạo nút lệnh với Button Bar](#10-tạo-nút-lệnh-với-button-bar)
+- [11. Truyền tệp bằng SFTP](#11-truyền-tệp-bằng-sftp)
+- [12. Sao lưu cấu hình SecureCRT](#12-sao-lưu-cấu-hình-securecrt)
+- [13. Các lỗi thường gặp](#13-các-lỗi-thường-gặp)
+- [14. Bài thực hành](#14-bài-thực-hành)
+- [15. Đưa tài liệu lên GitHub](#15-đưa-tài-liệu-lên-github)
+- [16. Nguồn tham khảo](#16-nguồn-tham-khảo)
+
+## 1. SecureCRT là gì?
+
+**SecureCRT** là phần mềm terminal của **VanDyke Software**, dùng để kết nối và thao tác dòng lệnh trên máy chủ, router, switch, firewall và thiết bị khác.
+
+Trong công việc Network/System, bạn thường dùng phần mềm để:
+
+- SSH vào máy chủ Linux hoặc địa chỉ quản trị thiết bị mạng.
+- Kết nối Console để cấu hình ban đầu hoặc xử lý khi mất kết nối qua IP.
+- Lưu nhiều hồ sơ kết nối và mở nhiều tab.
+- Ghi lại kết quả lệnh ra tệp log.
+- Tạo nút gửi lệnh thường dùng và tự động hóa các tác vụ phù hợp.
+
+### Phân biệt các kiểu kết nối
+
+| Kiểu kết nối | Dùng khi nào? | Cần chuẩn bị |
+| --- | --- | --- |
+| SSH2 | Quản trị qua mạng bằng kết nối mã hóa | IP/hostname, cổng SSH, tài khoản hoặc khóa SSH |
+| Telnet | Thiết bị cũ hoặc bài lab yêu cầu | IP, cổng Telnet, tài khoản nếu có |
+| Serial / Console | Kết nối trực tiếp bằng cáp console | Đúng loại cáp, driver, cổng COM và thông số serial |
+| SFTP tab | Chuyển tệp qua kết nối SSH2 | Máy chủ SSH hỗ trợ SFTP và quyền truy cập tệp |
+
+**Telnet thông thường không mã hóa nội dung đăng nhập.** Ưu tiên SSH khi thiết bị hỗ trợ.
+
+SecureCRT là phần mềm thương mại. Trang chính thức cung cấp bản đánh giá **30 ngày**; sử dụng tiếp theo điều kiện giấy phép của nhà cung cấp. Bộ tài liệu này không chứa bộ cài hoặc license.
+
+## 2. Tải và cài đặt
+
+1. Truy cập [trang tải chính thức VanDyke](https://www.vandyke.com/download/index.html).
+2. Chọn **SecureCRT**, chọn bản phù hợp Windows và kiến trúc máy.
+3. Hoàn tất các bước tải theo yêu cầu của trang.
+4. Mở bộ cài, đọc điều khoản và tiếp tục nếu đồng ý.
+5. Giữ các lựa chọn cài đặt phù hợp rồi hoàn tất.
+6. Mở SecureCRT từ Start.
+7. Chọn dùng thử hoặc nhập thông tin license hợp lệ nếu bạn đã có.
+
+Không cần cài SecureFX để thực hiện các bài SSH và Console trong tài liệu này. SecureFX là ứng dụng truyền tệp riêng, có thể được cung cấp trong bộ cài kết hợp.
+
+## 3. Làm quen với giao diện
+
+![Các vùng chính trong SecureCRT](images/01-giao-dien.png)
+
+| Thành phần | Vai trò |
+| --- | --- |
+| Session Manager | Danh sách session đã lưu, có thể tổ chức bằng thư mục |
+| Tab phiên kết nối | Mỗi tab hiển thị một phiên làm việc |
+| Terminal | Nơi nhận kết quả và nhập lệnh |
+| Quick Connect | Mở kết nối nhanh bằng thông tin thiết bị |
+| Session Options | Cài đặt của session được chọn |
+| Global Options | Cài đặt chung của ứng dụng |
+| Button Bar | Các nút tác vụ/lệnh do bạn tạo |
+| Status bar | Thông tin trạng thái tùy phiên bản và cấu hình |
+
+**Session** là một hồ sơ gồm loại giao thức, địa chỉ, cổng và các thiết lập liên quan. Session đã lưu vẫn tồn tại khi ngắt kết nối; mở session sẽ tạo một kết nối mới đến thiết bị.
+
+## 4. Kết nối SSH vào thiết bị
+
+![Ví dụ thông tin Quick Connect bằng SSH2](images/02-ssh.png)
+
+### 4.1. Chuẩn bị thông tin
+
+Ví dụ trong tài liệu:
+
+| Trường | Giá trị minh họa | Bạn cần thay bằng |
+| --- | --- | --- |
+| Protocol | SSH2 | SSH2 |
+| Hostname | 192.168.1.10 | IP hoặc hostname quản trị thực tế |
+| Port | 22 | Cổng SSH của thiết bị |
+| Username | netadmin | Tài khoản được cấp |
+| Session name | SW-LAB-SSH | Tên dễ nhận biết |
+
+Thiết bị phải bật SSH, cho phép tài khoản đăng nhập và có đường mạng từ máy bạn đến cổng SSH. Không phải cứ ping được là SSH sẽ hoạt động.
+
+### 4.2. Thực hiện kết nối
+
+1. Mở **File → Quick Connect** hoặc nút Quick Connect trên toolbar.
+2. Chọn **SSH2** tại Protocol.
+3. Điền Hostname, Port và Username.
+4. Bật **Save session** nếu hộp thoại có tùy chọn này và bạn muốn lưu.
+5. Bấm **Connect**.
+6. Xử lý bước xác minh host key nếu được hỏi.
+7. Nhập mật khẩu, hoặc dùng khóa SSH theo cấu hình tài khoản.
+8. Chờ xuất hiện dấu nhắc của thiết bị, ví dụ `SW-LAB>` hoặc `netadmin@linux-lab:~$`.
+
+### 4.3. Host key là gì?
+
+Host key giúp nhận diện **máy chủ SSH**. Lần đầu kết nối, SecureCRT có thể hiển thị fingerprint và yêu cầu xác nhận.
+
+Đối chiếu fingerprint với thông tin do quản trị viên cung cấp hoặc nguồn tin cậy. Chỉ lưu/chấp nhận sau khi đã xác minh. Nếu host key thay đổi ở lần sau, kiểm tra nguyên nhân như cài lại máy chủ, đổi thiết bị hoặc trỏ nhầm IP trước khi cập nhật khóa đã lưu.
+
+### 4.4. Nếu dùng private key
+
+Với session đã lưu, mở **Properties / Session Options → Connection → SSH2**. Tìm **PublicKey** trong danh sách Authentication và mở Properties để chọn identity/private key phù hợp.
+
+Public key tương ứng phải được cài trên máy chủ cho đúng tài khoản. Private key ở máy bạn; nhập passphrase nếu khóa có bảo vệ. Không đưa private key vào GitHub.
+
+## 5. Kết nối Console qua cổng COM
+
+![Ví dụ cấu hình Serial với COM3](images/03-console.png)
+
+### 5.1. Chuẩn bị
+
+- Đúng cáp console cho thiết bị: USB console hoặc bộ chuyển USB-to-Serial và cáp tương thích.
+- Driver của cáp/bộ chuyển nếu Windows chưa nhận.
+- Thông số console trong tài liệu của đúng model thiết bị.
+
+**Cổng console RJ45 không phải cổng Ethernet thông thường.** Hãy xác định đúng cổng và đúng loại cáp.
+
+### 5.2. Xem cổng COM trên Windows
+
+1. Cắm cáp vào máy tính và thiết bị.
+2. Bấm chuột phải Start → **Device Manager**.
+3. Mở **Ports (COM & LPT)**.
+4. Ghi lại số COM, ví dụ `USB Serial Port (COM3)`.
+5. Nếu không có cổng COM hoặc xuất hiện dấu cảnh báo, kiểm tra driver và cáp trước.
+
+### 5.3. Tạo kết nối Serial
+
+1. Mở **Quick Connect**.
+2. Chọn Protocol: **Serial**.
+3. Chọn COM vừa tìm được.
+4. Điền thông số theo tài liệu thiết bị.
+5. Bấm Connect và nhấn Enter một vài lần để gọi dấu nhắc.
+
+Bảng dưới là **ví dụ**, không phải thông số chung cho mọi thiết bị:
+
+| Thông số | Giá trị ví dụ |
+| --- | --- |
+| Port | COM3 |
+| Baud rate | 9600 |
+| Data bits | 8 |
+| Parity | None |
+| Stop bits | 1 |
+| Flow control | None, nếu tài liệu thiết bị yêu cầu |
+
+Một số thiết bị dùng **115200** hoặc tốc độ khác. `8N1` nghĩa là 8 data bits, không parity, 1 stop bit; không quyết định baud rate.
+
+Nếu thấy ký tự rác: kiểm tra baud rate và các thông số serial. Nếu màn hình trống: kiểm tra cổng COM, nguồn thiết bị, cáp và flow control. Không cần khởi động lại thiết bị đang vận hành chỉ để thử kết nối console.
+
+## 6. Kết nối Telnet
+
+1. Mở **Quick Connect**.
+2. Chọn **Telnet**.
+3. Điền IP/hostname của thiết bị.
+4. Điền cổng Telnet thực tế; cổng thông thường là **23**.
+5. Bấm Connect rồi đăng nhập nếu được yêu cầu.
+
+Telnet phải được bật ở phía thiết bị. Chỉ chọn khi môi trường và yêu cầu quản trị cho phép; với thiết bị hỗ trợ SSH, dùng SSH2.
+
+## 7. Lưu và quản lý session
+
+![Tổ chức session theo thư mục và thiết bị](images/04-session.png)
+
+### 7.1. Tạo session để dùng lâu dài
+
+1. Mở Session Manager, thường qua **File → Connect** hoặc bảng Session Manager.
+2. Chọn **New Session**, qua biểu tượng hoặc menu chuột phải tùy giao diện.
+3. Chọn giao thức, nhập thông tin kết nối và làm theo trình hướng dẫn.
+4. Đặt tên session, ví dụ `HO-SW01-SSH`.
+5. Lưu và thử kết nối.
+
+### 7.2. Đặt tên và chia thư mục
+
+Gợi ý tên:
+
+| Session | Ý nghĩa |
+| --- | --- |
+| HO-SW01-SSH | Switch 01 ở trụ sở, kết nối SSH |
+| BR01-RTR01-SSH | Router 01 ở chi nhánh 01 |
+| LAB-LINUX01 | Máy chủ Linux trong lab |
+| LAB-CONSOLE-COM3 | Kết nối console trên máy hiện tại |
+
+Có thể tạo thư mục như `HO`, `BR01`, `LAB` rồi di chuyển session tương ứng. Cổng COM có thể khác khi chuyển sang máy tính khác nên cần kiểm tra lại session Serial.
+
+### 7.3. Sửa và mở nhiều tab
+
+- Chuột phải session → **Properties** để sửa thông tin.
+- Chọn **Connect in Tab** nếu menu có, hoặc dùng tùy chọn mở kết nối trong tab.
+- Trước khi gõ lệnh, nhìn **tên tab và prompt** để xác nhận đang ở đúng thiết bị.
+- Khi làm xong, dùng lệnh đăng xuất của hệ điều hành/thiết bị hoặc chức năng **Disconnect** của SecureCRT.
+
+## 8. Nhập lệnh và chỉnh giao diện terminal
+
+### 8.1. Một số lệnh kiểm tra để thực hành
+
+Lệnh do **hệ điều hành của thiết bị** quyết định; SecureCRT chỉ gửi lệnh và hiển thị kết quả.
+
+| Nền tảng | Ví dụ lệnh | Mục đích |
+| --- | --- | --- |
+| Linux | `hostname` | Xem tên máy |
+| Linux | `whoami` | Xem tài khoản đang đăng nhập |
+| Linux | `ip address` | Xem địa chỉ IP nếu hệ thống có iproute2 |
+| Linux | `ip route` | Xem bảng định tuyến nếu có iproute2 |
+| Cisco IOS | `show version` | Xem phiên bản và thông tin thiết bị |
+| Cisco IOS | `show ip interface brief` | Xem nhanh IP/trạng thái interface |
+| FortiOS | `get system status` | Xem thông tin hệ thống |
+
+Lệnh có thể khác theo phiên bản, loại thiết bị và quyền tài khoản. Ví dụ lệnh Cisco không dùng nguyên xi cho mọi switch Dell, MikroTik hoặc TP-Link.
+
+### 8.2. Copy và paste
+
+1. Bôi đen phần kết quả cần sao chép.
+2. Dùng **Edit → Copy**.
+3. Để dán, dùng **Edit → Paste** hoặc phím đã cấu hình trong ứng dụng.
+
+Không mặc định Ctrl+C là Copy trong terminal: tổ hợp này thường gửi tín hiệu ngắt chương trình đang chạy. Tùy cấu hình, thao tác chọn chữ/chuột phải cũng có thể copy hoặc paste; nên kiểm tra trước.
+
+Dán nội dung có ký tự xuống dòng có thể khiến lệnh chạy ngay. Với nhiều dòng, đọc lại và thử từng lệnh trong lab trước khi áp dụng lên thiết bị.
+
+### 8.3. Font, màu và tiếng Việt
+
+Mở **Options → Session Options**, tìm các mục trong **Terminal**, chẳng hạn Appearance và Emulation tùy phiên bản:
+
+- Chọn font monospace hỗ trợ ký tự cần hiển thị.
+- Chỉnh cỡ chữ đủ đọc.
+- Chọn character encoding **UTF-8** khi hệ thống phía xa dùng UTF-8.
+- Chọn kiểu terminal phù hợp, thường là Xterm hoặc VT100 theo yêu cầu thiết bị.
+
+Nếu chữ lỗi, cần kiểm tra cả encoding/locale phía máy chủ; chỉ đổi font chưa chắc giải quyết được.
+
+## 9. Ghi log phiên làm việc
+
+![Thiết lập ghi log tự động](images/05-log.png)
+
+### 9.1. Ghi log thủ công
+
+1. Kết nối vào thiết bị.
+2. Chọn **File → Log Session**.
+3. Chọn vị trí và tên log nếu được hỏi.
+4. Chạy các lệnh cần thu thập.
+5. Dùng lại mục Log Session để dừng ghi theo trạng thái menu.
+6. Mở tệp log và kiểm tra kết quả.
+
+Log không tự khôi phục dữ liệu đã xuất hiện trước khi bật ghi. Hãy bật log trước các lệnh cần lưu.
+
+### 9.2. Tự động ghi khi kết nối
+
+1. Mở **Options → Session Options → Terminal → Log File**.
+2. Chọn đường dẫn tại **Log file name**.
+3. Bật **Start log upon connect**.
+4. Lưu; kết nối lại để thử nếu đang sửa một phiên đã mở.
+
+Ví dụ tạo trước thư mục `C:\Logs\SecureCRT` rồi dùng:
+
+```text
+C:\Logs\SecureCRT\%S-%Y%M%D-%h%m%s.log
+```
+
+| Biến | Ý nghĩa |
+| --- | --- |
+| `%S` | Tên session |
+| `%Y` / `%M` / `%D` | Năm / tháng / ngày |
+| `%h` / `%m` / `%s` | Giờ / phút / giây |
+
+Ví dụ kết quả: `HO-SW01-SSH-20261020-173000.log`.
+
+Log là bản ghi dữ liệu terminal, không mặc định là bản sao lưu đầy đủ cấu hình thiết bị. Kiểm tra nội dung trước khi chia sẻ vì đầu ra lệnh có thể chứa thông tin nội bộ.
+
+## 10. Tạo nút lệnh với Button Bar
+
+![Ví dụ nút gửi lệnh show version](images/06-button-bar.png)
+
+Ví dụ tạo nút đọc phiên bản trên Cisco IOS:
+
+1. Chọn **View → Button Bar** để hiện thanh nút.
+2. Chuột phải vùng trống trên thanh → **New Button**.
+3. Chọn Function: **Send String**.
+4. Đặt Label: `SHOW VERSION`.
+5. Điền chuỗi:
+
+```text
+show version\r
+```
+
+6. Lưu nút.
+7. Chọn đúng tab Cisco IOS và bấm nút.
+
+Trong Send String, `\r` biểu diễn carriage return để gửi Enter; không gõ nguyên `\r` vào dòng lệnh của thiết bị.
+
+Lệnh được gửi đến phiên đang được chọn. Nếu bạn dùng nhiều hãng, nên tạo các thanh nút riêng và đặt tên rõ, ví dụ `CISCO-CHECK`, `LINUX-CHECK`. Bắt đầu với lệnh đọc thông tin.
+
+## 11. Truyền tệp bằng SFTP
+
+![Các lệnh cơ bản trong SFTP tab](images/07-sftp.png)
+
+### 11.1. Điều kiện
+
+- Có session **SSH2** đã kết nối.
+- Máy chủ hỗ trợ SFTP subsystem.
+- Tài khoản có quyền truy cập thư mục/tệp cần dùng.
+
+Thiết bị có SSH chưa chắc đã hỗ trợ SFTP.
+
+### 11.2. Mở SFTP tab
+
+Tại phiên SSH2 đang kết nối, chọn **File → Connect SFTP Tab**, hoặc chuột phải tab SSH rồi chọn mục tương ứng.
+
+### 11.3. Lệnh thường dùng
+
+| Lệnh | Tác dụng |
+| --- | --- |
+| `pwd` | Xem thư mục trên máy chủ |
+| `lpwd` | Xem thư mục trên máy tính của bạn |
+| `ls` | Liệt kê tệp trên máy chủ |
+| `lls` | Liệt kê tệp trên máy tính của bạn |
+| `cd /home/netadmin` | Đổi thư mục trên máy chủ |
+| `lcd C:\Temp` | Đổi thư mục cục bộ |
+| `get report.txt` | Tải tệp từ thư mục remote hiện tại về thư mục local hiện tại |
+| `put note.txt` | Gửi tệp từ thư mục local hiện tại lên thư mục remote hiện tại |
+| `help` | Xem trợ giúp lệnh |
+
+### Ví dụ tải tệp về máy
+
+Tạo trước thư mục `C:\Temp`, mở SFTP tab rồi nhập:
+
+```text
+lcd C:\Temp
+cd /home/netadmin
+ls
+get report.txt
+```
+
+Thay đường dẫn và tên tệp bằng giá trị có thật. Mở `C:\Temp` trên Windows để kiểm tra tệp đã tải.
+
+Đây là SFTP dòng lệnh trong SecureCRT. Nếu dùng SecureFX để truyền tệp bằng giao diện riêng, thao tác sẽ khác tài liệu này.
+
+## 12. Sao lưu cấu hình SecureCRT
+
+Cấu hình SecureCRT chứa các session và thiết lập của **ứng dụng**, khác với cấu hình router/switch.
+
+### Xuất bản sao lưu
+
+1. Chọn **Tools → Export Settings** nếu phiên bản có hỗ trợ.
+2. Làm theo trình hướng dẫn để chọn phạm vi dữ liệu.
+3. Chọn vị trí lưu, hoàn tất xuất và giữ bản sao ở nơi phù hợp.
+
+### Khôi phục hoặc chuyển máy
+
+1. Trên máy đích, mở **Tools → Import Settings**.
+2. Chọn tệp xuất trước đó và làm theo trình hướng dẫn.
+3. Kiểm tra lại IP, cổng, đường dẫn khóa SSH và số COM.
+4. Thử kết nối một session trước khi tiếp tục.
+
+Một số tùy chọn xuất có thể bao gồm thông tin cá nhân hoặc thông tin đăng nhập. Không đưa bản sao lưu chứa dữ liệu này vào repository công khai. Tệp khóa, script hoặc tệp tham chiếu bên ngoài có thể cần sao lưu riêng theo cấu hình thực tế.
+
+## 13. Các lỗi thường gặp
+
+| Lỗi / hiện tượng | Nhóm nguyên nhân nên kiểm tra | Bước xử lý đầu tiên |
+| --- | --- | --- |
+| Connection timed out | Sai IP/port, thiếu route, VPN chưa lên, firewall chặn hoặc dịch vụ không phản hồi | Kiểm tra đúng đích và thử TCP port |
+| Connection refused | Đích hoặc thiết bị trung gian từ chối kết nối; dịch vụ/cổng có thể chưa mở | Xác nhận cổng và SSH/Telnet đang lắng nghe |
+| Authentication failed | Sai tài khoản, mật khẩu, key hoặc chính sách xác thực | Kiểm tra tài khoản và phương thức được phép |
+| Host key changed | Máy chủ thay khóa, đổi thiết bị hoặc kết nối nhầm đích | Xác minh fingerprint trước khi cập nhật |
+| No matching algorithm | Client và server không có thuật toán phù hợp | Kiểm tra phiên bản, cập nhật phần mềm/firmware phù hợp |
+| Unable to open COM | Sai số COM, thiếu driver hoặc cổng bị phần mềm khác chiếm | Xem Device Manager và đóng ứng dụng đang dùng COM |
+| Console hiện chữ rác | Thông số serial không khớp | Đối chiếu baud rate, data bits, parity và stop bits |
+| Console trống | Sai cổng/cáp, flow control hoặc chưa có dữ liệu | Nhấn Enter; kiểm tra nguồn, cáp và thông số |
+| SFTP không mở được | Máy chủ không có SFTP hoặc tài khoản bị hạn chế | Xác nhận SFTP subsystem và quyền tài khoản |
+| Không ghi được log | Đường dẫn sai hoặc không có quyền ghi | Chọn thư mục người dùng có thể ghi |
+| Dán nhiều dòng bị thiếu | Thiết bị nhận lệnh chậm hoặc cơ chế flow control | Gửi từng lệnh; xem tùy chọn Line Send Delay nếu cần |
+
+### Kiểm tra cổng SSH trên Windows
+
+Mở PowerShell:
+
+```powershell
+Test-NetConnection -ComputerName 192.168.1.10 -Port 22
+```
+
+Thay IP/cổng theo thực tế. `TcpTestSucceeded : True` chỉ cho biết kết nối TCP thành công, chưa xác nhận được đăng nhập SSH. Nếu False, tiếp tục kiểm tra từ máy bạn qua mạng/VPN/firewall đến thiết bị; không kết luận ngay SecureCRT bị lỗi.
+
+## 14. Bài thực hành
+
+### Bài 1: Tạo session SSH và ghi log
+
+1. Chuẩn bị một máy Linux hoặc thiết bị lab bật SSH.
+2. Tạo session `LAB-SSH-01`.
+3. Xác minh host key và đăng nhập.
+4. Bật log trước khi chạy lệnh.
+5. Với Linux, chạy `hostname`, `whoami` và `ip route` nếu hệ thống hỗ trợ.
+6. Dừng log rồi mở tệp để kiểm tra.
+7. Ngắt kết nối và mở lại session đã lưu.
+
+**Kết quả mong đợi:** session được lưu, kết nối lại đúng đích và log có kết quả các lệnh đã chạy.
+
+### Bài 2: Tạo kết nối Console
+
+1. Cắm đúng cáp vào thiết bị lab.
+2. Tìm cổng COM trong Device Manager.
+3. Đọc thông số console của thiết bị.
+4. Tạo session Serial rồi Connect.
+5. Nhấn Enter và kiểm tra xuất hiện prompt.
+6. Lưu session với tên rõ ràng.
+
+### Danh sách tự kiểm tra
+
+- [ ] Phân biệt được SSH, Telnet và Serial.
+- [ ] Điền được IP/hostname, port và username.
+- [ ] Hiểu bước xác minh host key.
+- [ ] Tạo và mở lại session đã lưu.
+- [ ] Xác định đúng COM và thông số console.
+- [ ] Ghi được log và tìm lại tệp.
+- [ ] Kiểm tra tab/prompt trước khi gửi lệnh.
+
+## 15. Đưa tài liệu lên GitHub
+
+![Các bước tải README và thư mục ảnh lên GitHub](images/08-github.png)
+
+### Tải cả bộ tài liệu
+
+1. **Giải nén ZIP**. Bạn sẽ có `README.md` và thư mục `images` ngay trong thư mục giải nén.
+2. Mở thư mục đích trong repository, ví dụ `Network-Tools/SecureCRT`.
+3. Chọn **Add file → Upload files**.
+4. Kéo **README.md và toàn bộ thư mục images** vào vùng tải lên.
+5. Nhập mô tả như `Thêm hướng dẫn SecureCRT`.
+6. Bấm **Commit changes** và hoàn tất bước chọn nhánh/pull request nếu được yêu cầu.
+7. Mở README để kiểm tra **8 hình** đã hiển thị.
+
+**README.md và images phải nằm cùng cấp.** Chỉ tải README hoặc tải nguyên ZIP sẽ không làm hình minh họa xuất hiện trong README trên GitHub.
+
+### Thêm ảnh bạn tự chụp
+
+Lưu ảnh vào thư mục `images`, ví dụ `09-ssh-thuc-te.png`. Sau đó chèn:
+
+```markdown
+![Kết nối SSH thực tế](images/09-ssh-thuc-te.png)
+```
+
+Ảnh mới phải được tải lên cùng repository. Đường dẫn tính từ README và phân biệt chữ hoa/thường. Không dùng đường dẫn cá nhân như `C:\Users\...` trong Markdown.
+
+### Khi ảnh không hiển thị
+
+- Kiểm tra có thư mục `images` cạnh README trên GitHub không.
+- Mở thử tệp PNG trong repository.
+- So sánh chính xác tên ảnh với đường dẫn Markdown.
+- Nếu di chuyển README, chuyển cả `images` hoặc cập nhật lại đường dẫn.
+
+## 16. Nguồn tham khảo
+
+Đối chiếu nguồn chính thức ngày **20/10/2026**. Ví dụ, bài tập và hình mô phỏng được biên soạn riêng cho tài liệu này.
+
+- [VanDyke – SecureCRT](https://www.vandyke.com/products/securecrt/)
+- [VanDyke – Tải phần mềm và bản dùng thử](https://www.vandyke.com/download/index.html)
+- [VanDyke – Các tính năng SecureCRT](https://www.vandyke.com/products/securecrt/features.html)
+- [VanDyke – FAQ SecureCRT](https://www.vandyke.com/products/securecrt/faq/index.html)
+- [VanDyke – Hiểu về SSH host key](https://www.vandyke.com/solutions/host_keys/host_keys.pdf)
+- [VanDyke – Public-key authentication](https://www.vandyke.com/support/tips/publickeyauth.html)
+- [VanDyke – Thiết lập private key trong SSH2](https://www.vandyke.com/support/tips/configure-scrt-ppk-file-public-key-authentication.html)
+- [VanDyke – Ghi log tự động](https://www.vandyke.com/support/tips/configure-automated-logging-in-securecrt.html)
+- [VanDyke – Giới thiệu Button Bar](https://www.vandyke.com/support/tips/button_bar.html)
+- [VanDyke – Tạo nút gửi lệnh](https://www.vandyke.com/support/tips/buttonbar.html)
+- [VanDyke – SFTP tab](https://www.vandyke.com/support/scripting/scripting-examples/sftp-tab-automation.html)
+- [VanDyke – Sao lưu và khôi phục thiết lập](https://www.vandyke.com/support/tips/backupsessions.html)
+- [VanDyke – Line Send Delay và flow control](https://www.vandyke.com/support/tips/echoflowctrl.html)
+
+Để tra đúng menu và phím tắt của bản đang cài, mở **Help** trong SecureCRT.
