@@ -1,0 +1,281 @@
+# Lightshot là gì? Hướng dẫn sử dụng chi tiết cho người mới
+
+> Hướng dẫn trên Windows 10/11, từ cài đặt đến chụp ảnh, chú thích và đưa hình lên GitHub.
+> Các ảnh trong tài liệu là **hình mô phỏng thao tác**, không phải ảnh chụp giao diện thật. Tên nút, vị trí và ngôn ngữ có thể khác theo phiên bản.
+
+## Mục lục
+
+- [1. Lightshot là gì?](#1-lightshot-là-gì)
+- [2. Tải và cài đặt](#2-tải-và-cài-đặt)
+- [3. Chụp ảnh màn hình lần đầu](#3-chụp-ảnh-màn-hình-lần-đầu)
+- [4. Vẽ và thêm chú thích](#4-vẽ-và-thêm-chú-thích)
+- [5. Sao chép, lưu và chia sẻ](#5-sao-chép-lưu-và-chia-sẻ)
+- [6. Phím tắt thường dùng](#6-phím-tắt-thường-dùng)
+- [7. Thiết lập và khắc phục lỗi](#7-thiết-lập-và-khắc-phục-lỗi)
+- [8. Bài thực hành](#8-bài-thực-hành)
+- [9. Đưa tài liệu lên GitHub](#9-đưa-tài-liệu-lên-github)
+- [10. Nguồn tham khảo](#10-nguồn-tham-khảo)
+
+## 1. Lightshot là gì?
+
+**Lightshot** là phần mềm chụp ảnh màn hình miễn phí. Bạn chọn một vùng đang hiển thị, đánh dấu nội dung rồi sao chép, lưu thành tệp hoặc tải lên để lấy liên kết chia sẻ.
+
+Ví dụ sử dụng:
+
+- Chụp thông báo lỗi để nhờ hỗ trợ.
+- Khoanh vùng cấu hình IP, DNS hoặc Gateway khi viết hướng dẫn mạng.
+- Thêm mũi tên vào vị trí cần bấm.
+- Lưu ảnh từng bước để viết README trên GitHub.
+
+Tài liệu này dùng **bản desktop Windows**. Bạn không cần tài khoản để chụp và lưu ảnh vào máy; tài khoản phục vụ việc quản lý lịch sử ảnh trên dịch vụ trực tuyến.
+
+## 2. Tải và cài đặt
+
+![Quy trình cài đặt và mở Lightshot](images/01-cai-dat.png)
+
+### Bước 1: Tải bộ cài
+
+1. Mở [trang tải Lightshot chính thức](https://app.prntscr.com/en/download.html).
+2. Chọn bản **Windows**.
+3. Chờ tải xong, mở tệp cài đặt trong thư mục Downloads.
+
+### Bước 2: Cài đặt
+
+1. Chọn ngôn ngữ nếu bộ cài yêu cầu.
+2. Đọc điều khoản và tiếp tục nếu đồng ý.
+3. Làm theo hướng dẫn, hoàn tất cài đặt.
+4. Mở **Start**, nhập `Lightshot` rồi mở ứng dụng.
+
+### Bước 3: Kiểm tra đã chạy
+
+Nhìn góc phải thanh taskbar, cạnh đồng hồ, tìm biểu tượng **lông vũ Lightshot**. Nếu chưa thấy, bấm dấu **^** để mở các biểu tượng ẩn.
+
+Lightshot chạy nền nên có thể không xuất hiện cửa sổ lớn. Thử nhấn **PrtSc** để kiểm tra.
+
+> Bàn phím có thể ghi `PrtSc`, `PrtScn` hoặc `Print Screen`. Một số laptop cần nhấn thêm `Fn`.
+
+## 3. Chụp ảnh màn hình lần đầu
+
+![Thao tác kéo vùng chọn](images/02-chon-vung.png)
+
+1. Mở nội dung cần chụp, ví dụ cửa sổ báo lỗi.
+2. Nhấn **PrtSc**. Khi chế độ chụp mở, màn hình thường tối lại và xuất hiện con trỏ chọn vùng.
+3. Đưa chuột đến góc trên bên trái nội dung cần lấy.
+4. **Giữ chuột trái**, kéo xuống góc dưới bên phải.
+5. Thả chuột để hoàn thành vùng chọn.
+6. Kiểm tra ranh giới; kéo mép hoặc điểm điều chỉnh nếu cần.
+7. Thêm chú thích hoặc chọn cách lưu ở các phần tiếp theo.
+
+**Ví dụ:** Khi chụp lỗi kết nối, nên lấy đủ tên cửa sổ, mã lỗi và nội dung lỗi để người hỗ trợ hiểu tình huống.
+
+Muốn hủy và chụp lại: nhấn **Esc**, chuẩn bị lại màn hình rồi nhấn PrtSc.
+
+Muốn lấy toàn màn hình: sau khi vào chế độ chụp, nhấn **Ctrl + A**.
+
+## 4. Vẽ và thêm chú thích
+
+Sau khi chọn vùng, dùng thanh công cụ bên cạnh ảnh. Di chuột lên biểu tượng để xem tên chức năng nếu phiên bản hỗ trợ.
+
+![Ví dụ khoanh lỗi, vẽ mũi tên và thêm chữ](images/03-chu-thich.png)
+
+| Công cụ | Cách sử dụng | Khi nào nên dùng |
+| --- | --- | --- |
+| Bút vẽ tự do | Chọn bút, giữ và kéo chuột | Khoanh nhanh một chi tiết |
+| Đường thẳng | Kéo từ điểm đầu đến điểm cuối | Gạch dưới một dòng |
+| Mũi tên | Kéo về phía nội dung cần chỉ | Chỉ nút hoặc trường cần bấm |
+| Hình chữ nhật | Kéo khung quanh nội dung | Khoanh thông báo lỗi |
+| Marker / đánh dấu | Kéo qua vùng cần nhấn mạnh | Làm nổi bật một dòng |
+| Text / chữ | Chọn công cụ chữ, bấm vị trí và nhập | Ghi “Bước 1”, “Bấm tại đây” |
+| Màu sắc | Chọn màu trước khi vẽ | Dùng màu dễ phân biệt với nền |
+| Undo / hoàn tác | Dùng nút hoàn tác khi có | Bỏ nét hoặc chú thích vừa thêm |
+
+### Ví dụ: chỉ ra lỗi mạng
+
+1. Chọn **hình chữ nhật**, khoanh dòng `Request timed out`.
+2. Chọn **mũi tên**, kéo hướng về dòng lỗi.
+3. Chọn **Text**, ghi `Kiểm tra kết nối đến Gateway`.
+4. Kiểm tra chữ không che mất thông tin quan trọng.
+5. Lưu ảnh bằng nút **Save**.
+
+Nên dùng một màu chủ đạo và lời chú thích ngắn. Tránh vẽ quá nhiều khiến người xem khó đọc kết quả gốc.
+
+> Marker hoặc khung chữ nhật viền không che kín thông tin. Nếu ảnh có mật khẩu, token hoặc dữ liệu cá nhân, hãy loại bỏ vùng đó hoặc che bằng vùng đặc hoàn toàn trong công cụ sửa ảnh, lưu lại và kiểm tra trước khi chia sẻ.
+
+## 5. Sao chép, lưu và chia sẻ
+
+![Ba cách xử lý ảnh sau khi chụp](images/04-luu-va-gui.png)
+
+### 5.1. Sao chép để gửi nhanh
+
+1. Chọn vùng và thêm chú thích.
+2. Nhấn **Ctrl + C** hoặc nút Copy.
+3. Mở Word hoặc khung chat hỗ trợ dán ảnh.
+4. Nhấn **Ctrl + V**.
+5. Kiểm tra ảnh trước khi gửi.
+
+Sao chép vào clipboard chưa tạo tệp ảnh riêng trên ổ đĩa. Nếu cần lưu lâu dài, dùng Save.
+
+### 5.2. Lưu thành tệp trên máy
+
+1. Bấm **nút Save** trên thanh công cụ để chủ động chọn nơi lưu.
+2. Chọn thư mục, chẳng hạn `Documents\Lightshot`.
+3. Đặt tên dễ hiểu, ví dụ `01-mo-cai-dat.png`.
+4. Chọn định dạng và lưu.
+5. Mở thư mục đó để kiểm tra ảnh.
+
+| Định dạng | Gợi ý lựa chọn |
+| --- | --- |
+| PNG | Ưu tiên cho ảnh giao diện, chữ và tài liệu kỹ thuật |
+| JPG | Có thể dùng khi cần tệp nhỏ hơn; chữ có thể giảm độ rõ |
+| BMP | Thường không cần cho README vì tệp có thể lớn |
+
+**Lưu ý Ctrl + S:** Tài liệu phím tắt của Lightshot mô tả thao tác lưu nhanh vào thư mục gần nhất, hoặc My Documents nếu chưa có. Để chắc chắn về tên và vị trí tệp, dùng nút Save; không mặc định rằng Ctrl + S luôn mở hộp thoại Save As.
+
+### 5.3. Tải ảnh lên để lấy liên kết
+
+1. Kiểm tra nội dung trong vùng chụp.
+2. Chọn **Upload** hoặc nhấn **Ctrl + D**.
+3. Chờ tải lên xong.
+4. Sao chép đường dẫn được cung cấp.
+5. Mở thử đường dẫn trước khi gửi.
+
+Ảnh đã được gửi lên dịch vụ bên ngoài; hãy coi người có liên kết có thể xem. Không dùng cách này cho ảnh chứa thông tin nội bộ nhạy cảm.
+
+**Với tài liệu GitHub:** nên lưu tệp PNG trong repository thay vì phụ thuộc vào liên kết ảnh chia sẻ.
+
+## 6. Phím tắt thường dùng
+
+Các tổ hợp dưới đây dùng trên bản Windows. Trừ PrtSc, các phím thao tác ảnh được dùng trong chế độ chụp.
+
+| Phím | Chức năng |
+| --- | --- |
+| PrtSc | Mở chế độ chụp |
+| Ctrl + C | Sao chép vùng đã chọn |
+| Ctrl + S | Lưu nhanh theo hành vi của phiên bản đang dùng |
+| Ctrl + D | Tải vùng chụp lên dịch vụ chia sẻ |
+| Ctrl + A | Mở rộng vùng chọn toàn màn hình |
+| Esc | Hủy chụp |
+
+## 7. Thiết lập và khắc phục lỗi
+
+### 7.1. Print Screen mở Snipping Tool thay vì Lightshot
+
+![Minh họa tắt phím Print Screen của công cụ chụp Windows](images/05-loi-print-screen.png)
+
+**Windows 11:**
+
+1. Nhấn **Win + I** để mở Settings.
+2. Vào **Accessibility → Keyboard**.
+3. Tìm tùy chọn như **Use the Print Screen key to open screen capture** hoặc **Use the Print screen key to open Snipping Tool**.
+4. Chuyển tùy chọn này sang **Off**.
+5. Thoát Lightshot ở khay hệ thống rồi mở lại.
+6. Thử nhấn PrtSc; nếu vẫn xung đột, khởi động lại máy.
+
+**Windows 10:** tìm tùy chọn tương ứng tại **Settings → Ease of Access → Keyboard → Print Screen shortcut**. Tên gọi có thể thay đổi theo bản Windows.
+
+### 7.2. Đổi phím chụp của Lightshot
+
+1. Bấm chuột phải biểu tượng Lightshot ở khay hệ thống.
+2. Mở **Options** nếu có.
+3. Tìm mục **Hotkeys**.
+4. Chọn một tổ hợp chưa bị ứng dụng khác sử dụng, ví dụ thử `Ctrl + Shift + P`.
+5. Lưu và kiểm tra lại. Nếu có thông báo xung đột, chọn tổ hợp khác.
+
+### 7.3. Không thấy biểu tượng hoặc nhấn phím không phản ứng
+
+- Mở Lightshot từ Start để chắc chắn ứng dụng đang chạy.
+- Bấm dấu **^** ở khay hệ thống để tìm biểu tượng ẩn.
+- Với laptop, thử `Fn + PrtSc` tùy bàn phím.
+- Kiểm tra các ứng dụng chụp ảnh khác có đang dùng cùng phím không.
+- Nếu cần, tải lại bộ cài từ trang chính thức.
+
+### 7.4. Bảng xử lý nhanh
+
+| Hiện tượng | Nên kiểm tra |
+| --- | --- |
+| Dán ảnh không được | Đã Ctrl + C sau khi chọn vùng chưa? Ứng dụng đích có nhận ảnh không? |
+| Không tìm thấy ảnh | Có chỉ Copy mà chưa Save không? Kiểm tra thư mục lưu gần nhất |
+| Upload thất bại | Kiểm tra Internet; thử lưu ảnh cục bộ trước |
+| Ảnh quá nhỏ, chữ khó đọc | Tăng cỡ chữ/zoom cửa sổ nguồn trước khi chụp lại |
+| Ảnh đen ở một ứng dụng | Thử chụp cửa sổ thông thường; nội dung được bảo vệ có thể hạn chế chụp |
+| Muốn chụp cuộn trang dài | Quy trình chọn vùng này chụp nội dung đang thấy; dùng công cụ chụp toàn trang riêng nếu cần |
+
+## 8. Bài thực hành
+
+### Bài 1: Tạo ảnh hướng dẫn cấu hình IP
+
+1. Mở cửa sổ xem thông tin mạng trên máy của bạn.
+2. Nhấn PrtSc và chọn phần có địa chỉ IPv4, Gateway và DNS.
+3. Khoanh khung dòng IPv4.
+4. Thêm mũi tên và chữ `Địa chỉ IP máy tính`.
+5. Lưu thành `01-thong-tin-ip.png`.
+6. Mở ảnh và kiểm tra chữ có đọc được không.
+
+**Kết quả mong đợi:** một tệp PNG có vùng nội dung rõ ràng, khung đánh dấu và chú thích.
+
+### Bài 2: Chụp lỗi để nhờ hỗ trợ
+
+1. Mở một thông báo lỗi cần trao đổi.
+2. Chụp đủ nội dung và mã lỗi.
+3. Viết chú thích ngắn về thao tác gây lỗi.
+4. Nhấn Ctrl + C rồi dán vào khung soạn tin.
+5. Bổ sung bằng văn bản: lỗi xảy ra lúc nào, sau thao tác nào và trên máy nào.
+
+### Danh sách tự kiểm tra
+
+- [ ] Mở được Lightshot bằng phím chụp.
+- [ ] Chọn được đúng vùng cần lấy.
+- [ ] Thêm được mũi tên, khung và chữ.
+- [ ] Dán được ảnh vào ứng dụng khác.
+- [ ] Lưu được PNG và tìm lại đúng tệp.
+- [ ] Kiểm tra nội dung trước khi chia sẻ.
+
+## 9. Đưa tài liệu lên GitHub
+
+![Cấu trúc tệp và các bước tải lên GitHub](images/06-github.png)
+
+### Cách 1: Tải cả bộ tài liệu vào repository
+
+1. Giải nén tệp ZIP đi kèm.
+2. Mở thư mục chứa **README.md** và **images**.
+3. Mở repository GitHub của bạn.
+4. Chọn **Add file → Upload files**.
+5. Kéo **README.md và cả thư mục images** vào vùng tải lên. Không tải nguyên ZIP nếu muốn GitHub hiển thị tài liệu ngay.
+6. Nhập mô tả, ví dụ `Thêm hướng dẫn sử dụng Lightshot`.
+7. Bấm **Commit changes**; nếu giao diện yêu cầu chọn nhánh hoặc tạo pull request, hoàn tất theo quyền của repository.
+8. Mở README, kiểm tra cả sáu hình đã hiển thị.
+
+Nếu repository đã có README ở thư mục gốc, có thể đặt tài liệu này tại **Network-Tools/Lightshot/** để có README riêng cho Lightshot. Giữ `images` bên cạnh README của tài liệu này.
+
+### Cách 2: Chèn ảnh bạn tự chụp
+
+Ví dụ lưu ảnh tại `images/07-cau-hinh-ip.png`, rồi thêm vào README:
+
+```markdown
+![Cấu hình IP trên máy tính](images/07-cau-hinh-ip.png)
+```
+
+Đường dẫn tính từ vị trí của README. Tên tệp phải khớp chính xác, kể cả chữ hoa/thường.
+
+**Mẹo đặt tên:** dùng chữ thường, không dấu và dấu gạch ngang, ví dụ `02-chon-vung-chup.png`.
+
+### Nếu GitHub không hiện ảnh
+
+1. Kiểm tra đã tải thư mục `images` lên chưa.
+2. Bấm mở tệp ảnh trong repository để kiểm tra tệp tồn tại.
+3. So sánh chính xác tên tệp và đường dẫn trong Markdown.
+4. Nếu chuyển README sang thư mục khác, chuyển cả `images` hoặc sửa lại đường dẫn.
+5. Không dùng đường dẫn ổ đĩa cá nhân như `C:\Users\...` vì người khác không truy cập được.
+
+## 10. Nguồn tham khảo
+
+Các trang chính thức được đối chiếu khi biên soạn ngày **20/10/2026**:
+
+- [Lightshot – Tải phần mềm](https://app.prntscr.com/en/download.html)
+- [Lightshot – Tính năng](https://app.prntscr.com/en/learnmore.html)
+- [Lightshot – Phím tắt](https://app.prntscr.com/en/hotkeys.html)
+- [Lightshot – Video hướng dẫn](https://app.prntscr.com/en/tutorials.html)
+- [Lightshot – Câu hỏi thường gặp](https://app.prntscr.com/en/faq.html)
+- [Microsoft – Phím tắt trong Windows](https://support.microsoft.com/en-us/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec)
+
+Các ví dụ thực hành và hình minh họa được biên soạn riêng cho tài liệu này. Không bao gồm bộ cài Lightshot.
