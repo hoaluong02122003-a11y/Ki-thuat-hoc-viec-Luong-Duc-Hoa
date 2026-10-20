@@ -1,0 +1,472 @@
+# Hướng dẫn sử dụng PuTTY trên Windows
+
+> Tài liệu ngắn gọn dành cho người mới: cài PuTTY, kết nối SSH, lưu cấu hình, đăng nhập bằng mật khẩu hoặc private key `.ppk`, copy/paste và xử lý lỗi cơ bản.
+
+![PuTTY Configuration](https://www1.sph.umich.edu/biostat/computing/cluster/images/putty.png)
+
+*Nguồn ảnh minh họa giao diện: University of Michigan School of Public Health.*
+
+---
+
+## 1. PuTTY là gì?
+
+**PuTTY** là phần mềm terminal miễn phí, mã nguồn mở, thường được dùng trên Windows để kết nối từ xa tới:
+
+- Linux server
+- Router / Switch
+- Firewall
+- NAS
+- VPS / Cloud server
+- Thiết bị hỗ trợ SSH, Telnet hoặc Serial
+
+Trong thực tế, giao thức được dùng nhiều nhất là **SSH** vì có mã hóa.
+
+Ví dụ:
+
+```text
+Máy Windows
+    |
+    | SSH - TCP 22
+    v
+Linux Server / Router / Switch
+```
+
+PuTTY đóng vai trò **SSH client**: lệnh bạn gõ trong cửa sổ PuTTY được gửi tới máy chủ từ xa và kết quả được hiển thị lại trên màn hình.
+
+---
+
+## 2. Tải PuTTY
+
+Trang chính thức:
+
+- https://www.chiark.greenend.org.uk/~sgtatham/putty/
+- https://putty.org/
+
+Tại thời điểm cập nhật tài liệu này, phiên bản PuTTY mới nhất là **0.85**.
+
+### Nên tải bản nào?
+
+Với Windows 10/11 64-bit, nên tải bộ cài **64-bit MSI installer**.
+
+Sau khi tải:
+
+1. Mở file cài đặt.
+2. Chọn **Next**.
+3. Giữ đường dẫn mặc định.
+4. Chọn **Install**.
+5. Chọn **Finish**.
+
+Sau khi cài, mở Start Menu và tìm:
+
+```text
+PuTTY
+```
+
+---
+
+## 3. Kết nối SSH tới máy chủ
+
+Khi mở PuTTY, màn hình **PuTTY Configuration** xuất hiện.
+
+![PuTTY Session screen](https://www1.sph.umich.edu/biostat/computing/cluster/images/putty.png)
+
+Điền các thông tin:
+
+| Mục | Ví dụ | Ý nghĩa |
+|---|---|---|
+| Host Name | `192.168.1.10` | IP hoặc hostname máy cần truy cập |
+| Port | `22` | Cổng SSH mặc định |
+| Connection type | `SSH` | Giao thức kết nối |
+
+Ví dụ:
+
+```text
+Host Name: 192.168.1.10
+Port:      22
+Type:      SSH
+```
+
+Sau đó bấm **Open**.
+
+---
+
+## 4. Xác nhận SSH Host Key lần đầu
+
+Lần đầu kết nối, PuTTY có thể hiện cảnh báo về **SSH host key**.
+
+Bạn nên kiểm tra fingerprint với quản trị viên/server trước khi chấp nhận, đặc biệt trong môi trường doanh nghiệp.
+
+Nếu đúng máy chủ, chọn:
+
+```text
+Accept
+```
+
+PuTTY sẽ ghi nhớ host key cho những lần kết nối sau.
+
+> Nếu sau này PuTTY cảnh báo host key đã thay đổi dù bạn không thay server, cần kiểm tra trước khi tiếp tục vì có thể server đã cài lại hoặc có rủi ro giả mạo kết nối.
+
+---
+
+## 5. Đăng nhập bằng username/password
+
+Sau khi kết nối thành công, cửa sổ terminal sẽ hỏi:
+
+```text
+login as:
+```
+
+Nhập username, ví dụ:
+
+```text
+admin
+```
+
+Tiếp theo nhập password.
+
+### Lưu ý quan trọng
+
+Khi nhập mật khẩu trong PuTTY, màn hình thường **không hiện dấu `*` và không hiện ký tự**.
+
+Ví dụ bạn gõ:
+
+```text
+P@ssw0rd123
+```
+
+nhưng màn hình vẫn trống. Đây là hành vi bình thường của SSH.
+
+Nhập xong nhấn **Enter**.
+
+---
+
+## 6. Lưu một kết nối để lần sau mở nhanh
+
+Nếu thường xuyên SSH vào cùng một server:
+
+1. Điền **Host Name**.
+2. Điền **Port**.
+3. Chọn **SSH**.
+4. Tại **Saved Sessions**, nhập tên, ví dụ:
+
+```text
+Server-Linux-01
+```
+
+5. Bấm **Save**.
+
+Lần sau chỉ cần:
+
+1. Mở PuTTY.
+2. Chọn `Server-Linux-01`.
+3. Bấm **Load**.
+4. Bấm **Open**.
+
+PuTTY lưu các Saved Sessions trong Windows Registry của tài khoản người dùng.
+
+---
+
+## 7. Copy và Paste trong PuTTY
+
+PuTTY có cách copy/paste hơi khác ứng dụng Windows thông thường.
+
+### Copy từ PuTTY
+
+Dùng chuột **bôi đen đoạn text** cần copy.
+
+Thông thường PuTTY sẽ tự copy đoạn được chọn vào clipboard.
+
+### Paste vào PuTTY
+
+Có thể dùng:
+
+```text
+Right Click
+```
+
+hoặc tùy cấu hình/phiên bản:
+
+```text
+Shift + Insert
+```
+
+> Không nên paste một loạt lệnh nguy hiểm vào server nếu chưa kiểm tra kỹ nội dung.
+
+---
+
+## 8. Thoát khỏi SSH
+
+Cách chuẩn là gõ:
+
+```bash
+exit
+```
+
+hoặc:
+
+```bash
+logout
+```
+
+Sau đó nhấn **Enter**.
+
+---
+
+## 9. SSH bằng Private Key `.ppk`
+
+Nếu server không dùng mật khẩu mà dùng SSH key, PuTTY thường dùng private key dạng:
+
+```text
+.ppk
+```
+
+### Chọn private key
+
+Trong PuTTY phiên bản mới:
+
+```text
+Connection
+  > SSH
+    > Auth
+      > Credentials
+```
+
+Tìm mục:
+
+```text
+Private key file for authentication
+```
+
+Bấm **Browse...** và chọn file:
+
+```text
+server-key.ppk
+```
+
+Sau đó quay lại:
+
+```text
+Session
+```
+
+điền IP / hostname và bấm **Open**.
+
+> Từ PuTTY 0.78 trở đi, mục chọn private key được chuyển vào `SSH > Auth > Credentials`, vì vậy nhiều hướng dẫn cũ trên Internet có thể chỉ sai vị trí.
+
+---
+
+## 10. Chuyển OpenSSH key sang `.ppk`
+
+Nếu bạn có key như:
+
+```text
+id_rsa
+id_ed25519
+.pem
+```
+
+có thể dùng **PuTTYgen**.
+
+### Các bước cơ bản
+
+1. Mở `PuTTYgen`.
+2. Chọn **Load**.
+3. Chọn private key hiện có.
+4. Nếu key có passphrase, nhập passphrase.
+5. Chọn **Save private key**.
+6. Lưu thành file `.ppk`.
+
+Ví dụ:
+
+```text
+my-server.ppk
+```
+
+---
+
+## 11. Kết nối thiết bị mạng bằng Serial
+
+PuTTY cũng có thể dùng để console vào router/switch qua cổng COM.
+
+Ví dụ:
+
+```text
+Connection type: Serial
+Serial line: COM3
+Speed: 9600
+```
+
+Thông số thường gặp:
+
+```text
+Speed:     9600 hoặc 115200
+Data bits: 8
+Stop bits: 1
+Parity:    None
+Flow:      None
+```
+
+Thông số chính xác phụ thuộc thiết bị.
+
+Kiểm tra cổng COM trong:
+
+```text
+Device Manager
+> Ports (COM & LPT)
+```
+
+---
+
+## 12. Một số lỗi thường gặp
+
+### `Network error: Connection timed out`
+
+Nguyên nhân có thể là:
+
+- Sai IP.
+- Server đang tắt.
+- Không có route tới server.
+- Firewall chặn TCP 22.
+- SSH Server chưa bật.
+- VPN chưa kết nối.
+
+Kiểm tra trên Windows:
+
+```powershell
+ping 192.168.1.10
+```
+
+Kiểm tra cổng SSH:
+
+```powershell
+Test-NetConnection 192.168.1.10 -Port 22
+```
+
+---
+
+### `Network error: Connection refused`
+
+Máy đích có thể truy cập được nhưng dịch vụ SSH không lắng nghe trên cổng đó.
+
+Trên Linux server có thể kiểm tra:
+
+```bash
+sudo systemctl status ssh
+```
+
+hoặc:
+
+```bash
+sudo systemctl status sshd
+```
+
+---
+
+### `Access denied`
+
+Kiểm tra:
+
+- Username.
+- Password.
+- SSH key.
+- Quyền đăng nhập SSH của user.
+- Server có cho phép password login hay không.
+
+---
+
+### `No supported authentication methods available`
+
+Thường gặp khi server chỉ cho phép SSH key nhưng PuTTY chưa được cấu hình đúng private key.
+
+Kiểm tra:
+
+```text
+Connection > SSH > Auth > Credentials
+```
+
+---
+
+## 13. Ví dụ thực tế
+
+Giả sử Linux Server có:
+
+```text
+IP:       192.168.10.50
+SSH Port: 22
+Username: admin
+```
+
+Trong PuTTY nhập:
+
+```text
+Host Name: 192.168.10.50
+Port: 22
+Connection type: SSH
+```
+
+Bấm **Open**.
+
+Terminal hiển thị:
+
+```text
+login as: admin
+admin@192.168.10.50's password:
+```
+
+Sau khi đăng nhập thành công:
+
+```bash
+whoami
+ip addr
+hostname
+```
+
+---
+
+## 14. Sơ đồ hoạt động
+
+```mermaid
+flowchart LR
+    A[Windows PC] -->|PuTTY / SSH TCP 22| B[Linux Server]
+    A -->|PuTTY / SSH| C[Router / Switch]
+    A -->|PuTTY / Serial COM| D[Console thiết bị mạng]
+```
+
+---
+
+## 15. Tóm tắt nhanh
+
+Để SSH bằng PuTTY chỉ cần nhớ 5 bước:
+
+```text
+1. Mở PuTTY
+2. Nhập IP / hostname
+3. Port 22
+4. Chọn SSH
+5. Open -> đăng nhập
+```
+
+---
+
+## Tài liệu tham khảo
+
+- PuTTY official site: https://www.chiark.greenend.org.uk/~sgtatham/putty/
+- PuTTY documentation: https://www.chiark.greenend.org.uk/~sgtatham/putty/docs.html
+- PuTTY FAQ: https://www.chiark.greenend.org.uk/~sgtatham/putty/faq.html
+- Ảnh minh họa PuTTY Configuration: University of Michigan School of Public Health
+
+---
+
+## Gợi ý cấu trúc repository GitHub
+
+```text
+putty-huong-dan/
+├── README.md
+└── images/
+```
+
+Nếu muốn dùng ảnh local thay vì link Internet, tải ảnh về thư mục `images` rồi sửa Markdown thành:
+
+```markdown
+![PuTTY Configuration](images/putty-session.png)
+```
