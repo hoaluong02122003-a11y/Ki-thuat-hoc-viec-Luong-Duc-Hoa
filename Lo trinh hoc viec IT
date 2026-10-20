@@ -1,0 +1,635 @@
+# Đưa bộ tài liệu lên GitHub
+
+## Qua trình duyệt
+
+1. Giải nén `lo-trinh-hoc-viec-it-github.zip`.
+2. Đăng nhập GitHub, tạo repository tên `lo-trinh-hoc-viec-it`.
+3. Chọn phạm vi truy cập phù hợp với tài liệu đào tạo của đơn vị.
+4. Trong repository mới, chọn đường dẫn tải tệp có sẵn (upload an existing file).
+5. Kéo **nội dung bên trong** thư mục `lo-trinh-hoc-viec-it` vào vùng tải lên, gồm README.md và các thư mục docs, templates, data.
+6. Ghi mô tả lần lưu rồi commit. README.md ở gốc repository sẽ là trang giới thiệu.
+
+## Qua Git trên máy tính
+
+Tạo repository trống trước; thay TEN-TAI-KHOAN trong lệnh bằng tài khoản của bạn. Mở terminal trong thư mục đã giải nén:
+
+```bash
+git init
+git add .
+git commit -m "Add IT onboarding roadmap from Google Sheets"
+git branch -M main
+git remote add origin https://github.com/TEN-TAI-KHOAN/lo-trinh-hoc-viec-it.git
+git push -u origin main
+```
+
+Thực hiện xác thực theo phương thức GitHub bạn đang sử dụng. File ZIP là bộ tài liệu sẵn sàng đưa lên; tải ZIP về không tự tạo repository trên tài khoản GitHub.
+
+# Lộ trình học việc kỹ thuật IT
+
+Tài liệu học việc dành cho kỹ thuật hệ thống và mạng, chuyển từ bảng **YÊU CẦU KỸ THUẬT HỌC VIỆC** sang Markdown để đọc, theo dõi và bổ sung báo cáo trên GitHub.
+
+**Nguồn:** [Google Sheets – tab được cung cấp](https://docs.google.com/spreadsheets/d/1yyhQ3SK6WG7nL2Efwll2k6uBTZtPD3PR/edit?gid=581318176#gid=581318176)  
+**Ngày trích xuất:** 20/10/2026. Đây là bản chụp nội dung tại thời điểm tải, không tự đồng bộ với Google Sheets.
+
+## Bắt đầu
+
+1. Đọc bảng lộ trình bên dưới và chọn chủ đề cần thực hành.
+2. Mở tài liệu của chủ đề để xem yêu cầu, thời gian và kết quả trong nguồn.
+3. Sao chép [mẫu báo cáo lab](templates/bao-cao-lab.md), ghi lại quá trình thực hiện và minh chứng.
+4. Cập nhật checklist trong tài liệu, gửi thay đổi để người hướng dẫn xem xét.
+5. Dùng [mẫu báo cáo ngày](templates/bao-cao-ngay.md) để báo cáo tiến độ.
+
+## Lộ trình theo bảng nguồn
+
+| STT nguồn | Chủ đề | Thời gian đã ghi | Số dòng ghi OK |
+| --- | --- | --- | --- |
+| 1 | [Môi trường làm việc](docs/01-moi-truong.md) | 2h | 0 |
+| 2 | [Công cụ làm việc](docs/02-cong-cu.md) | 4h | 1 |
+| 3 | [Network](docs/03-network.md) | 1w, 1d | 6 |
+| 4 | [Hardware system](docs/04-hardware.md) | 2d | 0 |
+| 6 | [Operating system](docs/06-operating-system.md) | 1w | 2 |
+| 7 | [Tổng quan ảo hóa](docs/07-ao-hoa.md) | 1h | 0 |
+| 8 | [Proxmox](docs/08-proxmox.md) | Chưa ghi | 1 |
+| 9 | [pfSense](docs/09-pfsense.md) | Chưa ghi | 1 |
+| 10 | [Zabbix và Graylog](docs/10-zabbix-graylog.md) | Chưa ghi | 0 |
+| 11 | [Checkmk](docs/11-checkmk.md) | Chưa ghi | 1 |
+| 12 | [RSAT và Active Directory](docs/12-rsat-ad.md) | Chưa ghi | 0 |
+| 13 | [Rclone và Wasabi](docs/13-rclone-wasabi.md) | Chưa ghi | 1 |
+| 14 | [Nextcloud, Keycloak, Mailcow và HAProxy](docs/14-dich-vu-doanh-nghiep.md) | Chưa ghi | 1 |
+
+STT được giữ theo nguồn: không có mục 5. “Số dòng ghi OK” đếm ô đánh giá có giá trị OK trong từng nhóm, không phải tỷ lệ hoàn thành toàn bộ chủ đề. Ô trống được hiển thị là “—”, không tự hiểu là chưa làm hoặc đã làm.
+
+Các mốc `h`, `d`, `w` được giữ nguyên (giờ, ngày, tuần). Không cộng thành tổng thời gian vì nguồn chưa chỉ rõ các mốc chi tiết có nằm trong thời lượng nhóm hay không.
+
+## Nội dung chính
+
+- **Công cụ:** GitHub; MobaXterm, PuTTY, SecureCRT; Telegram, Zalo; Lightshot; draw.io; hapbx.com, Zoiper 5; Nextcloud.
+- **Network:** địa chỉ IP, gateway, DNS, DHCP, NAT, MAC, route; OSI/TCP; công cụ kiểm tra; VLAN; FortiGate 300E, Omada, MikroTik; VPN site-to-site và client-to-site.
+- **Phần cứng:** các bộ phận máy chủ, tháo lắp, RAID 0/1/5/6/10 và kiểm thử trong lab.
+- **Hệ điều hành:** cài đặt, IP, tài khoản, phân vùng, iDRAC/iLO/BMC; các phiên bản được ghi chi tiết trong tài liệu nguồn.
+- **Ảo hóa và firewall:** tổng quan, Proxmox, storage, network, VM, backup/restore, cloud-init; pfSense, NAT, rule, DHCP, OpenVPN và HA.
+- **Giám sát:** Zabbix, Graylog, Checkmk và kết nối Grafana.
+- **Dịch vụ:** RSAT/AD, Rclone/Wasabi, Nextcloud/Talk/Office, Keycloak, HAProxy và Mailcow.
+
+## Cách đọc dữ liệu
+
+Mỗi tài liệu chủ đề có hai phần riêng:
+
+- **Yêu cầu từ bảng nguồn:** giữ nội dung chi tiết, thời gian, kết quả và đánh giá của từng dòng.
+- **Checklist và hồ sơ cần nộp:** phần bổ sung để theo dõi thực hành và lưu minh chứng.
+
+Các tên phiên bản như Proxmox 9.1, Ubuntu 18/20/22.04, CentOS 7, ESXi 6/7 được giữ theo bảng; đây không phải kết quả kiểm tra phiên bản hay khuyến nghị triển khai mới. Cụm “Crit 805” trong mục Checkmk được giữ nguyên, cần hỏi người hướng dẫn để xác nhận giá trị mong muốn. Các dòng chỉ có “Kết quả” mà không có nội dung chi tiết vẫn được giữ.
+
+## Cấu trúc tài liệu
+
+| Đường dẫn | Nội dung |
+| --- | --- |
+| `README.md` | Tổng quan và liên kết từng chủ đề |
+| `docs/` | 13 chủ đề học việc theo STT nguồn |
+| `templates/bao-cao-lab.md` | Mẫu ghi nhận một bài lab |
+| `templates/bao-cao-ngay.md` | Mẫu báo cáo tiến độ |
+| `data/yeu-cau-ky-thuat-hoc-viec.csv` | Bản CSV nguyên gốc của tab đã tải |
+| `HUONG-DAN-DUA-LEN-GITHUB.md` | Cách đưa bộ tài liệu lên repository |
+
+## Quy ước cập nhật
+
+- Đánh dấu `[x]` khi đã hoàn tất thực hành và có minh chứng.
+- Lưu báo cáo trong thư mục `reports/`, ví dụ `reports/2026-10-20-network.md`.
+- Đặt ảnh trong `images/` và dùng đường dẫn tương đối để ảnh hiển thị trên GitHub.
+- Không đưa mật khẩu, khóa riêng, token hoặc bản sao cấu hình có bí mật vào repository.
+- Khi sửa yêu cầu đào tạo, ghi rõ nguồn thay đổi và thời điểm cập nhật.
+
+Bộ tài liệu này tổ chức lộ trình và hồ sơ học việc; các hướng dẫn cấu hình chi tiết cần bổ sung từ môi trường lab thực tế và tài liệu chính thức của thiết bị.
+
+,,,,,,
+,YÊU CẦU KỸ THUẬT HỌC VIỆC,,,,,
+,STT,Nội dung chính,Nội dung chi tiết,Thời gian,Kết quả,"Kiểm tra, đánh giá"
+,1,Giới thiệu về môi trường làm việc ,"Giới thiệu về công ty, cơ cấu tổ chức các phòng ban",2h,,
+,,,Giới thiệu về các dịch vụ đang cung cấp và phát triển,,,
+,,,"Giới thiệu về cơ cấu phòng kỹ thuật, chuyên môn xử lý từng nhóm",,,
+,,,"Giới thiệu các công cụ làm việc nhóm, quản lý công việc, theo dõi kết quả làm việc.",,,
+,,,"Tác phong, nội quy, cách làm việc, cách báo cáo & công cụ trao đổi khi làm việc, cách gửi mail khi giao tiếp trong doanh nghiệp.",,,
+,,,"Giới thiệu về lộ trình học việc , đào tạo, phát triển",,,
+,2,Các tool làm việc,Github,4h,Github,OK
+,,,"MobaXterm, Putty, SecureCRT ",,,
+,,,Telegram Zalo,,,
+,,,Lightshot,,,
+,,,DrawIO,,,
+,,,hapbx.com và zoiper5,,hapbx.com & zoiper5,
+,,,NextCloud,,NextCloud,
+,3,Network,"Các khái niệm về IP, Gateway, DNS, DHCP, Private vs Public IP, NAT, Default route, Địa chỉ MAC",1w,,OK
+,,,"Mục đích và tính năng của các thiết bị mạng (Switch, Router, Firewall, Access Point)
+",,,
+,,,"Mục đích và các hoạt động cơ bản của các giao thức trong mô hình OSI và TCP.
+",,,
+,,,"Kiểm tra trạng thái mạng và hoạt động của switch bằng các tiện ích cơ bản: lệnh ping, traceroute, telnet, SSH, arp, ipconfig)
+",,,
+,,,"Cấu hình, tạo các VLAN, kết nối nhiều switch",,,
+,,,"Cấu hình Firewall Fortinet FortiGate-300E, WAN, LAN, DHCP, -> 1 Máy tính ra đc bên ngoài internet",1d,Firewall FortiGate 300E,OK
+,,,"Cấu hình Router Omada, WAN, LAN, DHCP -> 1 Máy tính ra đc bên ngoài internet",,Router Omada,OK
+,,,"Cấu hình Router MikroTik, Vlan, DHCP -> 1 máy lấy IP ra được bên ngoài internet",1d,Router MikroTik,OK
+,,,"Cấu hình VPN site to site giữa Omada và Firewall 300E, xem mẫu ở Fortinet 600E thực tế",,VPN Site-to-Site Omada - FortiGate,OK
+,,,"Cấu hình Client-to-Site Omada, Client-to-Site Fortinet, Client-to-Site MikroTik",1d,VPN Client-to-Site,OK
+,,,Cấu hình VPN Site-to-Site giữa Omada và MikroTik ,1d,VPN Site-to-Site Omada - MikroTik,
+,4,Hardware system,"- Tìm hiểu về máy chủ vật lý:
++ Các dòng máy chủ
++ Nắm các bộ phận chính (RAM, Disk, CPU, Power supply, card mạng, card raid, khe PIC...), thực hiện tháo lắp các bộ phận.",2d,,
+,,,"- Tìm hiểu về Raid trong máy chủ vật lý: 0, 1, 5, 6, 10
++ Cơ chế hoạt động
++ So sánh giữa các loại: Read performance, Write Performance, Capacity utilization, Fault tolerance, Minimum number of drives, Typical applications
++ Thực hành trên thiết bị vật lý, kiểm thử hiệu năng từng loại raid, lab khả năng chống chịu lỗi của các loại raid có dự phòng, chuyển đổi raid giữa các server.",,,
+,6,Operating system,"- Thực hiện cài đặt các hệ điều hành: 
++ Linux: Ubuntu 18, Ubuntu 20, Ubuntu22.04, CentOS7, AlmaLinux, RockyLinux 9.
++ Windows: Windows 10, Windows server 2012, Windows server 2016, Windows server 2019, Windows server 2022
++ VMware: ESXi6, ESXi7
+- Thực hiện reset password user root, Administrator
+- Cấu hình IP
+- Đối với OS Linux hay Windows thực hiện gộp/chia mở rộng phân vùng disk
+- Thao tác với các trình quản lý iDRAC, iLO, BMC...",1w,Ubuntu,OK
+,,,,,"LinuxServer (CentOS7, AlmaLinux10, RockyLinux 9.7)",OK
+,7,Ảo hóa ,"- Tổng quan về ảo hóa
++ Ảo hóa là gì? 
++Có những loại ảo hóa nào? 
++ Đặc điểm của từng loại ảo hóa?",1h,,
+,,,,,,
+,8,,"- Ảo hóa proxmox
++ Cài đặt
++ Add storage
++ Cấu hình network dạng Flat, Multi VLAN
++ Tạo VM, move disk VM giữa các data storage
++ Tìm hiểu backup/restore VM
++ Cloud init",,Proxmox 9.1,OK
+,9,,"- Pfsense
++ Triển khai pfsense
++ NAT Local Internet
++ Firewall Rule 
++ DHCP
++ Setup OpenVPN với Pfsense
++ Triển khai VPN Site to site
++ Triển khai Pfsense HA
++ Triển khai kết hợp HA + Site to Site Pfsense
++ DNS, DHCP, HA, Squid, Open VPN, Snort, Controller,
+Adguardhome",,pfSense,OK
+,10,,"Zabbix
++ Cài đặt zabbix lastest LTS trên Ubuntu
++ Monitor server Linux, windows, thiết bị network
++ Cấu hình cảnh báo slack, email, telegram
++ Tùy chỉnh các item, trigger
++ Kết nối zabbix - grafana",,,
+,,,"Graylog 
++ Cài đặt
++ Lấy log server linux/windows
++ Cảnh báo
+",,,
+,11,,"CheckMK - Monitor:
++ máy proxmox chạy checkmk
++ PC
++ pfSense trên VMware
++ Ubuntu sau pfSense
++ Thông báo qua Telegram
++ Cảnh báo ổ cứng (set mức warning 60%, Crit 805)
++ Monitor web (HTTP, SSL)
++ Kết nối CheckMK - Grafana",,CheckMK,OK
+,12,,RSAT - quản lý AD,,,
+,13,,RClone - Restore từ backup trên Wasabi,,RClone,OK
+,14,,"Dựng NextCloud (mới nhất)
+Dựng KeyCloak
+login NextCloud --> keyCloak
++ Cấu hình Talk (khởi tạo thêm 1 VM chạy Docker Compose chịu tải thay cho VM đang chạy NextCloud)
++ Mở File dung lượng lớn trên NextCloud
++ Đấu Office vào Cloud
+HAproxy (điều hướng web trỏ về NextCloud, KeyCloak)
+MailCow (giảm chi phí thuê dịch vụ cho doanh nghiệp)",,NextCloud,OK
+,,,,,KeyCloak,
+,,,,,MailCow,
+,,,,,HAProxy,
+,,,,,Liên kết dịch vụ qua 1 tài khoản duy nhất,
+# Môi trường làm việc
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| Giới thiệu về công ty, cơ cấu tổ chức các phòng ban | 2h | — | — |
+| Giới thiệu về các dịch vụ đang cung cấp và phát triển | — | — | — |
+| Giới thiệu về cơ cấu phòng kỹ thuật, chuyên môn xử lý từng nhóm | — | — | — |
+| Giới thiệu các công cụ làm việc nhóm, quản lý công việc, theo dõi kết quả làm việc. | — | — | — |
+| Tác phong, nội quy, cách làm việc, cách báo cáo & công cụ trao đổi khi làm việc, cách gửi mail khi giao tiếp trong doanh nghiệp. | — | — | — |
+| Giới thiệu về lộ trình học việc , đào tạo, phát triển | — | — | — |
+
+## Checklist thực hành
+
+- [ ] Giới thiệu về công ty, cơ cấu tổ chức các phòng ban
+- [ ] Giới thiệu về các dịch vụ đang cung cấp và phát triển
+- [ ] Giới thiệu về cơ cấu phòng kỹ thuật, chuyên môn xử lý từng nhóm
+- [ ] Giới thiệu các công cụ làm việc nhóm, quản lý công việc, theo dõi kết quả làm việc.
+- [ ] Tác phong, nội quy, cách làm việc, cách báo cáo & công cụ trao đổi khi làm việc, cách gửi mail khi giao tiếp trong doanh nghiệp.
+- [ ] Giới thiệu về lộ trình học việc , đào tạo, phát triển
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Công cụ làm việc
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| Github | 4h | Github | OK |
+| MobaXterm, Putty, SecureCRT | — | — | — |
+| Telegram Zalo | — | — | — |
+| Lightshot | — | — | — |
+| DrawIO | — | — | — |
+| hapbx.com và zoiper5 | — | hapbx.com & zoiper5 | — |
+| NextCloud | — | NextCloud | — |
+
+## Checklist thực hành
+
+- [ ] Github
+- [ ] MobaXterm, Putty, SecureCRT
+- [ ] Telegram Zalo
+- [ ] Lightshot
+- [ ] DrawIO
+- [ ] hapbx.com và zoiper5
+- [ ] NextCloud
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Network
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| Các khái niệm về IP, Gateway, DNS, DHCP, Private vs Public IP, NAT, Default route, Địa chỉ MAC | 1w | — | OK |
+| Mục đích và tính năng của các thiết bị mạng (Switch, Router, Firewall, Access Point) | — | — | — |
+| Mục đích và các hoạt động cơ bản của các giao thức trong mô hình OSI và TCP. | — | — | — |
+| Kiểm tra trạng thái mạng và hoạt động của switch bằng các tiện ích cơ bản: lệnh ping, traceroute, telnet, SSH, arp, ipconfig) | — | — | — |
+| Cấu hình, tạo các VLAN, kết nối nhiều switch | — | — | — |
+| Cấu hình Firewall Fortinet FortiGate-300E, WAN, LAN, DHCP, -> 1 Máy tính ra đc bên ngoài internet | 1d | Firewall FortiGate 300E | OK |
+| Cấu hình Router Omada, WAN, LAN, DHCP -> 1 Máy tính ra đc bên ngoài internet | — | Router Omada | OK |
+| Cấu hình Router MikroTik, Vlan, DHCP -> 1 máy lấy IP ra được bên ngoài internet | 1d | Router MikroTik | OK |
+| Cấu hình VPN site to site giữa Omada và Firewall 300E, xem mẫu ở Fortinet 600E thực tế | — | VPN Site-to-Site Omada - FortiGate | OK |
+| Cấu hình Client-to-Site Omada, Client-to-Site Fortinet, Client-to-Site MikroTik | 1d | VPN Client-to-Site | OK |
+| Cấu hình VPN Site-to-Site giữa Omada và MikroTik | 1d | VPN Site-to-Site Omada - MikroTik | — |
+
+## Checklist thực hành
+
+- [ ] Các khái niệm về IP, Gateway, DNS, DHCP, Private vs Public IP, NAT, Default route, Địa chỉ MAC
+- [ ] Mục đích và tính năng của các thiết bị mạng (Switch, Router, Firewall, Access Point)
+- [ ] Mục đích và các hoạt động cơ bản của các giao thức trong mô hình OSI và TCP.
+- [ ] Kiểm tra trạng thái mạng và hoạt động của switch bằng các tiện ích cơ bản: lệnh ping, traceroute, telnet, SSH, arp, ipconfig)
+- [ ] Cấu hình, tạo các VLAN, kết nối nhiều switch
+- [ ] Cấu hình Firewall Fortinet FortiGate-300E, WAN, LAN, DHCP, -> 1 Máy tính ra đc bên ngoài internet
+- [ ] Cấu hình Router Omada, WAN, LAN, DHCP -> 1 Máy tính ra đc bên ngoài internet
+- [ ] Cấu hình Router MikroTik, Vlan, DHCP -> 1 máy lấy IP ra được bên ngoài internet
+- [ ] Cấu hình VPN site to site giữa Omada và Firewall 300E, xem mẫu ở Fortinet 600E thực tế
+- [ ] Cấu hình Client-to-Site Omada, Client-to-Site Fortinet, Client-to-Site MikroTik
+- [ ] Cấu hình VPN Site-to-Site giữa Omada và MikroTik
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Hardware system
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| - Tìm hiểu về máy chủ vật lý:<br>+ Các dòng máy chủ<br>+ Nắm các bộ phận chính (RAM, Disk, CPU, Power supply, card mạng, card raid, khe PIC...), thực hiện tháo lắp các bộ phận. | 2d | — | — |
+| - Tìm hiểu về Raid trong máy chủ vật lý: 0, 1, 5, 6, 10<br>+ Cơ chế hoạt động<br>+ So sánh giữa các loại: Read performance, Write Performance, Capacity utilization, Fault tolerance, Minimum number of drives, Typical applications<br>+ Thực hành trên thiết bị vật lý, kiểm thử hiệu năng từng loại raid, lab khả năng chống chịu lỗi của các loại raid có dự phòng, chuyển đổi raid giữa các server. | — | — | — |
+
+## Checklist thực hành
+
+- [ ] - Tìm hiểu về máy chủ vật lý: + Các dòng máy chủ + Nắm các bộ phận chính (RAM, Disk, CPU, Power supply, card mạng, card raid, khe PIC...), thực hiện tháo lắp các bộ phận.
+- [ ] - Tìm hiểu về Raid trong máy chủ vật lý: 0, 1, 5, 6, 10 + Cơ chế hoạt động + So sánh giữa các loại: Read performance, Write Performance, Capacity utilization, Fault tolerance, Minimum number of drives, Typical applications + Thực hành trên thiết bị vật lý, kiểm thử hiệu năng từng loại raid, lab khả năng chống chịu lỗi của các loại raid có dự phòng, chuyển đổi raid giữa các server.
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Operating system
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| - Thực hiện cài đặt các hệ điều hành: <br>+ Linux: Ubuntu 18, Ubuntu 20, Ubuntu22.04, CentOS7, AlmaLinux, RockyLinux 9.<br>+ Windows: Windows 10, Windows server 2012, Windows server 2016, Windows server 2019, Windows server 2022<br>+ VMware: ESXi6, ESXi7<br>- Thực hiện reset password user root, Administrator<br>- Cấu hình IP<br>- Đối với OS Linux hay Windows thực hiện gộp/chia mở rộng phân vùng disk<br>- Thao tác với các trình quản lý iDRAC, iLO, BMC... | 1w | Ubuntu | OK |
+| — | — | LinuxServer (CentOS7, AlmaLinux10, RockyLinux 9.7) | OK |
+
+## Checklist thực hành
+
+- [ ] - Thực hiện cài đặt các hệ điều hành: + Linux: Ubuntu 18, Ubuntu 20, Ubuntu22.04, CentOS7, AlmaLinux, RockyLinux 9. + Windows: Windows 10, Windows server 2012, Windows server 2016, Windows server 2019, Windows server 2022 + VMware: ESXi6, ESXi7 - Thực hiện reset password user root, Administrator - Cấu hình IP - Đối với OS Linux hay Windows thực hiện gộp/chia mở rộng phân vùng disk - Thao tác với các trình quản lý iDRAC, iLO, BMC...
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Tổng quan ảo hóa
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| - Tổng quan về ảo hóa<br>+ Ảo hóa là gì? <br>+Có những loại ảo hóa nào? <br>+ Đặc điểm của từng loại ảo hóa? | 1h | — | — |
+
+## Checklist thực hành
+
+- [ ] - Tổng quan về ảo hóa + Ảo hóa là gì? +Có những loại ảo hóa nào? + Đặc điểm của từng loại ảo hóa?
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Proxmox
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| - Ảo hóa proxmox<br>+ Cài đặt<br>+ Add storage<br>+ Cấu hình network dạng Flat, Multi VLAN<br>+ Tạo VM, move disk VM giữa các data storage<br>+ Tìm hiểu backup/restore VM<br>+ Cloud init | — | Proxmox 9.1 | OK |
+
+## Checklist thực hành
+
+- [ ] - Ảo hóa proxmox + Cài đặt + Add storage + Cấu hình network dạng Flat, Multi VLAN + Tạo VM, move disk VM giữa các data storage + Tìm hiểu backup/restore VM + Cloud init
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# pfSense
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| - Pfsense<br>+ Triển khai pfsense<br>+ NAT Local Internet<br>+ Firewall Rule <br>+ DHCP<br>+ Setup OpenVPN với Pfsense<br>+ Triển khai VPN Site to site<br>+ Triển khai Pfsense HA<br>+ Triển khai kết hợp HA + Site to Site Pfsense<br>+ DNS, DHCP, HA, Squid, Open VPN, Snort, Controller,<br>Adguardhome | — | pfSense | OK |
+
+## Checklist thực hành
+
+- [ ] - Pfsense + Triển khai pfsense + NAT Local Internet + Firewall Rule + DHCP + Setup OpenVPN với Pfsense + Triển khai VPN Site to site + Triển khai Pfsense HA + Triển khai kết hợp HA + Site to Site Pfsense + DNS, DHCP, HA, Squid, Open VPN, Snort, Controller, Adguardhome
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Zabbix và Graylog
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| Zabbix<br>+ Cài đặt zabbix lastest LTS trên Ubuntu<br>+ Monitor server Linux, windows, thiết bị network<br>+ Cấu hình cảnh báo slack, email, telegram<br>+ Tùy chỉnh các item, trigger<br>+ Kết nối zabbix - grafana | — | — | — |
+| Graylog <br>+ Cài đặt<br>+ Lấy log server linux/windows<br>+ Cảnh báo | — | — | — |
+
+## Checklist thực hành
+
+- [ ] Zabbix + Cài đặt zabbix lastest LTS trên Ubuntu + Monitor server Linux, windows, thiết bị network + Cấu hình cảnh báo slack, email, telegram + Tùy chỉnh các item, trigger + Kết nối zabbix - grafana
+- [ ] Graylog + Cài đặt + Lấy log server linux/windows + Cảnh báo
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Checkmk
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| CheckMK - Monitor:<br>+ máy proxmox chạy checkmk<br>+ PC<br>+ pfSense trên VMware<br>+ Ubuntu sau pfSense<br>+ Thông báo qua Telegram<br>+ Cảnh báo ổ cứng (set mức warning 60%, Crit 805)<br>+ Monitor web (HTTP, SSL)<br>+ Kết nối CheckMK - Grafana | — | CheckMK | OK |
+
+## Checklist thực hành
+
+- [ ] CheckMK - Monitor: + máy proxmox chạy checkmk + PC + pfSense trên VMware + Ubuntu sau pfSense + Thông báo qua Telegram + Cảnh báo ổ cứng (set mức warning 60%, Crit 805) + Monitor web (HTTP, SSL) + Kết nối CheckMK - Grafana
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# RSAT và Active Directory
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| RSAT - quản lý AD | — | — | — |
+
+## Checklist thực hành
+
+- [ ] RSAT - quản lý AD
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Rclone và Wasabi
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| RClone - Restore từ backup trên Wasabi | — | RClone | OK |
+
+## Checklist thực hành
+
+- [ ] RClone - Restore từ backup trên Wasabi
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Nextcloud, Keycloak, Mailcow và HAProxy
+
+[← Về trang chính](../README.md)
+
+## Yêu cầu từ bảng nguồn
+
+| Nội dung chi tiết | Thời gian nguồn | Kết quả nguồn | Đánh giá nguồn |
+| --- | --- | --- | --- |
+| Dựng NextCloud (mới nhất)<br>Dựng KeyCloak<br>login NextCloud --> keyCloak<br>+ Cấu hình Talk (khởi tạo thêm 1 VM chạy Docker Compose chịu tải thay cho VM đang chạy NextCloud)<br>+ Mở File dung lượng lớn trên NextCloud<br>+ Đấu Office vào Cloud<br>HAproxy (điều hướng web trỏ về NextCloud, KeyCloak)<br>MailCow (giảm chi phí thuê dịch vụ cho doanh nghiệp) | — | NextCloud | OK |
+| — | — | KeyCloak | — |
+| — | — | MailCow | — |
+| — | — | HAProxy | — |
+| — | — | Liên kết dịch vụ qua 1 tài khoản duy nhất | — |
+
+## Checklist thực hành
+
+- [ ] Dựng NextCloud (mới nhất) Dựng KeyCloak login NextCloud --> keyCloak + Cấu hình Talk (khởi tạo thêm 1 VM chạy Docker Compose chịu tải thay cho VM đang chạy NextCloud) + Mở File dung lượng lớn trên NextCloud + Đấu Office vào Cloud HAproxy (điều hướng web trỏ về NextCloud, KeyCloak) MailCow (giảm chi phí thuê dịch vụ cho doanh nghiệp)
+
+## Hồ sơ cần nộp
+
+- [ ] Mô tả mục tiêu và môi trường thực hành: thiết bị, phiên bản, sơ đồ hoặc tài nguyên được cấp.
+- [ ] Ghi lại các bước đã thực hiện và phần cấu hình có liên quan.
+- [ ] Đính kèm kết quả kiểm tra, ảnh minh chứng hoặc log đã che thông tin nhạy cảm.
+- [ ] Ghi rõ lỗi gặp phải, cách xử lý và phần cần hỗ trợ.
+- [ ] Nhờ người hướng dẫn xác nhận kết quả.
+
+Sử dụng [mẫu báo cáo lab](../templates/bao-cao-lab.md). Các ô checklist ở trên dành cho lần theo dõi mới, chưa được đánh dấu tự động từ cột “OK” vì bảng nguồn không xác nhận hoàn thành từng thao tác.
+
+# Báo cáo thực hành: <Tên bài lab>
+
+| Thông tin | Nội dung |
+| --- | --- |
+| Người thực hiện | |
+| Ngày thực hiện | |
+| Chủ đề/STT nguồn | |
+| Người hướng dẫn | |
+| Trạng thái | Chưa bắt đầu / Đang làm / Chờ đánh giá / Đã xác nhận |
+
+## 1. Mục tiêu và tiêu chí đạt
+
+Mô tả kết quả có thể kiểm tra được.
+
+## 2. Môi trường thực hành
+
+Thiết bị, phiên bản, VM, sơ đồ kết nối, địa chỉ IP lab và các điều kiện ban đầu.
+
+## 3. Các bước thực hiện
+
+1. ...
+2. ...
+3. ...
+
+## 4. Kiểm tra kết quả
+
+| Phép kiểm tra | Kỳ vọng | Thực tế | Minh chứng | Đạt/Chưa đạt |
+| --- | --- | --- | --- | --- |
+| | | | | |
+
+## 5. Lỗi và cách xử lý
+
+Triệu chứng → nguyên nhân đã xác minh → cách xử lý → kết quả kiểm tra lại.
+
+## 6. Khôi phục và dọn lab
+
+Ghi lại cách hoàn tác thay đổi, bản sao lưu hoặc snapshot được sử dụng.
+
+## 7. Đánh giá của người hướng dẫn
+
+- Kết luận:
+- Nội dung cần bổ sung:
+- Ngày xác nhận:
+
+# Báo cáo ngày <YYYY-MM-DD>
+
+**Người thực hiện:** ...
+
+## Đã hoàn thành
+
+- Chủ đề/công việc:
+- Kết quả và liên kết báo cáo lab:
+
+## Đang thực hiện
+
+- Công việc:
+- Tiến độ thực tế:
+
+## Vướng mắc cần hỗ trợ
+
+- Triệu chứng và các bước đã kiểm tra:
+- Hỗ trợ cần thiết:
+
+## Kế hoạch ngày tiếp theo
+
+- Công việc và kết quả dự kiến:
