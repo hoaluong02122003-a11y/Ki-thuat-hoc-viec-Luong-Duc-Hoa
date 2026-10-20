@@ -1,1 +1,507 @@
+Hướng dẫn Git và GitHub cho người mới
+Từ khái niệm đến thực hành: quản lý tài liệu, lưu lịch sử, đưa nội dung lên GitHub và làm việc qua nhánh.
+Dành cho: người mới học Git, nhân viên IT và người muốn lưu tài liệu hướng dẫn trên GitHub.
+
+Môi trường thực hành: Windows, Git Bash và tài khoản GitHub cá nhân.
+
+Ví dụ xuyên suốt: repository huong-dan-git-github.
+
+Phạm vi: Git cơ bản và GitHub.com. Tên nút hoặc cách bố trí giao diện có thể thay đổi.
+Các giá trị TEN_GITHUB, TEN_CUA_BAN, EMAIL_CUA_BAN và MA_COMMIT là chỗ cần thay bằng thông tin của bạn. Những nội dung và tài khoản trong ví dụ không phải dữ liệu thực tế.
+Mục lục
+1.	Git và GitHub là gì?
+2.	Những điểm cần hiểu đúng
+3.	Các thuật ngữ cần nắm
+4.	Hiểu luồng làm việc của Git
+5.	Đưa tài liệu này lên GitHub
+6.	Cài Git và cấu hình trên Windows
+7.	Thực hành clone, add, commit và push
+8.	Thực hành branch và pull request
+9.	Tạo repository từ thư mục có sẵn
+10.	Phân biệt fetch, pull và push
+11.	Sử dụng .gitignore đúng cách
+12.	Xem khác biệt, lịch sử và tag
+13.	Sửa nhầm và xử lý xung đột
+14.	Bảng lệnh và lỗi thường gặp
+15.	Bài tập tự thực hành
+16.	Tài liệu tham khảo chính thức
+
+1. Git và GitHub là gì?
+Git
+Git là phần mềm quản lý phiên bản phân tán, tiếng Anh là Distributed Version Control System — DVCS. Git giúp ghi lại các mốc thay đổi của một dự án, xem lịch sử và kết hợp công việc từ nhiều nhánh.
+Một bản clone thông thường chứa dữ liệu lịch sử để bạn làm việc trên máy, thay vì phải hỏi máy chủ mỗi lần xem lịch sử hoặc tạo commit. Các cách clone đặc biệt có thể chỉ tải một phần dữ liệu.
+Git quản lý được cả mã nguồn, tài liệu Markdown và tệp cấu hình. Ví dụ: bạn có thể dùng Git để theo dõi tài liệu hướng dẫn Wi-Fi, ghi chú xử lý sự cố hoặc script PowerShell. S1, S2
+GitHub
+GitHub là nền tảng lưu trữ repository Git và hỗ trợ cộng tác. Ngoài kho mã, GitHub có các công cụ như:
+Công cụ	Dùng để làm gì?
+Repository	Lưu tệp và lịch sử Git của dự án.
+Pull request	Đề nghị xem xét, thảo luận và gộp thay đổi.
+Issues	Ghi nhận công việc, lỗi hoặc yêu cầu.
+Actions	Chạy các quy trình tự động được cấu hình cho dự án.
+Quyền truy cập	Quản lý người được đọc, đóng góp hoặc quản trị.
+
+Bạn có thể dùng Git độc lập, hoặc kết nối repository Git với GitHub và các nền tảng lưu trữ khác. S3
+Ví dụ dễ hình dung
+Giả sử bạn viết tài liệu huong-dan-wifi.md:
+Lần cập nhật	Nội dung	Lời nhắn commit gợi ý
+Lần 1	Viết cách kết nối Wi-Fi	docs: them huong dan ket noi Wi-Fi
+Lần 2	Bổ sung cách kiểm tra địa chỉ IP	docs: bo sung cach kiem tra IP
+Lần 3	Sửa hướng dẫn khắc phục lỗi DNS	docs: sua phan xu ly loi DNS
+
+Git ghi lại các mốc bạn chủ động commit. Sau khi push, các commit đó có mặt trong repository trên GitHub để bạn và người được cấp quyền cùng xem.
+Bảng so sánh
+Tiêu chí	Git	GitHub
+Bản chất	Phần mềm quản lý phiên bản	Nền tảng lưu trữ Git và cộng tác
+Nơi sử dụng	Máy cá nhân và máy chủ	Dịch vụ GitHub.com qua mạng
+Cách thao tác	Dòng lệnh hoặc ứng dụng đồ họa	Web, ứng dụng và công cụ dòng lệnh
+Công việc chính	Commit, nhánh, lịch sử, so sánh, gộp thay đổi	Lưu repository, review, quản lý công việc và quyền
+Khi không có Internet	Vẫn có thể sửa tệp, commit và xem lịch sử đã có trên máy	Cần kết nối để trao đổi dữ liệu với GitHub.com
+Tài khoản	Không cần tài khoản GitHub để dùng Git cục bộ	Có hệ thống tài khoản và phân quyền
+Quan hệ	Hoạt động độc lập	Được xây dựng dựa trên Git
+
+Nguồn về cách sử dụng Git qua CLI/GUI và quan hệ Git–GitHub: S3, S4.
+
+2. Những điểm cần hiểu đúng
+Một số cách diễn đạt thường gặp nên sửa để tránh học sai:
+Cách hiểu dễ nhầm	Cách hiểu đúng
+Git chỉ có dòng lệnh	Git cũng dùng được qua GitHub Desktop, các GUI và trình soạn thảo tích hợp Git. S4
+Git do “cộng đồng Linux” bảo trì	Git có cộng đồng phát triển và bảo trì riêng. S5
+Save tệp là đã có phiên bản trong Git	Save chỉ lưu nội dung tệp. Bạn còn cần tạo commit để ghi một mốc lịch sử. S6
+Commit lấy toàn bộ tệp đang sửa	Với quy trình thông thường, commit ghi snapshot từ staging area. S1, S6
+Commit xong là đã lên GitHub	Commit cục bộ cần được push để gửi lên remote. S7
+Remote là công cụ điều khiển nhánh	Remote là cấu hình tham chiếu đến repository khác, thường gồm tên và địa chỉ. S7
+.gitignore chặn mọi tệp không muốn push	Tệp đã được theo dõi không bị bỏ qua chỉ vì thêm vào .gitignore. S8
+GitHub tự xử lý mọi xung đột	Git tự gộp được nhiều thay đổi; người dùng phải quyết định nội dung khi các thay đổi xung đột. S9
+
+Về bảng so sánh ban đầu: “mã nguồn mở” là thuộc tính giấy phép; “miễn phí/trả phí” nói về chi phí. Không nên đặt hai nội dung đó thành hai câu trả lời đối lập cho cùng một tiêu chí. Tương tự, nên so hệ thống quản lý phiên bản với hệ thống quản lý phiên bản, và nền tảng cộng tác với nền tảng cộng tác.
+
+3. Các thuật ngữ cần nắm
+Thuật ngữ	Giải thích	Ví dụ
+git	Tên chương trình chính; phía sau là lệnh con và tham số	git status
+Repository / repo	Kho dữ liệu được Git quản lý, gồm lịch sử và thông tin liên quan	huong-dan-git-github
+Working tree	Các tệp bạn đang mở, sửa và lưu	README.md đang chỉnh
+Staging area / index	Nội dung đã chuẩn bị cho commit tiếp theo	Sau git add README.md
+Commit	Một mốc lịch sử chứa snapshot và thông tin như tác giả, lời nhắn	“Bổ sung hướng dẫn Wi-Fi”
+Branch	Nhánh phát triển trong cùng repo; tên nhánh trỏ tới một commit	main, docs/them-gitignore
+HEAD	Tham chiếu xác định vị trí làm việc hiện tại, thường qua nhánh đang chọn	Đang ở nhánh main
+Clone	Tạo bản repository ở vị trí khác, thường là trên máy cá nhân	git clone URL
+Fork	Repo riêng trên GitHub bắt đầu từ repo gốc, vẫn có quan hệ với repo đó	Fork để đóng góp
+Remote	Tên và cấu hình để trao đổi dữ liệu với repo khác	origin
+Origin	Tên remote thường được Git đặt khi clone; có thể dùng tên khác	git remote -v
+Diff	Phần khác biệt giữa những trạng thái được so sánh	git diff --staged
+Tag	Nhãn đánh dấu một mốc, thường dùng cho phiên bản	v1.0.0
+Merge	Kết hợp lịch sử của các nhánh	Gộp nhánh tài liệu vào main
+Pull request / PR	Đề nghị xem xét và gộp thay đổi trên nền tảng GitHub	PR bổ sung tài liệu
+.gitignore	Tệp quy tắc bỏ qua các tệp chưa được Git theo dõi	*.log, temp/
+
+Các thuật ngữ trên dựa trên tài liệu Git về snapshot, nhánh, clone, remote và tài liệu GitHub về fork/PR. S1, S2, S7, S10, S11, S12
+Branch, fork và clone khác nhau ra sao?
+Bạn muốn làm gì?	Thao tác phù hợp
+Tách phần chỉnh sửa trong cùng repo	Tạo branch
+Có repo của riêng mình trên GitHub từ một repo có sẵn	Tạo fork, nếu chính sách repo cho phép
+Lấy repo về máy để làm việc	Clone
+
+Ví dụ: bạn fork dự án của người khác về tài khoản của mình, clone fork xuống máy, rồi tạo branch để sửa tài liệu.
+Fork không phải lệnh git fork tiêu chuẩn. Tải Download ZIP cũng không thay thế clone khi bạn cần lịch sử và thông tin kết nối Git. S2, S11
+
+4. Hiểu luồng làm việc của Git
+flowchart TB
+    subgraph LOCAL["Máy tính của bạn"]
+        W["Working tree: tệp đang sửa"]
+        S["Staging area: nội dung đã chọn"]
+        L["Repository cục bộ: lịch sử và tham chiếu"]
+        W -->|git add| S
+        S -->|git commit| L
+        L -->|git switch| W
+    end
+    R["Repository trên GitHub"]
+    L -->|git push| R
+    R -->|git fetch| L
+
+Sơ đồ dùng Mermaid, được GitHub hỗ trợ trong Markdown. S13
+Một thay đổi đi qua các bước nào?
+Bước	Bạn làm gì?	Trạng thái
+1	Sửa rồi lưu tệp	Nội dung thay đổi trong working tree
+2	Chạy git add	Chuẩn bị nội dung cho commit
+3	Chạy git commit	Tạo mốc lịch sử trong repo cục bộ
+4	Chạy git push	Gửi commit và cập nhật nhánh trên remote
+
+git fetch tải dữ liệu và cập nhật thông tin theo dõi remote; nó không tự gộp thay đổi vào nhánh bạn đang làm. S7
+Vì sao cần staging?
+Bạn đang sửa hai tài liệu:
+·	huong-dan-wifi.md đã hoàn thành.
+·	huong-dan-vpn.md còn viết dở.
+Bạn chỉ chuẩn bị tài liệu đã xong:
+git add huong-dan-wifi.md
+git commit -m "docs: hoan thanh huong dan Wi-Fi"
+
+Phần sửa VPN chưa được stage sẽ chưa nằm trong commit này.
+Nếu sửa thêm tệp Wi-Fi sau khi đã git add, cần git add lại để đưa phần sửa mới vào commit. Staging giữ nội dung ở thời điểm bạn thêm nó. S6
+
+5. Đưa tài liệu này lên GitHub
+Bạn có thể đưa file README.md này lên GitHub bằng trình duyệt trước khi học dòng lệnh.
+Bước 1: Tạo repository
+Mở trang tạo repository, đăng nhập và điền:
+Trường	Giá trị gợi ý
+Owner	Tài khoản GitHub của bạn
+Repository name	huong-dan-git-github
+Description	Tài liệu học Git và GitHub bằng tiếng Việt
+Visibility	Public nếu muốn chia sẻ bài học; Private nếu muốn giới hạn truy cập
+
+Vì đã có file để tải lên, để trống các lựa chọn khởi tạo README, .gitignore và license trong lần thực hành này. Bấm Create repository. S14
+Bước 2: Tải README lên
+1.	Trong repo trống, chọn liên kết uploading an existing file.
+2.	Nếu repo đã có nội dung, dùng Add file → Upload files.
+3.	Kéo file README.md vào vùng tải lên.
+4.	Nhập lời nhắn: docs: them huong dan Git va GitHub.
+5.	Bấm Commit changes để lưu vào nhánh mặc định.
+Sau đó mở tab Code để xem bài hướng dẫn. S15
+Nếu repo đã có README của dự án khác, hãy xem nội dung hiện có trước khi thay bằng bài này.
+Bước 3: Chia sẻ
+Sao chép địa chỉ repo trên thanh địa chỉ trình duyệt. Đường dẫn có dạng:
+https://github.com/TEN_GITHUB/huong-dan-git-github
+
+Đây là mẫu đường dẫn; TEN_GITHUB phải là tên tài khoản thực tế.
+
+6. Cài Git và cấu hình trên Windows
+Cài Git
+Tải bộ cài từ trang Git cho Windows. Sau khi cài, mở Git Bash trong Start menu và kiểm tra:
+git --version
+
+Nếu nhận được dòng bắt đầu bằng git version, Git đã sẵn sàng trong cửa sổ đó. Các lệnh trong bài được viết để chạy bằng Git Bash. S4, S16
+Cấu hình danh tính cho commit
+Thay tên và email bằng thông tin của bạn:
+git config --global user.name "TEN_CUA_BAN"
+git config --global user.email "EMAIL_CUA_BAN"
+
+Kiểm tra lại:
+git config --global --get user.name
+git config --global --get user.email
+
+Đây là thông tin gắn với commit, không phải thao tác đăng nhập GitHub. Nên dùng email đã liên kết với tài khoản hoặc địa chỉ noreply được GitHub cung cấp trong phần cài đặt email. Trên máy dùng chung, có thể bỏ --global và cấu hình riêng bên trong từng repo. S4
+Đăng nhập khi dùng HTTPS
+Git for Windows có thể sử dụng Git Credential Manager để mở luồng đăng nhập GitHub khi cần. Hãy làm theo cửa sổ đăng nhập nếu nó xuất hiện. S17
+Mật khẩu tài khoản GitHub thông thường không được dùng để xác thực thao tác Git qua HTTPS. Các cách phù hợp gồm Git Credential Manager, GitHub CLI, personal access token hoặc chuyển sang SSH đã được cấu hình. Không điền token vào nội dung README hay URL được chia sẻ. S18
+
+7. Thực hành clone, add, commit và push
+Điều kiện: bạn đã đưa README lên repo của mình theo mục 5.
+Bước 1: Clone repo về máy
+Mở Git Bash ở thư mục muốn chứa dự án, thay TEN_GITHUB rồi chạy:
+git clone https://github.com/TEN_GITHUB/huong-dan-git-github.git
+cd huong-dan-git-github
+git status
+git branch --show-current
+git remote -v
+
+clone tạo thư mục dự án và thiết lập remote origin. Bạn không cần chạy thêm git init trong thư mục đã clone. S2
+Bài giả định nhánh chính là main. Nếu git branch --show-current trả về tên khác, dùng tên nhánh thực tế thay cho main ở các bước tiếp theo.
+Bước 2: Tạo một tệp thực hành
+Trong thư mục repo, tạo thư mục docs và tệp docs/thuc-hanh.md bằng trình soạn thảo. Nhập:
+# Ghi chú thực hành Git
+
+## Mục tiêu
+
+- Biết tạo commit.
+- Biết đưa tài liệu lên GitHub.
+- Biết xem lịch sử chỉnh sửa.
+
+Lưu tệp, rồi chạy:
+git status
+
+Bạn sẽ thấy tệp hoặc thư mục mới trong nhóm Untracked files.
+Bước 3: Chuẩn bị commit
+git add docs/thuc-hanh.md
+git diff --staged
+git status
+
+Kiểm tra nội dung hiển thị để biết chính xác điều gì sắp được ghi lại. Trong git status, tệp đã chuẩn bị nằm ở Changes to be committed. S6
+Bước 4: Tạo commit
+git commit -m "docs: them ghi chu thuc hanh Git"
+git log --oneline -5
+
+-m đặt lời nhắn cho commit. Trong ví dụ này, tiền tố docs: chỉ là cách đặt lời nhắn dễ đọc; bạn có thể dùng câu mô tả khác.
+Nếu màn hình lịch sử hoặc diff dừng ở trình xem trang, nhấn q để thoát.
+Bước 5: Gửi lên GitHub
+git push
+
+Repo clone thông thường đã có cấu hình theo dõi nhánh mặc định, nên có thể dùng git push ở bước này. S7
+Mở lại trang repo, kiểm tra có docs/thuc-hanh.md và commit vừa tạo. Bài thực hành giả định repo cá nhân mới cho phép bạn push vào nhánh chính; nếu nhánh có quy tắc bắt buộc PR, sử dụng quy trình ở mục 8.
+Lần cập nhật tiếp theo
+Sau khi sửa thêm docs/thuc-hanh.md:
+git status
+git diff
+git add docs/thuc-hanh.md
+git diff --staged
+git commit -m "docs: cap nhat ghi chu thuc hanh"
+git push
+
+
+8. Thực hành branch và pull request
+Mục tiêu: bổ sung .gitignore trên một nhánh riêng, sau đó gộp vào nhánh chính.
+Bước 1: Tạo nhánh
+Hoàn tất commit phần việc đang làm trước khi chuyển nhánh.
+git switch main
+git pull --ff-only
+git switch -c docs/them-gitignore
+
+git switch -c tạo và chuyển sang nhánh mới. Một nhánh là tham chiếu trong cùng repo; nó không phải một thư mục dự án mới. S10
+Bước 2: Tạo .gitignore
+Ở thư mục gốc của repo, tạo tệp có tên chính xác .gitignore:
+# Tep cau hinh ca nhan
+.env
+.env.*
+!.env.example
+
+# Log va tep tam
+*.log
+temp/
+
+.env.example là ngoại lệ được cho phép; nếu dùng tệp mẫu này, chỉ đặt giá trị minh họa vào đó.
+Lưu tệp và chạy:
+git add .gitignore
+git diff --staged
+git commit -m "chore: them quy tac bo qua tep tam"
+git push -u origin docs/them-gitignore
+
+-u thiết lập nhánh remote để các lần push/pull sau biết nhánh mặc định cần trao đổi.
+Bước 3: Mở pull request
+Trên GitHub:
+1.	Vào Pull requests → New pull request.
+2.	Chọn base: main và compare: docs/them-gitignore.
+3.	Xem phần khác biệt.
+4.	Bấm Create pull request.
+5.	Đặt tiêu đề: Thêm quy tắc bỏ qua tệp tạm.
+PR diễn đạt đề nghị: “Hãy xem và đưa thay đổi từ nhánh này vào nhánh đích.” S12
+Bước 4: Gộp và cập nhật máy
+Trong repo thực hành do bạn quản lý, sau khi kiểm tra nội dung, bấm Merge pull request → Confirm merge nếu cấu hình repo cho phép.
+Quay lại Git Bash:
+git switch main
+git pull --ff-only
+
+Kiểm tra .gitignore đã có trên main.
+Tên gần giống nhau	Ý nghĩa
+git pull	Lấy và tích hợp dữ liệu remote vào nhánh cục bộ
+Pull request	Đề nghị review/gộp thay đổi trên GitHub
+
+PR không phải lệnh để tải repo về máy. S12, S19
+
+9. Tạo repository từ thư mục có sẵn
+Đây là cách bắt đầu khác, dành cho thư mục chưa có Git. Không cần thực hiện lại trong repo đã clone ở mục 7.
+Ví dụ bạn muốn tạo dự án mới ghi-chu-git. Trong Git Bash, mở thư mục cha phù hợp rồi chạy:
+mkdir ghi-chu-git
+cd ghi-chu-git
+git init -b main
+
+Nếu đã có thư mục dự án thì chỉ cần cd vào đúng thư mục đó trước khi git init -b main.
+Tạo README.md với nội dung:
+# Ghi chú Git
+
+Repository dùng để lưu các bài thực hành Git của tôi.
+
+Tạo commit đầu tiên:
+git add README.md
+git commit -m "docs: tao ghi chu Git"
+
+Trên GitHub, tạo repo trống tên ghi-chu-git; không khởi tạo thêm README, .gitignore hoặc license vì máy bạn đã có lịch sử riêng. S14
+Kết nối rồi đẩy commit lên, sau khi thay TEN_GITHUB:
+git remote add origin https://github.com/TEN_GITHUB/ghi-chu-git.git
+git remote -v
+git push -u origin main
+
+Lệnh git remote add chỉ lưu cấu hình kết nối; nó không tự tạo repo trên GitHub hoặc gửi tệp đi. S7, S20
+
+10. Phân biệt fetch, pull và push
+Lệnh	Hướng dữ liệu trong ví dụ	Hành động
+git fetch origin	GitHub về repo cục bộ	Tải dữ liệu mới, cập nhật tham chiếu theo dõi remote
+git pull --ff-only	GitHub về nhánh đang làm	Fetch rồi cập nhật nhánh nếu có thể fast-forward
+git push	Repo cục bộ lên GitHub	Gửi các đối tượng cần thiết và cập nhật nhánh remote
+
+origin/main là thông tin cục bộ về nhánh main trên origin ở lần trao đổi gần nhất, không phải kết nối trực tiếp luôn tự cập nhật. S7
+Ví dụ có người sửa tài liệu trên GitHub
+Khi bạn đang ở main và đã lưu phần việc của mình bằng commit:
+git fetch origin
+git log --oneline main..origin/main
+git diff main origin/main
+
+Hai lệnh cuối giúp xem các commit phía remote mà main chưa có và so sánh nội dung giữa hai mốc.
+Để cập nhật theo cách không tự tạo merge commit:
+git pull --ff-only
+
+Fast-forward là tiến nhánh hiện tại tới mốc mới hơn trên cùng đường lịch sử. Nếu hai bên đã có commit riêng và phân kỳ, --ff-only sẽ dừng. Khi đó cần xem lịch sử và quyết định cách hợp nhất; xem mục 13. S19
+
+11. Sử dụng .gitignore đúng cách
+.gitignore phù hợp với log, tệp tạm và cấu hình riêng không cần đưa vào lịch sử.
+Với mẫu ở mục 8:
+Quy tắc	Tác dụng
+.env	Bỏ qua tệp có tên .env
+.env.*	Bỏ qua các tệp như .env.local
+!.env.example	Cho phép tệp mẫu .env.example
+*.log	Bỏ qua tệp có phần mở rộng .log
+temp/	Bỏ qua thư mục tên temp
+
+Quy tắc chỉ có tác dụng với nội dung chưa được theo dõi. Ví dụ, nếu một tệp .env đã được commit, thêm .env vào .gitignore chưa đủ để ngừng theo dõi nó. S8
+Để bỏ theo dõi .env ở phiên bản tiếp theo nhưng giữ bản hiện tại trên máy của bạn:
+git rm --cached -- .env
+git add .gitignore
+git commit -m "chore: ngung theo doi cau hinh ca nhan"
+git push
+
+Chỉ dùng ví dụ này khi .env thực sự đang được theo dõi và quy tắc bỏ qua đã có.
+Lệnh trên không xóa .env khỏi các commit cũ. Nếu đã đưa mật khẩu hoặc khóa thật vào lịch sử, cần thu hồi/đổi thông tin đó và xử lý lịch sử phù hợp; .gitignore không phải cơ chế xóa bí mật đã lộ. S8, S21
+
+12. Xem khác biệt, lịch sử và tag
+Diff
+Lệnh	So sánh
+git diff	Working tree với staging area
+git diff --staged	Staging area với commit hiện tại
+git diff HEAD	Working tree với commit hiện tại, đối với tệp được theo dõi
+git diff COMMIT_A COMMIT_B	Hai commit bạn chỉ định
+
+Sau git add, git diff có thể không còn nội dung; hãy dùng git diff --staged để xem phần sắp commit. Tệp mới chưa được theo dõi không tự xuất hiện trong git diff thông thường. S22
+Lịch sử
+git log --oneline -10
+git log --oneline --graph --all -15
+git show --stat HEAD
+
+HEAD thường xác định commit hiện tại của nhánh đang làm. Có thể thay HEAD bằng mã commit có trong git log để xem một mốc khác.
+Tag
+Sau khi hoàn thành một phiên bản tài liệu, bạn có thể gắn nhãn:
+git tag -a v1.0.0 -m "Phien ban tai lieu dau tien"
+git push origin v1.0.0
+
+Tag này đánh dấu commit hiện tại. Đẩy nhánh bằng git push origin main không mặc nhiên đẩy mọi tag; ví dụ trên gửi rõ tag v1.0.0. S23
+
+13. Sửa nhầm và xử lý xung đột
+Bỏ một tệp khỏi staging nhưng giữ nội dung sửa
+Nếu vừa git add nhầm:
+git restore --staged -- docs/thuc-hanh.md
+
+Nội dung đang sửa vẫn còn trong working tree; bạn chỉ bỏ nó khỏi phần chuẩn bị commit. S24
+Bỏ phần sửa chưa được stage
+Nếu đã kiểm tra và muốn bỏ các chỉnh sửa chưa stage của một tệp đang được theo dõi:
+git diff -- docs/thuc-hanh.md
+git restore -- docs/thuc-hanh.md
+
+Lệnh restore thứ hai thay nội dung working tree bằng nội dung trong index và làm mất phần sửa chưa stage của tệp đó. Nếu cần giữ lại để tham khảo, hãy sao chép tệp trước. S24
+Đảo thay đổi của một commit đã có
+Với một commit thông thường, có thể tạo commit mới để đảo tác động của nó:
+git log --oneline -10
+git show MA_COMMIT
+git revert --no-edit MA_COMMIT
+git push
+
+Thay MA_COMMIT bằng mã commit cần đảo, bảo đảm phần việc hiện tại đã được lưu. revert giữ commit cũ trong lịch sử và thêm commit đảo thay đổi; nó có thể phát sinh xung đột. Ví dụ trên không áp dụng nguyên xi cho merge commit. S25
+Khi push bị từ chối vì remote có thay đổi mới
+Trong bài thực hành trên main:
+1.	Chạy git status và hoàn tất commit phần việc cần giữ.
+2.	Chạy git pull --ff-only.
+3.	Nếu cập nhật được, thử git push.
+4.	Nếu báo lịch sử phân kỳ, xem các nhánh trước khi hợp nhất:
+git fetch origin
+git log --oneline --graph --all -15
+
+Khi hai phía có chung lịch sử và bạn đã quyết định gộp origin/main vào main hiện tại, chạy:
+git merge --no-edit origin/main
+
+Đây không phải hướng xử lý cho hai repository được khởi tạo độc lập. Nếu đã lỡ tạo hai lịch sử riêng, có thể clone repo GitHub vào thư mục mới rồi đưa các tệp cần giữ sang, kiểm tra và commit lại.
+Khi xuất hiện conflict
+Ví dụ minh họa một đoạn xung đột trong tệp:
+<<<<<<< HEAD
+Tên tài liệu: Hướng dẫn Wi-Fi nội bộ
+=======
+Tên tài liệu: Hướng dẫn Wi-Fi văn phòng
+>>>>>>> origin/main
+
+Git không biết tiêu đề nào đúng với nhu cầu của bạn. Mở tệp, chọn hoặc viết lại nội dung cuối cùng và xóa cả ba dòng đánh dấu xung đột.
+Sau khi sửa xong tệp trong ví dụ:
+git add docs/thuc-hanh.md
+git diff --staged
+git status
+git commit -m "docs: giai quyet xung dot tai lieu"
+git push
+
+Nếu Git báo nhiều tệp xung đột, xử lý từng tệp trước khi commit. Khi đang trong một lần merge và muốn hủy lần merge đó, có thể dùng git merge --abort. Bắt đầu merge với working tree sạch giúp việc hủy dễ kiểm soát hơn. S9, S26
+
+14. Bảng lệnh và lỗi thường gặp
+Bảng lệnh tra nhanh
+Nhu cầu	Lệnh
+Kiểm tra trạng thái	git status
+Tạo repo mới	git init -b main
+Lấy repo về máy	git clone URL
+Xem nhánh hiện tại	git branch --show-current
+Tạo và chuyển nhánh	git switch -c TEN_NHANH
+Chuyển nhánh	git switch TEN_NHANH
+Chuẩn bị một tệp	git add TEN_TEP
+Xem nội dung chuẩn bị commit	git diff --staged
+Tạo commit	git commit -m "Mo ta thay doi"
+Xem lịch sử	git log --oneline -10
+Xem remote	git remote -v
+Lấy thông tin remote mới	git fetch origin
+Cập nhật nhánh theo fast-forward	git pull --ff-only
+Đẩy nhánh mới lần đầu	git push -u origin TEN_NHANH
+Đẩy các lần sau	git push
+
+Bảng này là phần tra nhanh của các ví dụ đã giải thích; hãy thay tên tệp, nhánh và URL đúng với repo đang mở.
+Lỗi thường gặp
+Thông báo hoặc hiện tượng	Kiểm tra và cách xử lý
+git is not recognized hoặc git: command not found	Kiểm tra đã cài Git, mở lại Git Bash; nếu dùng terminal khác thì kiểm tra PATH.
+not a git repository	Đang đứng sai thư mục; cd vào repo rồi chạy lại git status.
+Author identity unknown	Cấu hình user.name và user.email, sau đó commit lại.
+src refspec main does not match any	Kiểm tra có commit đầu tiên chưa và nhánh có thật sự tên main không.
+remote origin already exists	Xem git remote -v; nếu địa chỉ sai thì sửa bằng git remote set-url origin URL_DUNG. S20
+Authentication failed	Kiểm tra đúng tài khoản/quyền repo và dùng GCM, token hoặc SSH phù hợp. S17, S18
+non-fast-forward	Lấy thay đổi remote và xem lịch sử theo mục 13 trước khi push lại.
+nothing to commit, working tree clean	Không có thay đổi cần commit so với trạng thái hiện tại; thông báo này không tự bảo đảm mọi commit đã được push.
+Tệp trên máy tên README.md.txt	Sửa đúng phần mở rộng thành README.md, rồi commit tệp đúng.
+Hiện mã Mermaid thay vì sơ đồ	Xem chế độ hiển thị Markdown trên GitHub; chế độ Raw hoặc trình soạn thảo thuần văn bản sẽ hiện mã. S13
+
+
+15. Bài tập tự thực hành
+Hoàn thành theo thứ tự trên repo học tập của bạn:
+·	Tạo repo huong-dan-git-github và đưa README này lên.
+·	Clone repo về máy.
+·	Tạo docs/thuc-hanh.md.
+·	Dùng git add, git diff --staged, git commit và git push.
+·	Tạo nhánh docs/them-gitignore.
+·	Bổ sung .gitignore và mở pull request.
+·	Gộp PR, chuyển về main và pull cập nhật.
+·	Sửa thêm một dòng tài liệu và xem diff trước/sau khi stage.
+·	Tìm lại một commit bằng git log và git show.
+Tự kiểm tra sau bài học:
+·	Khi chỉ bấm Save, dữ liệu đang ở đâu?
+·	Sau commit, đã chắc nội dung lên GitHub chưa?
+·	Vì sao sau git add lại cần dùng git diff --staged?
+·	Khi muốn sửa repo của người khác, lúc nào cần fork, clone và branch?
+·	Vì sao thêm tệp vào .gitignore chưa chắc ngừng theo dõi được tệp đó?
+Gợi ý trả lời: Save lưu working tree; commit tạo mốc cục bộ; push gửi lên remote. Staging giữ phần đã chuẩn bị. Fork tạo repo riêng trên nền tảng, clone tạo bản làm việc ở nơi khác, branch tách dòng phát triển trong repo. .gitignore không bỏ theo dõi tệp đã được Git quản lý.
+
+16. Tài liệu tham khảo chính thức
+Các phần giải thích và ví dụ được viết bằng tiếng Việt cho bài thực hành này. Nguồn dưới đây là tài liệu đối chiếu của Git và GitHub.
+Mã	Tài liệu
+S1	Git: What is Git?
+S2	Git: git clone
+S3	GitHub: What is GitHub?
+S4	GitHub: Set up Git
+S5	Git: Community
+S6	Git: Recording Changes to the Repository
+S7	Git: Working with Remotes
+S8	Git: gitignore
+S9	GitHub: Merge conflicts
+S10	Git: Branches in a Nutshell
+S11	GitHub: Forks
+S12	GitHub: Hello World
+S13	GitHub: Creating diagrams
+S14	GitHub: Creating a new repository
+S15	GitHub: Adding a file to a repository
+S16	Git: Install for Windows
+S17	GitHub: Caching your credentials
+S18	GitHub: About authentication
+S19	Git: git pull
+S20	GitHub: Managing remote repositories
+S21	GitHub: Removing sensitive data from a repository
+S22	Git: git diff
+S23	Git: git tag
+S24	Git: git restore
+S25	Git: git revert
+S26	Git: git merge
 
