@@ -1,1 +1,523 @@
 
+# Kiến thức mạng cơ bản: IP, Gateway, DNS, DHCP, NAT, Route và MAC
+
+> Dành cho người mới học Network/System. Ví dụ chủ yếu dùng IPv4 và mạng Ethernet/Wi-Fi gia đình hoặc doanh nghiệp nhỏ.
+> Tài liệu có 5 sơ đồ minh họa, ví dụ thực tế và lệnh kiểm tra trên Windows.
+
+## Mục lục
+
+- [1. Nhìn tổng thể một kết nối mạng](#1-nhìn-tổng-thể-một-kết-nối-mạng)
+- [2. Địa chỉ IP là gì?](#2-địa-chỉ-ip-là-gì)
+- [3. Gateway là gì?](#3-gateway-là-gì)
+- [4. DNS là gì?](#4-dns-là-gì)
+- [5. DHCP là gì?](#5-dhcp-là-gì)
+- [6. Private IP và Public IP](#6-private-ip-và-public-ip)
+- [7. NAT là gì?](#7-nat-là-gì)
+- [8. Default route là gì?](#8-default-route-là-gì)
+- [9. Địa chỉ MAC là gì?](#9-địa-chỉ-mac-là-gì)
+- [10. Khi mở một website thì chuyện gì xảy ra?](#10-khi-mở-một-website-thì-chuyện-gì-xảy-ra)
+- [11. Kiểm tra và xử lý lỗi trên Windows](#11-kiểm-tra-và-xử-lý-lỗi-trên-windows)
+- [12. Bài thực hành và câu hỏi ôn tập](#12-bài-thực-hành-và-câu-hỏi-ôn-tập)
+- [13. Đưa tài liệu lên GitHub](#13-đưa-tài-liệu-lên-github)
+- [14. Tài liệu đọc thêm](#14-tài-liệu-đọc-thêm)
+
+## 1. Nhìn tổng thể một kết nối mạng
+
+![Các thành phần giúp máy tính kết nối mạng](images/01-tong-quan.png)
+
+Ví dụ máy tính của bạn có:
+
+| Thành phần | Giá trị ví dụ | Vai trò |
+| --- | --- | --- |
+| IPv4 | `192.168.1.100` | Địa chỉ của giao diện mạng |
+| Subnet mask | `255.255.255.0` hoặc `/24` | Xác định phần mạng của địa chỉ |
+| Default gateway | `192.168.1.1` | Bước chuyển tiếp thường dùng để đến mạng khác |
+| DNS server | `192.168.1.1` | Nhận yêu cầu phân giải tên miền |
+| DHCP server | `192.168.1.1` | Cấp cấu hình tự động trong ví dụ này |
+| MAC | `02:11:22:33:44:55` | Địa chỉ lớp liên kết của giao diện trong ví dụ |
+
+Một router có thể đồng thời làm gateway, DHCP server, DNS forwarder và NAT. Đây là **những chức năng khác nhau**, không bắt buộc phải nằm trên cùng một thiết bị.
+
+Ví dụ doanh nghiệp có thể dùng firewall làm gateway, Windows Server làm DHCP và máy chủ DNS riêng.
+
+## 2. Địa chỉ IP là gì?
+
+**IP — Internet Protocol address** là địa chỉ logic gán cho giao diện mạng, dùng để trao đổi gói tin trong mạng IP.
+
+Một thiết bị có thể có nhiều IP vì có nhiều card mạng, nhiều VLAN, nhiều địa chỉ trên một giao diện hoặc dùng đồng thời IPv4 và IPv6.
+
+### 2.1. IPv4 và IPv6
+
+| Loại | Độ dài | Ví dụ |
+| --- | --- | --- |
+| IPv4 | 32 bit | `192.168.1.100` |
+| IPv6 | 128 bit | `2001:db8::100` — địa chỉ minh họa trong tài liệu |
+
+IPv4 thường hiển thị thành 4 số từ 0 đến 255, ngăn cách bằng dấu chấm.
+
+### 2.2. IP phải đi cùng subnet mask/prefix
+
+![Ví dụ cùng subnet và khác subnet](images/02-ip-subnet.png)
+
+Chỉ nhìn `192.168.1.100` chưa đủ để xác định mạng. Cần biết thêm subnet mask, chẳng hạn:
+
+```text
+IP:           192.168.1.100
+Subnet mask:  255.255.255.0
+CIDR:         192.168.1.100/24
+Network:      192.168.1.0/24
+```
+
+`/24` nghĩa là **24 bit đầu là phần mạng**, không phải có 24 máy.
+
+Với subnet `/24` thông thường trong ví dụ:
+
+| Địa chỉ | Ý nghĩa |
+| --- | --- |
+| `192.168.1.0` | Network address |
+| `192.168.1.1` đến `192.168.1.254` | 254 địa chỉ host có thể dùng |
+| `192.168.1.255` | Broadcast address |
+
+Quy tắc số host ở trên áp dụng cho ví dụ `/24` này; không suy rộng sang mọi prefix, đặc biệt `/31`, `/32` hoặc IPv6.
+
+### 2.3. Cùng mạng hay khác mạng?
+
+Giả sử máy A là `192.168.1.100/24`:
+
+- Máy B `192.168.1.50/24`: cùng subnet.
+- Máy C `192.168.2.50/24`: khác subnet.
+
+Thông thường, A gửi trực tiếp tới B nếu cùng liên kết/VLAN. Muốn đến C thì cần route qua router.
+
+**Không kết luận cùng mạng chỉ vì “3 số đầu giống nhau”.** Phải xét subnet mask và cấu trúc mạng thực tế. Cùng subnet IP nhưng bị tách VLAN hoặc bị client isolation vẫn có thể không liên lạc được.
+
+### 2.4. IP tĩnh và IP động
+
+- **IP tĩnh:** được cấu hình thủ công hoặc quản lý cố định theo thiết kế.
+- **IP động:** thường được DHCP cấp với thời hạn lease.
+- **DHCP reservation:** DHCP vẫn cấp tự động nhưng giữ một địa chỉ cho client được nhận diện, thường qua MAC hoặc client identifier.
+
+Tránh đặt IP thủ công trùng với thiết bị khác hoặc nằm trong pool DHCP mà chưa có cơ chế loại trừ phù hợp.
+
+## 3. Gateway là gì?
+
+**Gateway** là thiết bị/chức năng chuyển tiếp lưu lượng giữa các mạng. Trong cấu hình IP của máy tính, **default gateway** thường là địa chỉ của router dùng làm next hop cho default route.
+
+Ví dụ:
+
+```text
+Máy tính:       192.168.1.100/24
+Default gateway: 192.168.1.1
+```
+
+- Gửi đến `192.168.1.50`: thông thường gửi trực tiếp trong LAN.
+- Gửi đến địa chỉ ngoài subnet: tra bảng định tuyến; nếu không có route cụ thể hơn thì dùng default gateway.
+
+Trên Ethernet thông thường, gateway phải có thể truy cập trực tiếp qua liên kết của máy tính, thường là IP cùng subnet. Một số thiết kế đặc biệt như PPP hoặc route on-link có ngoại lệ.
+
+### Thiếu gateway có vào mạng được không?
+
+Máy vẫn có thể liên lạc với thiết bị cùng subnet. Đến mạng khác sẽ cần route phù hợp; thiếu default gateway không ngăn kết nối nếu đã có route cụ thể đúng.
+
+### Gateway có phải modem không?
+
+Có thể là modem/router nhà mạng nếu thiết bị đó làm routing cho LAN. Trong doanh nghiệp, gateway có thể nằm trên firewall, router hoặc switch Layer 3.
+
+## 4. DNS là gì?
+
+**DNS — Domain Name System** là hệ thống phân giải tên. Khi dùng website, bạn thường cần chuyển tên như `example.com` thành địa chỉ IP để ứng dụng kết nối.
+
+DNS không chỉ lưu IP: còn có bản ghi phục vụ email, xác minh tên miền và các chức năng khác.
+
+| Loại bản ghi | Vai trò |
+| --- | --- |
+| A | Tên → địa chỉ IPv4 |
+| AAAA | Tên → địa chỉ IPv6 |
+| CNAME | Tên bí danh trỏ tới tên khác |
+| MX | Chỉ định máy chủ nhận email của miền |
+| TXT | Lưu thông tin dạng văn bản, ví dụ xác minh hoặc SPF |
+| PTR | Phân giải ngược địa chỉ về tên |
+
+### DNS server trong cấu hình máy tính là gì?
+
+Đó thường là DNS resolver mà máy gửi truy vấn đến. Nó có thể là:
+
+- Router có chức năng chuyển tiếp DNS.
+- DNS nội bộ của doanh nghiệp.
+- DNS resolver công cộng.
+
+Nếu máy có DNS `192.168.1.1`, không có nghĩa router chứa toàn bộ cơ sở dữ liệu tên miền Internet. Router có thể chỉ chuyển truy vấn đến DNS phía trên và lưu cache.
+
+### Lỗi DNS có biểu hiện gì?
+
+Có thể kết nối được tới IP nhưng không phân giải được tên miền. Đây là dấu hiệu cần kiểm tra DNS, chưa phải kết luận chắc chắn.
+
+```powershell
+nslookup example.com
+```
+
+**DNS khác gateway:** DNS giúp tìm địa chỉ; gateway giúp chuyển gói tin đến mạng khác. Hai giá trị có thể giống nhau nếu router làm cả hai chức năng.
+
+Trong mạng có AD hoặc dịch vụ nội bộ, cần dùng DNS theo thiết kế. Đổi sang DNS công cộng có thể khiến tên nội bộ không phân giải được.
+
+## 5. DHCP là gì?
+
+**DHCP — Dynamic Host Configuration Protocol** tự động cung cấp cấu hình IP cho client.
+
+Thông tin được cấp có thể gồm:
+
+- IP và subnet mask.
+- Default gateway.
+- DNS server.
+- Thời hạn thuê địa chỉ — **lease**.
+- Các tùy chọn khác theo môi trường.
+
+![Quy trình DORA trong DHCPv4](images/03-dhcp.png)
+
+### 5.1. Quy trình DORA
+
+Khi một client DHCPv4 mới xin cấu hình, quy trình thường gặp là:
+
+| Bước | Thông điệp | Ý nghĩa đơn giản |
+| --- | --- | --- |
+| 1 | Discover | Client tìm DHCP server |
+| 2 | Offer | Server đề xuất địa chỉ/cấu hình |
+| 3 | Request | Client yêu cầu sử dụng đề xuất |
+| 4 | ACK | Server xác nhận lease |
+
+Đây là mô tả đơn giản của lần cấp mới. Quá trình gia hạn lease không nhất thiết lặp lại đủ bốn bước.
+
+DHCPv4 dùng UDP 67 ở server và UDP 68 ở client. Nếu server nằm ở subnet khác, thường cần **DHCP relay** trên thiết bị phù hợp vì broadcast ban đầu không được router chuyển tiếp như lưu lượng unicast thông thường.
+
+### 5.2. Pool và reservation
+
+Ví dụ thiết kế:
+
+```text
+LAN:          192.168.1.0/24
+Gateway:      192.168.1.1
+DHCP pool:    192.168.1.100 – 192.168.1.200
+IP hạ tầng:   nằm ngoài pool hoặc được loại trừ rõ ràng
+```
+
+Muốn máy in thường xuyên nhận cùng IP có thể tạo reservation trong DHCP server. Cách nhận diện client tùy hệ thống.
+
+### 5.3. Nếu máy nhận 169.254.x.x?
+
+Khi bật nhận IP tự động nhưng không lấy được lease IPv4, Windows có thể tự đặt địa chỉ **link-local/APIPA** trong `169.254.0.0/16`.
+
+Cần kiểm tra kết nối, VLAN, DHCP server, pool và relay. Không phải mọi địa chỉ bắt đầu bằng 169 đều là lỗi; nhận xét này nói riêng về dải `169.254.0.0/16` trong tình huống trên.
+
+## 6. Private IP và Public IP
+
+### 6.1. Các dải Private IPv4 theo RFC 1918
+
+| Dải | CIDR | Ví dụ |
+| --- | --- | --- |
+| `10.0.0.0` – `10.255.255.255` | `10.0.0.0/8` | `10.20.10.50` |
+| `172.16.0.0` – `172.31.255.255` | `172.16.0.0/12` | `172.16.20.93` |
+| `192.168.0.0` – `192.168.255.255` | `192.168.0.0/16` | `192.168.1.100` |
+
+**Lưu ý:** không phải toàn bộ `172.x.x.x` đều là Private. Chỉ dải `172.16.0.0` đến `172.31.255.255` trong bảng là RFC 1918.
+
+Private IP có thể được tái sử dụng tại nhiều tổ chức. Chúng có thể đi qua mạng nội bộ hoặc VPN theo thiết kế nhưng không được định tuyến công khai toàn cầu trên Internet.
+
+### 6.2. Public IP
+
+Trong cách gọi thông dụng, Public IP là địa chỉ toàn cầu được dùng cho liên lạc qua Internet. Việc một địa chỉ là public **không tự bảo đảm** thiết bị truy cập được từ bên ngoài: còn phụ thuộc routing, firewall, dịch vụ và chính sách nhà mạng.
+
+| Tiêu chí | Private IP | Public IP |
+| --- | --- | --- |
+| Phạm vi dùng phổ biến | LAN, hệ thống nội bộ, VPN | Kết nối và dịch vụ trên Internet |
+| Tính duy nhất | Có thể trùng giữa các mạng độc lập | Cần được quản lý/phân bổ phù hợp trong định tuyến toàn cầu |
+| Truy cập trực tiếp từ Internet | Không định tuyến trực tiếp toàn cầu | Có thể, nếu các điều kiện mạng và chính sách cho phép |
+| Tĩnh hay động | Có thể tĩnh hoặc động | Có thể tĩnh hoặc động |
+
+**Public/Private và Static/Dynamic là hai cách phân loại khác nhau.** Public IP không đồng nghĩa IP tĩnh.
+
+### 6.3. Không phải “ngoài Private là Public”
+
+Còn nhiều dải chuyên dụng:
+
+| Dải | Mục đích |
+| --- | --- |
+| `127.0.0.0/8` | Loopback, ví dụ `127.0.0.1` |
+| `169.254.0.0/16` | IPv4 link-local |
+| `100.64.0.0/10` | Shared address space, thường gặp trong CGNAT của ISP |
+| `192.0.2.0/24` | Địa chỉ dùng trong tài liệu |
+| `198.51.100.0/24` | Địa chỉ dùng trong tài liệu |
+| `203.0.113.0/24` | Địa chỉ dùng trong tài liệu |
+
+Các địa chỉ `203.0.113.10` và `198.51.100.20` trong sơ đồ chỉ minh họa vai trò WAN/máy chủ; không dùng để cấu hình Internet thật.
+
+### 6.4. CGNAT là gì?
+
+Nhà mạng có thể NAT thêm một lớp để nhiều thuê bao dùng chung địa chỉ public. Khi đó, WAN trên router của bạn có thể là IP thuộc `100.64.0.0/10` hoặc một dải nội bộ.
+
+Nếu WAN router khác IP mà dịch vụ ngoài Internet quan sát được, có thể có NAT phía trên; cần kiểm tra thêm vì modem phía trước cũng có thể gây double NAT. Port forwarding trên router của bạn chưa chắc đủ để truy cập từ Internet.
+
+## 7. NAT là gì?
+
+**NAT — Network Address Translation** là cơ chế dịch địa chỉ IP. Trong sử dụng phổ biến, router/firewall dịch địa chỉ nguồn nội bộ sang địa chỉ WAN khi ra Internet.
+
+![Ví dụ hai máy chia sẻ một địa chỉ WAN bằng NAT/PAT](images/04-nat-pat.png)
+
+### 7.1. Ví dụ PAT / NAT overload
+
+| Kết nối phía LAN | Ánh xạ phía WAN minh họa |
+| --- | --- |
+| `192.168.1.100:51001` | `203.0.113.10:40001` |
+| `192.168.1.101:51001` | `203.0.113.10:40002` |
+
+**PAT/NAPT** dịch thêm cổng TCP/UDP để nhiều kết nối dùng chung một IP. Router giữ thông tin ánh xạ/trạng thái để gửi phản hồi về đúng máy.
+
+Cổng thực tế phụ thuộc cách NAT hoạt động; router không bắt buộc phải đổi cổng nguồn trong mọi kết nối.
+
+### 7.2. Các thuật ngữ hay gặp
+
+| Thuật ngữ | Ý nghĩa |
+| --- | --- |
+| SNAT | Dịch địa chỉ nguồn |
+| DNAT | Dịch địa chỉ đích |
+| Port forwarding | Ánh xạ IP/cổng nhận vào sang dịch vụ phía trong, thường dựa trên DNAT |
+| Static NAT | Ánh xạ địa chỉ cố định, thường một-một |
+| PAT/NAPT | Dịch địa chỉ kết hợp cổng để dùng chung địa chỉ |
+| Hairpin NAT | Cho client nội bộ truy cập dịch vụ nội bộ thông qua địa chỉ được công bố, trong thiết kế cần cơ chế này |
+
+### 7.3. NAT khác firewall
+
+- NAT dịch địa chỉ/cổng.
+- Firewall quyết định cho phép hay chặn theo chính sách.
+- Routing quyết định đường chuyển tiếp.
+
+Một firewall có thể làm cả ba việc nhưng chúng là các chức năng riêng. Có rule NAT chưa chắc lưu lượng đã được phép qua firewall.
+
+IPv6 không mặc định cần NAT để truy cập Internet như mô hình private IPv4 dùng chung một public IP. Thiết kế IPv6 vẫn cần routing và firewall phù hợp.
+
+## 8. Default route là gì?
+
+**Default route** là tuyến mặc định dùng khi bảng định tuyến không có tuyến cụ thể hơn khớp địa chỉ đích.
+
+Trong IPv4:
+
+```text
+0.0.0.0/0 → next hop
+```
+
+Trong IPv6, prefix mặc định là `::/0`.
+
+### 8.1. Ví dụ bảng định tuyến
+
+Máy tính có IP `192.168.1.100/24`, gateway `192.168.1.1`:
+
+| Mạng đích | Next hop | Tình huống |
+| --- | --- | --- |
+| `192.168.1.0/24` | On-link | Thiết bị cùng subnet |
+| `10.20.10.0/24` | `192.168.1.2` | Mạng chi nhánh qua router riêng |
+| `0.0.0.0/0` | `192.168.1.1` | Các đích còn lại |
+
+- Đến `192.168.1.50`: dùng route on-link.
+- Đến `10.20.10.50`: dùng route `/24` qua `192.168.1.2`.
+- Đến đích khác không có route cụ thể: dùng default route.
+
+### 8.2. Ưu tiên theo độ dài prefix
+
+Trong tra cứu định tuyến thông thường, tuyến có **prefix khớp dài nhất** được chọn trước. `/24` cụ thể hơn `/16`, và cả hai cụ thể hơn `/0`.
+
+Metric cùng các quy tắc lựa chọn tuyến khác được xét khi so các ứng viên phù hợp; không dùng metric thấp của default route để vượt qua route cụ thể hơn. Policy routing, SD-WAN và VRF có thể bổ sung cơ chế lựa chọn riêng trên thiết bị.
+
+### 8.3. Default gateway khác default route thế nào?
+
+| Khái niệm | Là gì? |
+| --- | --- |
+| Default gateway | Địa chỉ next hop thường được khai báo cho tuyến mặc định |
+| Default route | Bản ghi tuyến, gồm prefix mặc định và thông tin chuyển tiếp |
+
+Ví dụ `192.168.1.1` là gateway; `0.0.0.0/0 via 192.168.1.1` là default route.
+
+## 9. Địa chỉ MAC là gì?
+
+**MAC — Media Access Control address** là địa chỉ lớp liên kết dùng trong mạng như Ethernet và Wi-Fi. Loại phổ biến dài **48 bit**, thường hiển thị dưới 6 nhóm hexadecimal:
+
+```text
+02:11:22:33:44:55
+02-11-22-33-44-55
+```
+
+Một thiết bị có thể có nhiều MAC tương ứng các giao diện vật lý/ảo. MAC có thể được gán cục bộ, thay đổi hoặc ngẫu nhiên hóa vì quyền riêng tư; không phải mã định danh bất biến của cả thiết bị.
+
+### 9.1. So sánh IP và MAC
+
+| Tiêu chí | IP | MAC |
+| --- | --- | --- |
+| Lớp trong mô hình đơn giản | Network — Layer 3 | Data Link — Layer 2 |
+| Vai trò | Địa chỉ và định tuyến giữa các mạng IP | Chuyển frame trên liên kết/mạng lớp 2 |
+| Phạm vi dùng để chuyển tiếp | Qua nhiều mạng bằng routing | Trong từng miền lớp 2/chặng Ethernet |
+| Thiết bị dùng phổ biến | Router tra bảng route theo IP đích | Switch Layer 2 tra bảng MAC theo MAC đích |
+| Có thể thay đổi? | Có | Có |
+
+### 9.2. ARP liên hệ IP với MAC
+
+Trong IPv4 trên Ethernet, máy thường dùng **ARP** để biết MAC tương ứng với IP next hop trong mạng cục bộ.
+
+- Đích cùng subnet: tìm MAC của máy đích.
+- Đích khác subnet qua gateway: tìm MAC của gateway.
+
+IPv6 dùng Neighbor Discovery thay cho ARP.
+
+![Quan hệ giữa IP đích, MAC gateway và default route](images/05-route-mac.png)
+
+Khi máy gửi đến website ở mạng khác:
+
+```text
+IP đích:  IP máy chủ website
+MAC đích trên LAN: MAC của gateway
+```
+
+Router bỏ frame cũ và đóng gói frame mới cho liên kết tiếp theo nếu dùng Ethernet. Vì vậy, MAC nguồn/đích thường thay đổi theo chặng router; NAT có thể thay đổi IP/cổng. MAC của máy bạn không được giữ nguyên xuyên qua mọi router đến máy chủ Internet.
+
+## 10. Khi mở một website thì chuyện gì xảy ra?
+
+Giả sử bạn mở `https://example.com` trên máy `192.168.1.100/24`:
+
+1. **Có cấu hình mạng:** máy đã có IP, mask, route và DNS từ DHCP hoặc cấu hình thủ công.
+2. **Phân giải tên:** ứng dụng/hệ thống lấy địa chỉ từ cache hoặc truy vấn DNS. Một số trình duyệt có thể dùng DNS riêng như DNS over HTTPS.
+3. **Tra route:** máy xác định đường tới IP website. Nếu không có route cụ thể hơn thì chọn default route.
+4. **Tìm địa chỉ liên kết:** nếu chưa có thông tin ARP và next hop là gateway trong LAN, máy tìm MAC gateway.
+5. **Gửi dữ liệu:** switch chuyển frame đến router theo thông tin MAC.
+6. **Router xử lý:** thực hiện routing, chính sách firewall và NAT theo cấu hình; nếu có CGNAT có thể dịch thêm ở nhà mạng.
+7. **Máy chủ phản hồi:** lưu lượng đi qua đường phản hồi, các thiết bị NAT dùng trạng thái để dịch về client.
+8. **Ứng dụng trao đổi dữ liệu:** sau khi thiết lập kết nối bảo mật phù hợp, trình duyệt nhận nội dung trang.
+
+Đây là mô hình đơn giản. Cache, proxy, VPN, IPv6, CDN, HTTP/3 và các thiết kế khác có thể làm chi tiết thực tế thay đổi.
+
+## 11. Kiểm tra và xử lý lỗi trên Windows
+
+### 11.1. Các lệnh nên biết
+
+Mở PowerShell hoặc Command Prompt:
+
+| Lệnh | Xem thông tin gì? |
+| --- | --- |
+| `ipconfig /all` | IP, subnet mask, gateway, DNS, DHCP và MAC |
+| `Get-NetIPConfiguration` | Cấu hình IP theo giao diện, trong PowerShell |
+| `Get-NetAdapter` | Trạng thái giao diện và MAC, trong PowerShell |
+| `route print -4` | Bảng định tuyến IPv4 |
+| `arp -a` | ARP cache IPv4 |
+| `nslookup example.com` | Thử phân giải tên bằng DNS |
+| `ping 192.168.1.1` | Thử phản hồi ICMP từ gateway ví dụ |
+| `tracert -d 1.1.1.1` | Quan sát các hop có phản hồi trên đường đi |
+| `Test-NetConnection example.com -Port 443` | Kiểm tra kết nối TCP đến cổng 443 trong PowerShell |
+
+Thay địa chỉ ví dụ bằng địa chỉ thật trong hệ thống. Ping/traceroute có thể bị lọc hoặc giới hạn phản hồi; không nhận ICMP chưa đủ kết luận thiết bị hoặc mạng đã hỏng.
+
+### 11.2. Trình tự kiểm tra khi không vào Internet
+
+| Bước | Kiểm tra | Ý nghĩa |
+| --- | --- | --- |
+| 1 | Dây LAN, link, Wi-Fi, trạng thái adapter | Đã có kết nối vật lý/lớp 2 chưa? |
+| 2 | `ipconfig /all` | IP/mask có đúng mạng không? Có APIPA không? |
+| 3 | Gateway, VLAN và ARP | Có tiếp cận được next hop trong LAN không? |
+| 4 | `route print -4` | Có route đúng không, có VPN/NIC khác ảnh hưởng không? |
+| 5 | TCP tới đích biết trước, theo chính sách mạng | Đường ra có hoạt động không? |
+| 6 | `nslookup example.com` | DNS có phản hồi và trả kết quả phù hợp không? |
+| 7 | Proxy, firewall, dịch vụ, chứng chỉ và ứng dụng | Nếu mạng/DNS hoạt động, kiểm tra lớp ứng dụng |
+
+### 11.3. Những lỗi dễ nhầm
+
+| Hiện tượng | Khả năng cần kiểm tra |
+| --- | --- |
+| Có Wi-Fi nhưng không có Internet | Wi-Fi chỉ xác nhận kết nối tới AP; kiểm tra IP, DHCP, gateway, DNS và WAN |
+| Vào được máy trong LAN nhưng không ra ngoài | Route/gateway, firewall hoặc đường WAN |
+| Kết nối được IP nhưng lỗi tên miền | DNS, cache, proxy hoặc cấu hình ứng dụng |
+| IP `169.254.x.x` khi bật DHCP | Không lấy được lease IPv4; kiểm tra VLAN/server/pool/relay |
+| Hai máy cùng IP, mạng chập chờn | Xung đột IP hoặc ánh xạ ARP bất thường |
+| SSH không được dù ping thông | Cổng SSH, dịch vụ, firewall hoặc chính sách truy cập |
+| Port forward vẫn không truy cập được | Double NAT/CGNAT, firewall, sai địa chỉ/cổng hoặc dịch vụ chưa chạy |
+| Hai card mạng đều có gateway | Có nhiều default route; kiểm tra prefix, metric, interface và mục đích thiết kế |
+
+## 12. Bài thực hành và câu hỏi ôn tập
+
+### Bài 1: Ghi lại cấu hình máy của bạn
+
+Chạy `ipconfig /all`, tự điền:
+
+| Thông tin | Giá trị của bạn |
+| --- | --- |
+| Tên adapter đang dùng | ... |
+| IPv4 | ... |
+| Subnet mask/prefix | ... |
+| Default gateway | ... |
+| DNS server | ... |
+| DHCP Enabled | ... |
+| DHCP server nếu có | ... |
+| Physical Address / MAC | ... |
+
+Nếu có nhiều adapter, chọn adapter thực sự dùng cho kết nối đang kiểm tra. VPN và card ảo cũng có thể xuất hiện trong kết quả.
+
+### Bài 2: Phân biệt cùng subnet
+
+Máy A: `10.20.10.50/24`. Xác định đích nào cùng subnet:
+
+| Đích | Đáp án |
+| --- | --- |
+| `10.20.10.1` | Cùng subnet |
+| `10.20.10.200` | Cùng subnet |
+| `10.20.11.50` | Khác subnet |
+| `172.16.20.93` | Khác subnet |
+
+Cùng subnet IP vẫn cần đúng kết nối lớp 2 và chính sách để liên lạc được.
+
+### Bài 3: Quan sát DNS, route và ARP
+
+1. Chạy `nslookup example.com` và xem DNS server trả lời.
+2. Chạy `route print -4`, tìm dòng mạng đích `0.0.0.0` với mask `0.0.0.0`.
+3. Xem gateway và interface của tuyến đó.
+4. Chạy `arp -a`, tìm dòng tương ứng gateway nếu có.
+5. So sánh IP gateway với MAC trong ARP cache.
+
+Không có dòng ARP có thể chỉ vì cache chưa có hoặc adapter/kiểu liên kết không dùng ARP như Ethernet; cần xét cấu hình thực tế.
+
+### Câu hỏi tự kiểm tra
+
+| Câu hỏi | Trả lời |
+| --- | --- |
+| DHCP và DNS có giống nhau không? | Không. DHCP cấp cấu hình; DNS phân giải tên |
+| Private IP có thể là IP tĩnh không? | Có |
+| Public IP có thể thay đổi không? | Có |
+| Mọi địa chỉ `172.x.x.x` đều là Private? | Không |
+| NAT có thay thế firewall không? | Không |
+| Có default gateway thì chắc chắn ra Internet? | Không, còn đường truyền, routing và chính sách |
+| Đến website ngoài LAN thì ARP MAC website? | Thông thường không; máy ARP MAC next hop trong LAN |
+| Default route luôn được ưu tiên nhất? | Không; route khớp cụ thể hơn được ưu tiên trong tra cứu thông thường |
+
+## 13. Đưa tài liệu lên GitHub
+
+1. Giải nén bộ ZIP đi kèm.
+2. Mở thư mục đích trong repository, ví dụ `Network-Basics`.
+3. Chọn **Add file → Upload files**.
+4. Tải **README.md và cả thư mục images** vào cùng cấp.
+5. Bấm **Commit changes**, hoàn tất chọn nhánh/pull request nếu giao diện yêu cầu.
+6. Mở README và kiểm tra đủ **5 hình**.
+
+**Không chỉ tải riêng README và không tải nguyên ZIP để thay cho việc giải nén.** Hình sử dụng đường dẫn tương đối, ví dụ:
+
+```markdown
+![Tổng quan kết nối mạng](images/01-tong-quan.png)
+```
+
+Nếu ảnh không hiện, kiểm tra tên tệp, chữ hoa/thường và vị trí `images` so với README.
+
+## 14. Tài liệu đọc thêm
+
+Các tài liệu tiêu chuẩn nền tảng:
+
+- [RFC 1918 — Address Allocation for Private Internets](https://www.rfc-editor.org/rfc/rfc1918)
+- [RFC 2131 — Dynamic Host Configuration Protocol](https://www.rfc-editor.org/rfc/rfc2131)
+- [RFC 1034 — Domain Names: Concepts and Facilities](https://www.rfc-editor.org/rfc/rfc1034)
+- [RFC 3022 — Traditional IP Network Address Translator](https://www.rfc-editor.org/rfc/rfc3022)
+- [RFC 826 — Address Resolution Protocol](https://www.rfc-editor.org/rfc/rfc826)
+- [RFC 6598 — Shared Address Space](https://www.rfc-editor.org/rfc/rfc6598)
+- [RFC 5737 — IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
+
+Các đường dẫn là nguồn đọc thêm về nền tảng giao thức. Khi cấu hình thiết bị thật, tra tài liệu đúng hãng, model và phiên bản.
