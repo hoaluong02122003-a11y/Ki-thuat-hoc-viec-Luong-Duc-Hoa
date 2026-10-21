@@ -1,0 +1,107 @@
+1. Lệnh ipconfig
+Mục đích: Xem cấu hình mạng của máy tính Windows.
+ipconfig
+ipconfig /all
+
+Thông tin cần chú ý:
+- IPv4 Address: Địa chỉ IP của máy.
+- Subnet Mask: Xác định mạng con.
+- Default Gateway: Thiết bị chuyển tiếp dữ liệu ra mạng khác.
+- DNS Servers: Máy chủ phân giải tên miền.
+- Physical Address: Địa chỉ MAC của card mạng.
+- DHCP Enabled: Máy được cấu hình nhận IP tự động hay không.
+Nếu máy dự kiến nhận IP tự động nhưng xuất hiện địa chỉ 169.254.x.x, cần kiểm tra kết nối và DHCP.
+
+2. Lệnh ping
+Mục đích: Kiểm tra khả năng liên lạc với thiết bị đích, thời gian phản hồi và mất gói ICMP.
+ping 172.16.5.1
+ping 1.1.1.1
+
+Gửi 20 gói kiểm tra:
+ping 172.16.5.1 -n 20
+
+Ping liên tục; nhấn Ctrl + C để dừng:
+ping 172.16.5.1 -t
+
+Kết quả	Ý nghĩa
+Reply from...	Nhận được phản hồi
+time=1ms	Thời gian khứ hồi khoảng 1 mili giây
+Request timed out	Không nhận được phản hồi trong thời gian chờ
+Destination host unreachable	Thiết bị phát thông báo không thể tới đích
+0% loss	Không mất gói trong lần kiểm tra
+
+
+Không ping được chưa chắc thiết bị hỏng, vì ICMP có thể bị chặn.
+
+3. Lệnh tracert / traceroute
+Mục đích: Kiểm tra các chặng định tuyến trên đường tới đích.
+
+Windows:
+tracert -d 1.1.1.1
+
+Linux/macOS:
+traceroute 1.1.1.1
+
+- Mỗi dòng phản hồi thể hiện một chặng định tuyến.
+- -d trên Windows bỏ bước phân giải tên để hiển thị nhanh hơn.
+- Dấu * nghĩa là không nhận phản hồi cho lần thăm dò đó; không luôn đồng nghĩa mất kết nối.
+- Switch Layer 2 không xuất hiện như một chặng trong traceroute.
+4. Lệnh arp
+Mục đích: Xem bảng ánh xạ địa chỉ IPv4 với địa chỉ MAC trên liên kết cục bộ.
+ping 172.16.5.1
+arp -a
+
+Ứng dụng:
+- Kiểm tra máy đã học được MAC của gateway chưa.
+- Đối chiếu IP và MAC để hỗ trợ xác định thiết bị.
+- Hỗ trợ kiểm tra nghi ngờ trùng IP.
+Bảng ARP của máy tính khác bảng MAC của Switch. Khi truy cập mạng khác, máy thường dùng MAC của gateway.
+
+5. Lệnh telnet
+Mục đích: Có thể dùng để thử kết nối tới một cổng TCP.
+
+Giả sử Switch có IP quản trị 172.16.5.2, kiểm tra cổng SSH:
+telnet 172.16.5.2 22
+
+- Kết nối mở: Cổng TCP chấp nhận kết nối.
+- Báo lỗi kết nối: Kiểm tra IP, cổng, dịch vụ hoặc firewall.
+- Không dùng cách này để kiểm tra cổng UDP.
+Nếu Windows chưa có Telnet Client, dùng PowerShell:
+Test-NetConnection 172.16.5.2 -Port 22
+
+TcpTestSucceeded : True nghĩa là kết nối TCP thành công.
+172.16.5.2 chỉ là IP minh họa. Telnet để đăng nhập không mã hóa dữ liệu; nên dùng SSH để quản trị.
+
+6. Lệnh ssh
+Mục đích: Đăng nhập thiết bị từ xa qua kết nối mã hóa.
+ssh admin@172.16.5.2
+
+Điều kiện:
+- Biết đúng IP quản trị và tài khoản.
+- Switch đã bật SSH.
+- Máy tính có thể truy cập mạng quản trị.
+Sau khi đăng nhập, sử dụng lệnh phù hợp với hãng và hệ điều hành Switch.
+
+Ví dụ thường gặp trên Cisco IOS:
+Lệnh	Chức năng
+show interfaces status	Xem trạng thái cổng, tốc độ và VLAN
+show interfaces	Xem chi tiết lưu lượng và lỗi cổng
+show vlan brief	Xem danh sách VLAN
+show mac address-table	Xem MAC được học trên từng cổng
+show logging	Xem nhật ký hoạt động
+
+
+Các dấu hiệu cần chú ý:
+- Cổng lên/xuống liên tục.
+- Tốc độ kết nối thấp hơn dự kiến.
+- Bộ đếm lỗi CRC hoặc drops tăng.
+- MAC được học ở cổng hoặc VLAN không đúng dự kiến.
+7. Quy trình kiểm tra cơ bản
+1. Kiểm tra dây mạng và đèn cổng.
+2. Dùng ipconfig /all kiểm tra IP, gateway và DNS.
+3. Ping gateway 172.16.5.1.
+4. Dùng arp -a kiểm tra ánh xạ IP–MAC.
+5. Ping IP Internet 1.1.1.1.
+6. Dùng tracert kiểm tra đường đi.
+7. Xác định IP quản trị Switch, thử cổng SSH và đăng nhập để kiểm tra cổng, VLAN, MAC, log.
+Lưu ý: Gateway 172.16.5.1 chưa chắc là IP quản trị Switch. Switch unmanaged thường không hỗ trợ SSH; kiểm tra qua đèn cổng, dây và kết nối của thiết bị đầu cuối.
