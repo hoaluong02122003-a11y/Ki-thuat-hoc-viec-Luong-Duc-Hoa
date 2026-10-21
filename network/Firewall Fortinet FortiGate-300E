@@ -1,0 +1,210 @@
+1.Sơ đồ và bộ thông số LAB
+
+flowchart TD
+    NET["Internet"] --> ISP["Modem hoặc ONT của ISP"]
+    ISP --> FW["FortiGate 300E: WAN và LAN"]
+    FW --> SW["Switch LAN"]
+    SW --> PC["Máy tính nhận DHCP"]
+    SW --> AP["Access Point Wi-Fi"]
+    ADMIN["Máy quản trị"] -. "Mạng quản trị riêng nếu có" .-> FW
+| Thành phần | Giá trị ví dụ | Ý nghĩa |
+|---|---|---|
+| WAN | `port1`, alias `WAN_ISP1` | Cổng đi về ISP |
+| LAN | `port3`, alias `LAN_OFFICE` | Cổng đi về switch |
+| IP LAN của FortiGate | `192.168.10.1/24` | Gateway cho máy tính |
+| DHCP pool | `192.168.10.100–192.168.10.200` | Dải cấp động |
+| DNS cấp cho máy LAB | `1.1.1.1`, `8.8.8.8` | Ví dụ DNS công cộng; mạng có AD dùng DNS nội bộ theo thiết kế |
+| Mạng quản trị | Theo cấu hình hiện có | Không mặc định giống mạng LAN |
+
+2.Những kiến thức phải hiểu trước khi cấu hình
+| Khái niệm | Vai trò | Điều không nên nhầm |
+|---|---|---|
+| Interface | Điểm kết nối vật lý hoặc logic | Chọn Role WAN chưa tự tạo quyền truy cập Internet |
+| IP/subnet | Xác định địa chỉ và mạng con | LAN và WAN không nên dùng hai mạng chồng lấn trong LAB này |
+| Gateway | Chặng tiếp theo để đi ra mạng khác | Gateway trên PC không luôn là IP quản trị MGMT |
+| Route | Chỉ đường đi tới mạng đích | Có route chưa có nghĩa firewall cho phép đi |
+| Firewall policy | Cho phép/chặn lưu lượng được chuyển tiếp | Policy không thay thế route |
+| Source NAT | Đổi IP nguồn khi đi ra ngoài | NAT không tự tạo policy hoặc đường đi |
+| DHCP | Cấp IP, mask, gateway, DNS | Nhận được IP chưa chứng minh có Internet |
+| DNS | Phân giải tên miền | Ping IP được nhưng tên miền lỗi có thể do DNS |
+| SD-WAN | Chọn đường WAN theo quy tắc/chất lượng | SD-WAN rule khác firewall policy |
+Để PC ra Internet trong mô hình này cần đủ: IP đúng + gateway đúng + WAN hoạt động + route phù hợp + policy cho phép + NAT phù hợp. Truy cập bằng tên miền còn cần DNS hoạt động.
+
+3. Đăng nhập và chuẩn bị
+3.1. Xác định đúng IP quản trị
+- Hỏi người bàn giao hoặc xem tài liệu cấu hình hiện tại để biết cổng quản trị, IP và tài khoản.
+- Cắm máy tính vào đúng cổng/mạng quản trị.
+- Mở CMD, chạy ipconfig /all để xem cấu hình PC.
+- PC hiện có 172.16.5.50/24, vì vậy không cần đổi IP chỉ để kiểm tra gateway 172.16.5.1 cùng subnet. Nếu quản trị qua MGMT thuộc mạng khác, dùng IP quản trị đã được xác nhận và cấu hình đường truy cập phù hợp.
+- Có thể thử https://172.16.5.1 để xác định trang quản trị gateway. Chỉ đăng nhập khi xác nhận đúng thiết bị. Nếu FortiGate dùng IP/cổng quản trị khác, truy cập địa chỉ được cấp; dùng tài khoản được cấp. Nếu không biết IP, dùng console và người có quyền hỗ trợ kiểm tra cấu hình, không reset thiết bị đang chạy chỉ để tìm IP.
+Không suy ra IP quản trị chỉ từ Default Gateway. Gateway có thể là thiết bị khác; kết nối quản trị trực tiếp cùng subnet cũng không cần gateway để truy cập.
+3.2. Sao lưu và kiểm tra trước khi sửa
+- Ghi lại phiên bản FortiOS, VDOM đang dùng, interface LAN/WAN và đường quản trị.
+- Tải bản backup từ chức năng Configuration/Backup của GUI; tên vị trí phụ thuộc phiên bản. Bảo vệ file backup vì có thông tin cấu hình nhạy cảm.
+- Giữ đường console hoặc quản trị riêng khi đổi IP/interface mà bạn đang dùng để truy cập.
+- Không đăng tài khoản, mật khẩu quản trị hoặc PPPoE lên GitHub.
+CLI chỉ đọc hữu ích:
+get system status
+show system interface
+get router info routing-table all
+Chạy trong đúng VDOM nếu hệ thống sử dụng nhiều VDOM. Không chia sẻ nguyên output nếu có dữ liệu nhạy cảm.
+
+4. Cấu hình WAN: chọn đúng kiểu kết nối
+Vào Network → Interfaces, chọn cổng nối modem/ONT, bấm Edit, đặt alias dễ hiểu và Role là WAN.
+| Kiểu WAN | Khi nào dùng | Thông tin cần |
+|---|---|---|
+| DHCP | Thiết bị phía trước tự cấp IP | Kết nối đúng cổng và kiểm tra IP/gateway nhận được |
+| Static | ISP hoặc mạng phía trước cấp IP cố định | IP, subnet mask, gateway và thông tin DNS |
+| PPPoE | FortiGate trực tiếp quay PPPoE | Username/password ISP; VLAN nếu nhà mạng yêu cầu |
+Ví dụ PPPoE
+   Chọn Addressing mode PPPoE.
+   Nhập tài khoản và mật khẩu ISP vào thiết bị, không ghi vào tài liệu công khai.
+   Xác nhận modem/ONT và đường truyền được thiết lập phù hợp để FortiGate quay PPPoE. Không tự chuyển bridge trên đường đang sử dụng nếu chưa có kế hoạch.
+   Nếu có tùy chọn nhận gateway mặc định, cấu hình theo thiết kế một WAN rồi kiểm tra route thực tế.
+   Lưu và kiểm tra trạng thái kết nối, IP nhận được, default route.
+Nếu không kết nối: kiểm tra dây/link, tài khoản, bridge/VLAN và giới hạn phiên hoặc ràng buộc MAC của ISP. Chỉ yêu cầu ISP xử lý MAC khi họ xác nhận có ràng buộc; không coi reset MAC là bước bắt buộc cho mọi đường truyền.
+Administrative Access là gì?
+Các ô HTTPS, SSH, PING điều khiển truy cập vào chính FortiGate trên interface đó. Chúng không phải quyền cho máy LAN đi Internet.
+- Dùng HTTPS/SSH trên mạng quản trị tin cậy khi cần.
+- Không bật HTTP/Telnet để quản trị thông thường.
+- Không bật rộng HTTPS/SSH trên WAN chỉ để LAN ra Internet. Nếu cần quản trị từ xa, thiết kế VPN và giới hạn nguồn quản trị phù hợp.
+Kết quả cần đạt: WAN có link, PPPoE kết nối hoặc có IP đúng; có đường đi ra upstream.
+5. Cấu hình LAN và DHCP
+5.1. Interface LAN
+Tại Network → Interfaces, chọn interface nối switch:
+| Trường | Giá trị LAB |
+|---|---|
+| Interface | `port3` |
+| Alias | `LAN_OFFICE` |
+| Role | LAN |
+| Addressing mode | Manual |
+| IP/Netmask | `172.16.5.1/255.255.255.0` |
+| Administrative Access | PING nếu cần; HTTPS/SSH chỉ khi đây là mạng quản trị được phép |
+Nếu cổng đang thuộc hardware/software switch, aggregate hoặc đang có tham chiếu, cần hiểu cấu hình hiện tại trước khi tách hoặc sửa. Không áp dụng nguyên ví dụ lên cổng đang phục vụ hệ thống.
+5.2. DHCP Server
+Ảnh chưa xác nhận DHCP đang được dùng. Trước tiên chạy ipconfig /all, xem DHCP Enabled, DHCP Server và DNS Servers. Nếu mạng hiện tại đã cấp IP đúng, giữ nguyên dịch vụ đang có.
+
+Chỉ khi dựng LAB mới hoặc đã xác nhận FortiGate sẽ cấp DHCP, cấu hình theo bảng minh họa:
+| Trường | Giá trị LAB |
+|---|---|
+| Address range | `172.16.5.100–172.16.5.200` — chỉ là pool LAB, phải kiểm tra IP đang dùng trước |
+| Netmask | `255.255.255.0` |
+| Default gateway | `172.16.5.1` |
+| DNS | DNS đã chọn cho hệ thống |
+Đảm bảo không có DHCP server khác cấp thông tin xung đột trong cùng LAN. Đặt IP tĩnh cho switch/AP ngoài pool hoặc tạo reservation theo thiết kế.
+
+Địa chỉ hiện tại .50 nằm ngoài pool minh họa .100–.200. Đừng chuyển máy sang DHCP chỉ để giữ nguyên .50; nếu muốn DHCP luôn cấp .50, cần reservation hợp lệ trên DHCP server đang dùng và bảo đảm IP không trùng.
+
+Trên máy hiện tại, giữ cấu hình đang có và kiểm tra:
+ipconfig /all
+ping 172.16.5.1
+Nếu cần xin lại lease trên chính máy LAB:
+ipconfig /release
+ipconfig /renew
+Hai lệnh này làm gián đoạn kết nối máy trong lúc xin lại IP; không chạy qua phiên điều khiển từ xa nếu có nguy cơ mất truy cập.
+
+Kết quả cần đạt với máy trong ảnh: IPv4 172.16.5.50, mask /24, gateway 172.16.5.1 và DNS phù hợp; ping gateway được nếu PING được phép. Nếu thử DHCP với pool LAB mới, máy có thể nhận IP khác; cập nhật IP đó trong bộ lọc log/sniffer.
+
+6. Kiểm tra default route
+Default route IPv4 là 0.0.0.0/0: dùng khi không có route cụ thể hơn tới đích. 172.16.5.1 là gateway của PC, không phải thông tin gateway WAN của FortiGate. Gateway WAN phải lấy từ ISP hoặc cấu hình upstream thực tế.
+- WAN DHCP/PPPoE: có thể tự cài default route khi tùy chọn nhận gateway được bật. Kiểm tra trước khi thêm route khác.
+- WAN Static: vào Network → Static Routes, tạo đích 0.0.0.0/0, chọn WAN và gateway ISP cung cấp.
+- Không đoán gateway bằng cách đổi số cuối của IP WAN thành .1. Đặc biệt PPPoE có thể nhận địa chỉ /32 và gateway theo phiên kết nối.
+Kiểm tra trên FortiGate:
+get router info routing-table all
+execute ping 1.1.1.1
+Nếu FortiGate ping được Internet, chỉ kết luận lưu lượng do FortiGate tự phát đang đi được. Vẫn phải kiểm tra policy và NAT cho PC phía LAN.
+
+7. Tạo firewall policy LAN → Internet và NAT
+Ví dụ này sử dụng NAT trong firewall policy, không dùng Central SNAT. Nếu hệ thống đã bật Central NAT, thực hiện source NAT trong cấu hình tương ứng theo thiết kế hiện tại; không bật/tắt chế độ chỉ để làm giống bài.
+7.1. Tạo đối tượng địa chỉ LAN
+Vào Policy & Objects → Addresses → Create New:
+| Trường | Giá trị |
+|---|---|
+| Name | `LAN_OFFICE_SUBNET` |
+| Type | Subnet |
+| Subnet | `172.16.5.0/24` |
+Đối tượng này đại diện cho cả mạng LAN, giúp policy dễ đọc hơn so với dùng nguồn all.
+7.2. Tạo policy
+Vào Policy & Objects → Firewall Policy; một số bản gọi là IPv4 Policy.
+| Trường | Giá trị LAB | Ý nghĩa |
+|---|---|---|
+| Name | `LAN_OFFICE_TO_INTERNET` | Tên dễ nhận diện |
+| Incoming Interface | `port3` | Dữ liệu đi vào từ LAN |
+| Outgoing Interface | `port1` | Dữ liệu đi ra WAN trong bài một WAN |
+| Source | `LAN_OFFICE_SUBNET` | Máy nào được áp dụng |
+| Destination | `all` | Cho phép đích Internet theo route; không tự mở quyền vào từ ngoài |
+| Schedule | `always` | Áp dụng mọi thời điểm |
+| Service | `DNS`, `HTTP`, `HTTPS`, `PING` | Đủ cho bài thử DNS/web/ping cơ bản |
+| Action | ACCEPT | Cho phép lưu lượng khớp |
+| NAT | Enable | Bật source NAT |
+| IP Pool Configuration | Use Outgoing Interface Address | Dùng IP interface WAN được chọn |
+| Log Allowed Traffic | All Sessions nếu có | Ghi log để học và kiểm tra |
+Ứng dụng khác có thể cần thêm dịch vụ. Nếu dùng ALL để cô lập lỗi trong LAB, ghi lại lý do và thu hẹp lại sau kiểm tra. Không coi policy cho phép ALL là cấu hình bảo mật hoàn chỉnh.
+
+Thứ tự policy có ảnh hưởng: FortiGate xét các policy phù hợp theo thứ tự; policy phía trên có thể khớp trước. Kiểm tra rule chặn/cho phép đang có, không đưa một rule rộng lên đầu một cách máy móc.
+7.3. NAT hoạt động thế nào?
+Ví dụ PC 172.16.5.50 mở website. FortiGate nhận lưu lượng ở LAN, tìm đường ra WAN và policy phù hợp. Với source NAT dùng địa chỉ WAN, FortiGate đổi IP nguồn thành IP WAN, theo dõi session và chuyển phản hồi về đúng PC.
+
+Không cần tạo policy WAN → LAN chỉ để trả lời một kết nối LAN → Internet đã được cho phép. Truy cập mới do Internet khởi tạo vào server nội bộ là bài toán khác, thường cần VIP/DNAT và policy riêng.
+
+8. Kiểm tra và đọc kết quả
+Trên PC:
+ipconfig /all
+ping 172.16.5.1
+arp -a
+ping 1.1.1.1
+nslookup example.com
+tracert -d 1.1.1.1
+Trong PowerShell, kiểm tra thêm dịch vụ web:
+Test-NetConnection example.com -Port 443
+Mở trình duyệt truy cập https://example.com. Ping có thể bị chặn nên dùng kết quả TCP/web để đối chiếu.
+
+Trên FortiGate, mở Log & Report → Forward Traffic, lọc IP PC 172.16.5.50. Kiểm tra action, policy ID, source/destination interface, dịch vụ và thông tin NAT nếu phiên bản hiển thị. Phải bật logging và có đích lưu log phù hợp; không có log chưa đủ kết luận không có lưu lượng.
+| Hiện tượng | Kiểm tra tiếp |
+|---|---|
+| PC nhận `169.254.x.x` | Dây/link, VLAN, DHCP server và pool |
+| PC có IP nhưng không tới gateway | Mask, VLAN, IP trùng, cổng switch, quyền PING trên FortiGate |
+| FortiGate không ra Internet | WAN, PPPoE, upstream và default route |
+| FortiGate ra Internet, PC không ra | Gateway PC, policy, NAT và log |
+| Ping IP Internet được, DNS lỗi | DNS được cấp, route tới DNS và dịch vụ DNS trong policy |
+| DNS đúng nhưng HTTPS lỗi | TCP 443, policy/security profile, chứng chỉ, proxy hoặc MTU tùy triệu chứng |
+| Traceroute có dấu `*` | Router có thể không trả ICMP; xem các chặng sau và thử dịch vụ thực |
+Lệnh quan sát bổ sung
+get system arp
+diagnose sniffer packet any 'host 172.16.5.50 and icmp' 4 20 l
+Sniffer trên lấy tối đa 20 gói ICMP liên quan PC ví dụ; Ctrl+C để dừng nếu chưa đủ gói. Nó không chứng minh mọi lưu lượng đều được quan sát; offload và vị trí bắt gói có thể ảnh hưởng kết quả.
+
+9. SD-WAN: học sau khi một WAN hoạt động
+9.1. Bốn thành phần
+| Thành phần | Vai trò |
+|---|---|
+| Zone | Nhóm logic được dùng trong firewall policy |
+| Member | Đường WAN cụ thể thuộc zone |
+| Performance SLA | Đo khả năng tới đích, loss, latency, jitter tùy cấu hình |
+| SD-WAN rule | Chọn member theo nguồn/đích và chiến lược |
+Một WAN không bắt buộc phải dùng SD-WAN. Với hai WAN, ví dụ mục tiêu là WAN1 ưu tiên, WAN2 dự phòng.
+9.2. Trình tự cấu hình
+1. Xác nhận từng WAN hoạt động riêng và biết gateway/cách nhận gateway của nó.
+2. Sao lưu, chuẩn bị quản trị riêng. Kiểm tra tham chiếu interface trước khi chuyển WAN đang dùng vào SD-WAN; việc chuyển có thể yêu cầu sửa policy/route hiện có.
+3. Tại Network → SD-WAN, tạo zone INTERNET_SDWAN.
+4. Thêm WAN1, WAN2 thành members. Static WAN dùng gateway thật; WAN động xử lý gateway theo FortiOS và cấu hình thực tế.
+5. Tạo Performance SLA tới đích kiểm tra ổn định, có phản hồi giao thức đã chọn. Chọn các members cần đo và ngưỡng phù hợp đường truyền.
+6. Tạo rule cho LAN, đích phù hợp; chọn chiến lược ưu tiên/đáp ứng SLA đúng với mục tiêu. Chọn WAN1 trước WAN2 và gắn health check nếu chiến lược/phiên bản hỗ trợ theo cách đó.
+7. Cấu hình/kiểm tra default route cho SD-WAN theo phiên bản. Tránh route động/tĩnh cũ có ưu tiên làm lưu lượng đi khác dự kiến.
+8. Sửa outgoing interface của policy LAN ra Internet thành zone INTERNET_SDWAN; với bài này NAT dùng địa chỉ interface đi ra.
+9. Kiểm tra rule match, member được chọn, route và log bằng lưu lượng từ PC.
+Không coi mọi lựa chọn Manual, Best Quality hay Lowest Cost (SLA) là giống nhau. Cần đọc mô tả chiến lược của phiên bản đang dùng; kiểm tra cả tình huống đường còn link nhưng không tới Internet.
+9.3. Thử chuyển đường
+Trong LAB hoặc khung giờ được phép: tạo kết nối từ PC, ngắt WAN1, quan sát SLA/member và thử kết nối mới qua WAN2; nối lại WAN1 và kiểm tra phục hồi.
+
+Các session đang chạy có thể bị ngắt khi đổi WAN/IP NAT. SD-WAN không tự bảo đảm mọi cuộc gọi hoặc phiên tải đang chạy chuyển đường không gián đoạn.
+
+10. Loopback, IP Pool và VIP
+LAN ra Internet thông thường không cần tạo loopback. Với dải public ISP cấp, phải biết dải đó được route về đâu, có dùng được trên WAN nào, cách trả về và nhu cầu SNAT/DNAT trước khi chọn cách triển khai.
+
+Tạo một loopback mang IP public không tự làm IP đó truy cập được từ Internet. Khi chuyển sang ISP khác, IP do ISP cũ cấp cũng không tự sử dụng được trên đường mới.
+
+Một firewall policy không bị giới hạn chỉ một IP loopback. Policy có thể sử dụng subnet, nhiều address objects hoặc address group tùy nhu cầu. Việc cần một hay nhiều policy phụ thuộc interface, chiều lưu lượng, NAT và quyền truy cập, không chỉ số IP trong một dải /29.
+
+Muốn viết cấu hình loopback/public NAT cụ thể phải có: phiên bản FortiOS; sơ đồ WAN; dải ISP cấp và cách định tuyến; IP server đích; cổng dịch vụ; nhu cầu truy cập từ LAN hay Internet. Bài này không giả định các thông số đó từ ảnh cấu hình cũ.
