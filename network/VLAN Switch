@@ -1,0 +1,106 @@
+VLAN (Virtual Local Area Network) là mạng LAN ảo, cho phép chia một hệ thống switch vật lý thành nhiều mạng riêng biệt.
+
+Ví dụ: Trong công ty, máy tính nhân viên, khách và camera cùng cắm vào một switch nhưng được chia thành các VLAN khác nhau để dễ quản lý và kiểm soát truy cập.
+
+1. Đặc điểm của VLAN
+| Đặc điểm | Giải thích |
+|---|---|
+| Chia mạng theo logic | Thiết bị có thể cùng switch nhưng thuộc các mạng VLAN khác nhau |
+| Tách miền broadcast | Gói broadcast chỉ được truyền trong VLAN tương ứng |
+| Mở rộng qua nhiều switch | Các thiết bị cùng VLAN có thể nằm trên những switch khác nhau |
+| Kiểm soát truy cập | Có thể kết hợp router/firewall và ACL để cho phép hoặc chặn truy cập giữa các VLAN |
+| Dễ quản lý | Phân chia mạng theo phòng ban, chức năng hoặc loại thiết bị |
+| Định tuyến giữa VLAN | Các VLAN khác nhau cần router hoặc switch Layer 3 để liên lạc |
+VLAN ID là số nhận diện VLAN, thông thường trong khoảng 1–4094; một số thiết bị có VLAN dành riêng.
+
+Trong thiết kế thông thường, mỗi VLAN sử dụng một subnet IP riêng. VLAN không tự cấp IP và không tự cung cấp Internet.
+
+2. Các cổng truy cập
+| Kiểu cổng | Chức năng | Thiết bị thường kết nối |
+|---|---|---|
+| **Access** | Đưa thiết bị vào một VLAN dữ liệu | PC, máy in, camera |
+| **Trunk** | Mang nhiều VLAN trên cùng một đường kết nối | Switch, router/firewall, AP phát nhiều SSID |
+Ví dụ:
+- Cổng Access VLAN 10: PC cắm vào thuộc mạng VLAN 10.
+- Cổng Trunk cho phép VLAN 10 và 20: truyền lưu lượng của cả hai VLAN giữa các switch.
+Trên đường trunk, chuẩn 802.1Q dùng thẻ VLAN để nhận biết lưu lượng thuộc VLAN nào. Native VLAN có thể truyền không gắn thẻ, tùy cấu hình.
+
+Một số switch sử dụng các thuật ngữ:
+| Thuật ngữ | Ý nghĩa |
+|---|---|
+| **Tagged** | Gói tin đi ra cổng có gắn thẻ VLAN |
+| **Untagged** | Gói tin đi ra cổng không có thẻ VLAN |
+| **PVID** | VLAN được gán cho gói tin không có thẻ khi đi vào cổng |
+Mỗi switch có một máy thuộc VLAN 10 và một máy thuộc VLAN 20:
+flowchart TD
+    SW1["Switch 1"] <-->|"Trunk: VLAN 10, 20"| SW2["Switch 2"]
+    SW1 --- A["PC A · VLAN 10"]
+    SW1 --- B["PC B · VLAN 20"]
+    SW2 --- C["PC C · VLAN 10"]
+    SW2 --- D["PC D · VLAN 20"]
+- PC A và PC C: cùng VLAN 10, cùng subnet nên có thể liên lạc trực tiếp qua hai switch.
+- PC B và PC D: tương tự, cùng VLAN 20.
+- PC A và PC B: khác VLAN, cần thiết bị định tuyến và chính sách cho phép để liên lạc.
+4. Quy trình cấu hình VLAN
+
+Tên menu và câu lệnh phụ thuộc hãng switch, nhưng quy trình chung như sau.
+
+Bước 1: Lập bảng VLAN và phân chia cổng
+
+Ví dụ áp dụng trên cả hai switch:
+| Cổng | Chế độ | VLAN | Mục đích |
+|---|---|---|---|
+| 1–8 | Access | 10 | Máy nhân viên |
+| 9–16 | Access | 20 | Thiết bị khách |
+| 24 | Trunk | 10, 20 | Nối switch còn lại |
+Bước 2: Tạo VLAN trên cả hai switch
+
+Trong mục quản lý VLAN:
+- Tạo VLAN ID 10, đặt tên NHAN_VIEN.
+- Tạo VLAN ID 20, đặt tên KHACH.
+VLAN phải tồn tại trên tất cả switch cần chuyển tiếp VLAN đó.
+
+Bước 3: Gán VLAN cho cổng Access
+- Cổng 1–8: Access VLAN 10.
+- Cổng 9–16: Access VLAN 20.
+Nếu dùng giao diện Tagged/Untagged/PVID:
+- Cổng 1–8: Untagged VLAN 10, PVID 10.
+- Cổng 9–16: Untagged VLAN 20, PVID 20.
+- Bỏ VLAN Untagged cũ trên các cổng này nếu cần.
+Bước 4: Cấu hình Trunk giữa hai switch
+
+Trên cổng 24 của cả hai switch:
+- Chọn chế độ Trunk.
+- Cho phép VLAN 10 và VLAN 20.
+- Nếu dùng kiểu cấu hình membership: đặt cả hai VLAN là Tagged.
+- Nếu dùng Native VLAN/Untagged trên đường nối, cấu hình thống nhất hai đầu.
+Sau đó nối dây cổng 24 Switch 1 ↔ cổng 24 Switch 2.
+
+Bước 5: Cấu hình địa chỉ IP
+
+Ví dụ đặt IP tĩnh để kiểm tra:
+| Máy | Vị trí | VLAN | IP | Subnet mask |
+|---|---|---|---|---|
+| PC A | Switch 1 | 10 | `192.168.10.11` | `255.255.255.0` |
+| PC C | Switch 2 | 10 | `192.168.10.12` | `255.255.255.0` |
+| PC B | Switch 1 | 20 | `192.168.20.11` | `255.255.255.0` |
+| PC D | Switch 2 | 20 | `192.168.20.12` | `255.255.255.0` |
+Nếu muốn tự động nhận IP, cần DHCP phục vụ từng VLAN. Chỉ tạo VLAN trên switch Layer 2 thì máy chưa tự nhận được IP.
+
+Bước 6: Cấu hình gateway nếu cần truy cập mạng khác
+
+Trên router/firewall hoặc switch Layer 3, có thể đặt:
+- Gateway VLAN 10: 192.168.10.1/24.
+- Gateway VLAN 20: 192.168.20.1/24.
+Để ra Internet, cần thêm đường định tuyến, chính sách cho phép và NAT phù hợp trên thiết bị biên.
+
+Bước 7: Kiểm tra và lưu cấu hình
+
+Trên PC A, mở CMD:
+ipconfig
+ping 192.168.10.12
+
+Nếu đã tạo gateway VLAN 10:
+ping 192.168.10.1
+
+Nếu ping không được, kiểm tra VLAN của cổng, danh sách VLAN được phép qua trunk, IP/subnet và firewall trên máy tính. Sau khi kiểm tra thành công, lưu cấu hình để giữ lại sau khi khởi động switch.
