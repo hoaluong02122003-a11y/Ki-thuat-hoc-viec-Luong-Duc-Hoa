@@ -1,6 +1,3 @@
-# Hướng dẫn sử dụng draw.io (diagrams.net)
-
-> Tài liệu hướng dẫn cơ bản dành cho người mới, có thể xem trực tiếp trên GitHub.
 
 ## 1. draw.io là gì?
 
