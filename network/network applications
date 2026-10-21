@@ -1,0 +1,46 @@
+1. Switch: kết nối thiết bị trong mạng LAN
+
+Ví dụ: Văn phòng có 20 máy tính, 2 máy in và 4 camera. Switch cung cấp các cổng mạng để kết nối chúng.
+- Chuyển tiếp dữ liệu: Học địa chỉ MAC để chuyển khung dữ liệu đến cổng phù hợp.
+- VLAN: Chia mạng thành các nhóm như Nhân viên, Khách và Camera.
+- PoE: Cấp điện qua dây mạng cho AP, camera hoặc điện thoại IP nếu switch hỗ trợ.
+- STP/RSTP: Hạn chế vòng lặp khi có nhiều đường kết nối giữa các switch.
+Lưu ý: Switch Layer 2 chủ yếu chuyển mạch trong VLAN. Switch Layer 3 còn có thể định tuyến giữa các VLAN.
+
+2. Router: kết nối các mạng
+
+Ví dụ: Máy tính 192.168.10.20/24 cần truy cập máy chủ 192.168.20.10/24. Hai thiết bị thuộc hai mạng khác nhau nên cần thiết bị định tuyến để chuyển dữ liệu.
+- Routing: Chọn đường đi dựa trên địa chỉ IP đích và bảng định tuyến.
+- Default gateway: Là điểm chuyển tiếp khi thiết bị cần liên lạc ra ngoài mạng cục bộ.
+- NAT: Thường dùng để nhiều thiết bị có IP private cùng truy cập Internet qua IP public.
+- DHCP: Tự động cấp IP, gateway và DNS nếu được cấu hình làm DHCP server.
+- VPN: Kết nối người dùng từ xa hoặc các chi nhánh nếu thiết bị hỗ trợ.
+3. Firewall: kiểm soát ai được truy cập đâu
+
+Ví dụ: Công ty cho mạng Nhân viên truy cập máy chủ nội bộ, còn mạng Khách chỉ được truy cập Internet.
+- Chính sách truy cập: Cho phép hoặc chặn theo IP, cổng, giao thức, người dùng hoặc ứng dụng tùy thiết bị.
+- Stateful inspection: Theo dõi trạng thái kết nối để xử lý lưu lượng phản hồi.
+- Phân vùng mạng: Kiểm soát truy cập giữa LAN, WAN, DMZ và các VLAN.
+- Bảo mật nâng cao: Một số dòng hỗ trợ IPS, chống mã độc, lọc website và kiểm soát ứng dụng.
+- Ghi log: Hỗ trợ giám sát và điều tra sự cố.
+Lưu ý: Firewall thường tích hợp cả định tuyến, NAT, DHCP và VPN, nên có thể đảm nhiệm vai trò gateway của doanh nghiệp.
+
+4. Access Point: đưa thiết bị Wi-Fi vào mạng
+
+Ví dụ: AP cắm dây mạng về switch để điện thoại và laptop truy cập cùng hệ thống mạng với máy tính dùng dây.
+- Phát SSID: Tạo tên mạng Wi-Fi để người dùng kết nối.
+- Bảo mật: Hỗ trợ WPA2/WPA3 tùy thiết bị; có thể xác thực qua RADIUS.
+- Nhiều SSID: Tạo Wi-Fi Nhân viên và Wi-Fi Khách.
+- VLAN: Đưa từng SSID vào VLAN tương ứng nếu AP và hạ tầng hỗ trợ.
+- Roaming: Hỗ trợ thiết bị di chuyển giữa các AP; hiệu quả còn phụ thuộc thiết bị đầu cuối và cấu hình.
+AP thông thường cần router hoặc firewall phía trước để truy cập Internet.
+
+Trong một văn phòng, cách kết nối phổ biến là: Internet → Router/Firewall → Switch. Máy tính, máy in và camera nối dây vào switch; AP cũng nối vào switch để phục vụ điện thoại và laptop qua Wi-Fi.
+
+
+| Thiết bị | Mục đích chính | Các tính năng thường gặp | Ví dụ thực tế |
+|---|---|---|---|
+| **Switch — Bộ chuyển mạch** | Kết nối các thiết bị trong cùng mạng LAN bằng dây mạng | Chuyển tiếp dữ liệu dựa trên địa chỉ MAC; chia VLAN; cấp nguồn PoE; chống vòng lặp bằng STP | Kết nối máy tính, máy in, camera và AP trong văn phòng |
+| **Router — Bộ định tuyến** | Kết nối và chuyển dữ liệu giữa các mạng khác nhau | Định tuyến IP; cung cấp default gateway; NAT; DHCP; kết nối WAN; VPN tùy thiết bị | Kết nối mạng LAN của công ty với Internet hoặc kết nối hai chi nhánh |
+| **Firewall — Tường lửa** | Kiểm soát và bảo vệ lưu lượng giữa các vùng mạng | Cho phép hoặc chặn kết nối theo chính sách; theo dõi trạng thái kết nối; ghi log; VPN; các dòng nâng cao có IPS, lọc web và kiểm soát ứng dụng | Cho nhân viên truy cập Internet nhưng chặn truy cập trái phép từ Internet vào máy chủ |
+| **Access Point — Điểm truy cập Wi-Fi** | Cho thiết bị không dây kết nối vào mạng LAN | Phát Wi-Fi; quản lý SSID; xác thực và mã hóa Wi-Fi; gán SSID vào VLAN; hỗ trợ roaming tùy hệ thống | Cho điện thoại và laptop kết nối mạng văn phòng qua Wi-Fi |
