@@ -4,22 +4,6 @@
 > Dành cho người mới học Network/System. Ví dụ chủ yếu dùng IPv4 và mạng Ethernet/Wi-Fi gia đình hoặc doanh nghiệp nhỏ.
 > Tài liệu có 5 sơ đồ minh họa, ví dụ thực tế và lệnh kiểm tra trên Windows.
 
-## Mục lục
-
-- [1. Nhìn tổng thể một kết nối mạng](#1-nhìn-tổng-thể-một-kết-nối-mạng)
-- [2. Địa chỉ IP là gì?](#2-địa-chỉ-ip-là-gì)
-- [3. Gateway là gì?](#3-gateway-là-gì)
-- [4. DNS là gì?](#4-dns-là-gì)
-- [5. DHCP là gì?](#5-dhcp-là-gì)
-- [6. Private IP và Public IP](#6-private-ip-và-public-ip)
-- [7. NAT là gì?](#7-nat-là-gì)
-- [8. Default route là gì?](#8-default-route-là-gì)
-- [9. Địa chỉ MAC là gì?](#9-địa-chỉ-mac-là-gì)
-- [10. Khi mở một website thì chuyện gì xảy ra?](#10-khi-mở-một-website-thì-chuyện-gì-xảy-ra)
-- [11. Kiểm tra và xử lý lỗi trên Windows](#11-kiểm-tra-và-xử-lý-lỗi-trên-windows)
-- [12. Bài thực hành và câu hỏi ôn tập](#12-bài-thực-hành-và-câu-hỏi-ôn-tập)
-- [13. Đưa tài liệu lên GitHub](#13-đưa-tài-liệu-lên-github)
-- [14. Tài liệu đọc thêm](#14-tài-liệu-đọc-thêm)
 
 ## 1. Nhìn tổng thể một kết nối mạng
 
