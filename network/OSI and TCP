@@ -1,0 +1,54 @@
+Mô hình OSI và TCP/IP giúp giải thích cách dữ liệu được truyền qua mạng. OSI chia quá trình này thành 7 tầng, còn TCP/IP thường chia thành 4 tầng và gắn với các giao thức đang được sử dụng thực tế.
+1. Các tầng của mô hình OSI và TCP/IP
+| Tầng OSI | Mục đích | Hoạt động cơ bản | Giao thức / công nghệ tiêu biểu | Tầng TCP/IP tương ứng |
+|---|---|---|---|---|
+| **7. Application — Ứng dụng** | Cung cấp dịch vụ mạng cho ứng dụng | Truy cập web, gửi email, phân giải tên miền, cấp cấu hình IP | HTTP/HTTPS, DNS, DHCP, SMTP, SSH | Application |
+| **6. Presentation — Trình bày** | Thống nhất cách biểu diễn dữ liệu | Chuyển đổi định dạng, mã hóa/giải mã, nén/giải nén | TLS thường được liên hệ với chức năng tầng này; UTF-8, JPEG là ví dụ về định dạng dữ liệu | Application |
+| **5. Session — Phiên** | Quản lý phiên trao đổi giữa các ứng dụng | Thiết lập, duy trì và kết thúc phiên; điều phối hội thoại | Chức năng quản lý phiên trong RPC và các giao thức ứng dụng | Application |
+| **4. Transport — Vận chuyển** | Truyền dữ liệu giữa các tiến trình trên hai thiết bị | Sử dụng cổng; chia dữ liệu; tùy giao thức có kiểm tra, sắp xếp và truyền lại | TCP, UDP | Transport |
+| **3. Network — Mạng** | Chuyển dữ liệu giữa các mạng | Đánh địa chỉ IP, chọn đường đi và chuyển tiếp gói tin | IPv4, IPv6, ICMP | Internet |
+| **2. Data Link — Liên kết dữ liệu** | Truyền dữ liệu trong cùng liên kết mạng | Đóng khung, sử dụng địa chỉ MAC, kiểm tra lỗi khung | Ethernet MAC, Wi-Fi MAC, IEEE 802.1Q | Network Access |
+| **1. Physical — Vật lý** | Truyền các bit qua môi trường vật lý | Biến bit thành tín hiệu điện, ánh sáng hoặc sóng vô tuyến | Các chuẩn vật lý Ethernet/Wi-Fi; cáp đồng, cáp quang là môi trường truyền | Network Access |
+Việc ánh xạ chỉ mang tính tương đối: các chức năng phiên, biểu diễn dữ liệu và ứng dụng thường được tích hợp cùng nhau trong TCP/IP.
+2. Mục đích và hoạt động của các giao thức phổ biến
+| Giao thức | Mục đích | Hoạt động cơ bản |
+|---|---|---|
+| **HTTP / HTTPS** | Trao đổi nội dung website và dữ liệu API | Client gửi yêu cầu, server trả phản hồi. HTTPS bảo vệ việc trao đổi bằng TLS |
+| **DNS** | Tra cứu thông tin tên miền, thường là địa chỉ IP | Client hỏi DNS resolver; resolver trả từ bộ nhớ đệm hoặc truy vấn hệ thống DNS để tìm kết quả |
+| **DHCP** | Tự động cấp cấu hình mạng | Với DHCPv4, quá trình cấp mới phổ biến gồm **Discover → Offer → Request → ACK**, cung cấp IP, subnet mask, gateway và DNS |
+| **SMTP** | Gửi và chuyển tiếp email | Phần mềm gửi thư chuyển email đến máy chủ; các máy chủ tiếp tục chuyển thư đến hệ thống nhận |
+| **IMAP / POP3** | Truy cập email trong hộp thư | IMAP đồng bộ thư và thư mục với server; POP3 chủ yếu tải thư về client |
+| **SSH** | Đăng nhập và quản trị thiết bị từ xa an toàn | Thiết lập kết nối mã hóa, xác thực người dùng rồi truyền lệnh và kết quả |
+| **TCP** | Vận chuyển dữ liệu tin cậy, đúng thứ tự | Thiết lập kết nối; đánh số dữ liệu, xác nhận đã nhận, truyền lại phần bị mất; kiểm soát luồng và tắc nghẽn |
+| **UDP** | Truyền các datagram với ít cơ chế bổ sung | Gửi dữ liệu mà không bắt tay thiết lập kết nối; bản thân UDP không bảo đảm dữ liệu đến nơi hoặc đúng thứ tự |
+| **IP** | Định địa chỉ và chuyển gói tin giữa các mạng | Gắn IP nguồn/đích; router dựa vào bảng định tuyến để chuyển tiếp. IP không tự bảo đảm giao hàng |
+| **ICMP** | Báo lỗi và cung cấp thông tin chẩn đoán mạng | Gửi thông báo như không tới được đích, hết TTL; `ping` sử dụng Echo Request và Echo Reply |
+| **ARP** | Tìm địa chỉ MAC tương ứng với IPv4 trên liên kết cục bộ | Phát yêu cầu hỏi MAC của một IPv4; thiết bị sở hữu IP trả lời; kết quả được lưu tạm trong bảng ARP |
+| **NDP** | Khám phá thiết bị lân cận trong IPv6 | Dùng ICMPv6 để tìm địa chỉ lớp liên kết, khám phá router và kiểm tra khả năng tiếp cận thiết bị lân cận |
+Điểm quan trọng về ARP: Khi gửi dữ liệu ra Internet, máy tính thường tìm MAC của gateway, vì gateway là chặng tiếp theo trong LAN.
+3. Phân biệt TCP và UDP
+| Tiêu chí | TCP | UDP |
+|---|---|---|
+| Thiết lập kết nối | Có | Không |
+| Bảo đảm nhận đủ, đúng thứ tự | Có cơ chế bảo đảm khi kết nối hoạt động; báo lỗi nếu không thể tiếp tục | Không có sẵn |
+| Truyền lại dữ liệu mất | Có | Ứng dụng phải tự xử lý nếu cần |
+| Đặc điểm | Có thêm chi phí cho việc quản lý kết nối và độ tin cậy | Cơ chế đơn giản, phù hợp khi ứng dụng cần tự kiểm soát việc truyền |
+| Ví dụ sử dụng | SSH, SMTP, HTTP/1.1, HTTP/2 | DHCP, nhiều truy vấn DNS, thoại/video thời gian thực; QUIC của HTTP/3 chạy trên UDP |
+TCP thường bắt đầu bằng bắt tay ba bước:
+1. SYN: Client yêu cầu kết nối.
+2. SYN-ACK: Server đồng ý và phản hồi.
+3. ACK: Client xác nhận, sau đó hai bên trao đổi dữ liệu.
+4. Ví dụ khi mở một website HTTPS
+Giả sử máy tính đã có cấu hình IP và bạn truy cập https://example.com bằng HTTP/2:
+1. DNS: Máy tính tra cứu địa chỉ IP của website nếu chưa có trong bộ nhớ đệm.
+2. Chọn đường đi: Máy tính xác định cần gửi trực tiếp trong LAN hay qua gateway.
+3. ARP: Nếu cần và chưa có thông tin, máy tính tìm MAC của chặng tiếp theo.
+4. TCP: Thiết lập kết nối đến cổng 443 của máy chủ.
+5. TLS: Xác thực máy chủ và thiết lập bảo vệ cho dữ liệu trao đổi.
+6. HTTP: Trình duyệt gửi yêu cầu; máy chủ trả nội dung website.
+7. Ethernet/Wi-Fi và tầng vật lý: Mang dữ liệu qua từng liên kết dưới dạng khung và tín hiệu.
+Trong quá trình gửi, dữ liệu được đóng gói theo thứ tự:
+
+Dữ liệu ứng dụng → TCP segment hoặc UDP datagram → IP packet → Khung Ethernet/Wi-Fi → Tín hiệu truyền.
+
+Bên nhận thực hiện quá trình ngược lại để đưa dữ liệu đến đúng ứng dụng.
