@@ -1,11 +1,6 @@
 1.Router Omada là thiết bị định tuyến thuộc hệ sinh thái mạng Omada của TP-Link, dùng để kết nối mạng nội bộ với Internet, cấp IP cho máy tính, chia VLAN và kết nối VPN giữa các địa điểm. Omada còn có switch, Access Point và bộ điều khiển để quản lý tập trung.
 Omada SDN — Giải Pháp Cloud Thông Minh Cho Mạng Doanh Nghiệp
 Là gateway tích hợp liền mạch với nền tảng Omada Software Defined Networking (SDN),Router ER605 cho phép quản lý tập trung và từ xa, mọi lúc, mọi nơi. Tính năng quản lý độc lập thông qua giao diện người dùng hoặc ứng dụng Web cũng có sẵn để tối đa hóa sự tiện lợi.
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/38a43c3e51af0019f888861dec1d5b904d03fde1/network/picture/Screenshot%202026-10-22%20101023.png)
-Cấu hình Router Omada ER605
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/91200e3dd3ed89d8ff48b3ad8c6a7ace53c0d5f3/network/picture/Screenshot%202026-10-22%20102139.png)
-Tính năng bảo mật
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/8782a095c959fedd8436eb2e9ffb14f63122b994/network/picture/Screenshot%202026-10-22%20102354.png)
 Ứng dụng của Router Omada
 | Chức năng | Giải thích | Ví dụ |
 |---|---|---|
@@ -62,7 +57,7 @@ DHCP hoạt động thông qua 4 bước DORA
 -	Offer: server đề nghị IP cùng các tham số mạng.
 -	Request: máy yêu cầu dùng đề nghị đã chọn.
 -	ACK: server xác nhận, máy bắt đầu sử dụng địa chỉ.
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/a20f73d112c3398162f5315c0b0ef65fee26f71d/network/picture/Screenshot%202026-10-22%20113104.png)
+
 DHCPv4 dùng UDP: server cổng 67, client cổng 68. Quy trình gia hạn có thể đơn giản hơn quá trình cấp ban đầu, không phải lần nào cũng lặp đủ bốn bước theo sơ đồ.
 
 #Sự khác nhau giữa IP động, IP tĩnh và DHCP Reservation
@@ -71,11 +66,3 @@ DHCPv4 dùng UDP: server cổng 67, client cổng 68. Quy trình gia hạn có t
 | **IP động qua DHCP** | Thiết bị tự nhận IP; địa chỉ có thể thay đổi | Laptop, điện thoại, máy tính thông thường |
 | **IP tĩnh thủ công** | Nhập IP trực tiếp trên thiết bị | Thiết bị cần cấu hình địa chỉ cố định |
 | **DHCP Reservation** | Server dành một IP cố định cho thiết bị, thường dựa trên MAC | Máy in, camera, thiết bị cần IP ổn định nhưng vẫn nhận tự động |
-
-## Sơ đồ kết nối với Router Omada
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/bb8a95f6659f52e5722ff6aba439792e6156fbc1/network/picture/Screenshot%202026-10-22%20112941.png)
-5. Cấu hình Router Omada 
-# Cấu hình LAN
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/8470871dbb3c7344c7d5f14b5ebf6df55252ac0a/network/picture/Screenshot%202026-10-22%20150325.png)
-# Cấu hình WLAN
-![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/cb4d01e744e21d60293e71704d4808d01b67ee52/network/picture/Screenshot%202026-10-22%20152921.png)
