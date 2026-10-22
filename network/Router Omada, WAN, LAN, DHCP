@@ -56,9 +56,26 @@ Khi sử dụng DHCP:
 DHCP chỉ cấp cấu hình mạng; muốn truy cập Internet vẫn cần WAN, định tuyến, NAT và firewall phù hợp.
 DHCP Server có vai trò quản lý và cấp cấu hình mạng trong các Router Omada, Fortigate hoặc Windows Server
 DHCP Client có vai trò yêu cầu và nhận cấu hình mạng cho các thiết bị ví dụ như máy tính, điện thoại, máy in, camera
-Sự khác nhau giữa IP động, IP tĩnh và DHCP Reservation
+
+DHCP hoạt động thông qua 4 bước DORA
+-	Discover: máy chưa có IP tìm DHCP Server, thường bằng broadcast trong LAN.
+-	Offer: server đề nghị IP cùng các tham số mạng.
+-	Request: máy yêu cầu dùng đề nghị đã chọn.
+-	ACK: server xác nhận, máy bắt đầu sử dụng địa chỉ.
+![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/a20f73d112c3398162f5315c0b0ef65fee26f71d/network/picture/Screenshot%202026-10-22%20113104.png)
+DHCPv4 dùng UDP: server cổng 67, client cổng 68. Quy trình gia hạn có thể đơn giản hơn quá trình cấp ban đầu, không phải lần nào cũng lặp đủ bốn bước theo sơ đồ.
+
+#Sự khác nhau giữa IP động, IP tĩnh và DHCP Reservation
 | Cách sử dụng | Cách hoạt động | Trường hợp phù hợp |
 |---|---|---|
 | **IP động qua DHCP** | Thiết bị tự nhận IP; địa chỉ có thể thay đổi | Laptop, điện thoại, máy tính thông thường |
 | **IP tĩnh thủ công** | Nhập IP trực tiếp trên thiết bị | Thiết bị cần cấu hình địa chỉ cố định |
 | **DHCP Reservation** | Server dành một IP cố định cho thiết bị, thường dựa trên MAC | Máy in, camera, thiết bị cần IP ổn định nhưng vẫn nhận tự động |
+
+## Sơ đồ kết nối với Router Omada
+![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/bb8a95f6659f52e5722ff6aba439792e6156fbc1/network/picture/Screenshot%202026-10-22%20112941.png)
+5. Cấu hình Router Omada 
+# Cấu hình LAN
+![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/8470871dbb3c7344c7d5f14b5ebf6df55252ac0a/network/picture/Screenshot%202026-10-22%20150325.png)
+# Cấu hình WLAN
+![image alt](https://github.com/hoaluong02122003-a11y/Ki-thuat-hoc-viec-Luong-Duc-Hoa/blob/cb4d01e744e21d60293e71704d4808d01b67ee52/network/picture/Screenshot%202026-10-22%20152921.png)
